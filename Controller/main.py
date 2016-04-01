@@ -22,6 +22,14 @@ root.lift()
 root.attributes('-topmost', True)
 root.after_idle(root.attributes, '-topmost', False)
 
+panedWindow = ttk.PanedWindow(root, orient = HORIZONTAL)
+panedWindow.pack(fill = BOTH, expand = True)
+
+framepictureset = ttk.Frame(panedWindow, width = 100, height = 300, relief = SUNKEN)
+framemain = ttk.Frame(panedWindow, width = 300, height = 300, relief = SUNKEN)
+
+panedWindow.add(framepictureset, weight = 0)
+panedWindow.add(framemain, weight = 1)
 
 # Set which directory to save downloaded picture sets in.
 def setdirectory():
@@ -68,15 +76,12 @@ menubar.add_cascade(menu = about, label = 'About')
 about.add_command(label = 'Developers')
 
 
-btnstart = ttk.Button(root, text = 'Start', command = startpicturetaking).pack()
-progresspictures = ttk.Progressbar(root).pack()
+btnstart = ttk.Button(framemain, text = 'Start', command = startpicturetaking).pack()
+progresspictures = ttk.Progressbar(framemain).pack()
 
 
-btndownload = ttk.Button(root, text = 'Download', command = downloadpictureset).pack()
-progressdownload = ttk.Progressbar(root).pack()
-
-
-
+btndownload = ttk.Button(framemain, text = 'Download', command = downloadpictureset).pack()
+progressdownload = ttk.Progressbar(framemain).pack()
 
 
 root.mainloop()
