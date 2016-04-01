@@ -60,3 +60,10 @@ target/
 
 #Ipython Notebook
 .ipynb_checkpoints
+.name
+encodings.xml
+MARSEMControlApplication.iml
+misc.xml
+modules.xml
+vcs.xml
+workspace.xml
