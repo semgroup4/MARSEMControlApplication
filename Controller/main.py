@@ -9,6 +9,7 @@ import tkinter as tk
 w = 500
 h = 450
 
+
 # Set which directory to save downloaded picture sets in.
 def setDirectory():
     print('Set up where picture sets will be saved')
@@ -49,19 +50,31 @@ def browsePictureSetsOnPi():
 
 class Window:
     def __init__(self, master):
-        #master.configure(background='Blue')
+        ws = master.winfo_screenwidth()
+        hs = master.winfo_screenheight()
+
+        x = (ws/2) - (w/2)
+        y = (hs/2) - (h/2)
+        master.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
+        master.resizable(FALSE, FALSE)
+        master.attributes('-topmost', True)
+        master.wm_title('MARSEM - Miraculously Autonomous Rover Search Environment Mapper')
+        master.option_add('*tearOff', False)
+        master.lift()
 
         self.frame_library = tk.Frame(master, width=w/4.5, height=h, background='coral')
         self.frame_library.pack(side=LEFT)
-
+        self.frame_library.pack_propagate(0)
         self.frame_main = tk.Frame(master, width=w-(w/4.5), height=h, background='cornflower blue')
         self.frame_main.pack(side=LEFT)
+        self.frame_main.pack_propagate(0)
 
-        tk.Button(self.frame_main, text='Start').grid(row = 5, column = 1)
-        progress = ttk.Progressbar(self.frame_main).grid(row = 6, column =2 )
-        tk.Button(self.frame_main, text='Download').grid(row =7 , column = 3)
-        download = ttk.Progressbar(self.frame_main).grid(row =15 , column = 2)
-        tk.Button(self.frame_library, text='test').grid(row =9 , column = 3)
+        ttk.Button(self.frame_main, text='Start').pack()
+        progress = ttk.Progressbar(self.frame_main).pack()
+        ttk.Button(self.frame_main, text='Download').pack()
+        download = ttk.Progressbar(self.frame_main).pack()
+        ttk.Button(self.frame_library, text='test').pack()
 
         self.menu = Menu(master)
         master.config(menu=self.menu)
@@ -82,21 +95,6 @@ class Window:
 
 def main():
     root = Tk()
-    root.lift()
-    root.attributes('-topmost', True)
-    root.after_idle(root.attributes, '-topmost', False)
-    root.wm_title('MARSEM - Miraculously Autonomous Rover Search Environment Mapper')
-    root.resizable(FALSE, FALSE)
-
-    ws = root.winfo_screenwidth()
-    hs = root.winfo_screenheight()
-
-    x = (ws/2) - (w/2)
-    y = (hs/2) - (h/2)
-
-    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
-
-    root.option_add('*tearOff', False)
     window = Window(root)
 
     root.mainloop()
