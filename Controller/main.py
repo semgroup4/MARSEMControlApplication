@@ -4,8 +4,10 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
 import tkinter as tk
-from tkinter.ttk import Style
 
+
+w = 500
+h = 450
 
 # Set which directory to save downloaded picture sets in.
 def setDirectory():
@@ -47,14 +49,13 @@ def browsePictureSetsOnPi():
 
 class Window:
     def __init__(self, master):
-        master.configure(background='Blue')
+        #master.configure(background='Blue')
 
-        self.frame_library = tk.Frame(master)
+        self.frame_library = tk.Frame(master, width=w/4.5, height=h, background='coral')
         self.frame_library.pack(side=LEFT)
 
-        self.frame_main = tk.Frame(master)
-        self.frame_main.config(bg='Green')
-        self.frame_main.pack()
+        self.frame_main = tk.Frame(master, width=w-(w/4.5), height=h, background='cornflower blue')
+        self.frame_main.pack(side=LEFT)
 
         tk.Button(self.frame_main, text='Start').grid(row = 5, column = 1)
         progress = ttk.Progressbar(self.frame_main).grid(row = 6, column =2 )
@@ -86,7 +87,15 @@ def main():
     root.after_idle(root.attributes, '-topmost', False)
     root.wm_title('MARSEM - Miraculously Autonomous Rover Search Environment Mapper')
     root.resizable(FALSE, FALSE)
-    root.geometry('640x480+50+100')
+
+    ws = root.winfo_screenwidth()
+    hs = root.winfo_screenheight()
+
+    x = (ws/2) - (w/2)
+    y = (hs/2) - (h/2)
+
+    root.geometry('%dx%d+%d+%d' % (w, h, x, y))
+
     root.option_add('*tearOff', False)
     window = Window(root)
 
