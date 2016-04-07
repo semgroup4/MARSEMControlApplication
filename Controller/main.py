@@ -4,7 +4,6 @@ from tkinter import ttk
 from tkinter import messagebox
 from tkinter import filedialog
 import tkinter as tk
-from tkinter.ttk import Style
 
 
 # Set which directory to save downloaded picture sets in.
@@ -49,6 +48,13 @@ class Window:
     def __init__(self, master):
         master.configure(background='Blue')
 
+        master.geometry('640x480+50+100')
+        master.resizable(FALSE, FALSE)
+        master.attributes('-topmost', True)
+        master.wm_title('MARSEM - Miraculously Autonomous Rover Search Environment Mapper')
+        master.option_add('*tearOff', False)
+        master.lift()
+
         self.frame_library = tk.Frame(master)
         self.frame_library.pack(side=LEFT)
 
@@ -56,11 +62,11 @@ class Window:
         self.frame_main.config(bg='Green')
         self.frame_main.pack()
 
-        tk.Button(self.frame_main, text='Start').grid(row = 5, column = 1)
-        progress = ttk.Progressbar(self.frame_main).grid(row = 6, column =2 )
-        tk.Button(self.frame_main, text='Download').grid(row =7 , column = 3)
-        download = ttk.Progressbar(self.frame_main).grid(row =15 , column = 2)
-        tk.Button(self.frame_library, text='test').grid(row =9 , column = 3)
+        ttk.Button(self.frame_main, text='Start').pack()
+        progress = ttk.Progressbar(self.frame_main).pack()
+        ttk.Button(self.frame_main, text='Download').pack()
+        download = ttk.Progressbar(self.frame_main).pack()
+        ttk.Button(self.frame_library, text='test').pack()
 
         self.menu = Menu(master)
         master.config(menu=self.menu)
@@ -81,13 +87,7 @@ class Window:
 
 def main():
     root = Tk()
-    root.lift()
-    root.attributes('-topmost', True)
     root.after_idle(root.attributes, '-topmost', False)
-    root.wm_title('MARSEM - Miraculously Autonomous Rover Search Environment Mapper')
-    root.resizable(FALSE, FALSE)
-    root.geometry('640x480+50+100')
-    root.option_add('*tearOff', False)
     window = Window(root)
 
     root.mainloop()
