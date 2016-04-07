@@ -9,6 +9,8 @@ import tkinter as tk
 w = 500
 h = 450
 
+LARGE_FONT= ('Calibri', 25)
+
 
 # Set which directory to save downloaded picture sets in.
 def setDirectory():
@@ -63,14 +65,17 @@ class Window:
         master.option_add('*tearOff', False)
         master.lift()
 
-        self.frame_library = tk.Frame(master, width=w/4.5, height=h, background='coral')
+        tk.Label(master, text='MARSEM Control System', background='midnight blue', foreground='White', width=w, height=1, font=LARGE_FONT).pack(side=TOP, fill=X)
+
+        self.frame_library = tk.Frame(master, width=w/4.5, height=h)
         self.frame_library.pack(side=LEFT)
         self.frame_library.pack_propagate(0)
-        self.frame_main = tk.Frame(master, width=w-(w/4.5), height=h, background='cornflower blue')
+        tk.Label(master, background='dark grey').pack(side=LEFT, fill=Y)
+        self.frame_main = tk.Frame(master, width=w-(w/4.5), height=h)
         self.frame_main.pack(side=LEFT)
         self.frame_main.pack_propagate(0)
 
-        ttk.Button(self.frame_main, text='Start').pack()
+        ttk.Button(self.frame_main, text='Start', style='TButton').pack()
         progress = ttk.Progressbar(self.frame_main).pack()
         ttk.Button(self.frame_main, text='Download').pack()
         download = ttk.Progressbar(self.frame_main).pack()
