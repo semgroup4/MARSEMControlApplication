@@ -39,7 +39,7 @@ samp {
     display: none;
 }
 
-button {
+#bodyButton {
     background-color: #F1F1F1; /* Green */
     border: none;
     color: black;
@@ -48,9 +48,58 @@ button {
     text-decoration: none;
     display: inline-block;
     font-size: 14px;
+    outline: none; 
 }
 
-img {
+#bodyButton:hover {
+    background-color: #FC8A4F;
+    color: white;
+}
+#bodyButton:active {
+  background-color: #FF602E;
+  transform: translateY(4px);
+}    
+
+#startProgress {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background-color: #ddd;
+}
+#startBar {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    background-color: #1A406C;
+}
+
+#timeLabel {
+    text-align: center; 
+    position: absolute;
+    line-height: 30px; 
+    color: white;
+}
+
+#downloadProgress {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    background-color: #ddd;
+}
+#downloadBar {
+    position: absolute;
+    width: 0%;
+    height: 100%;
+    background-color: #1A406C;
+}
+#timeLabel {
+    text-align: center; 
+    position: absolute;
+    line-height: 30px; 
+    color: white;
+}
+
+img  {
     -webkit-animation: colorize 2s cubic-bezier(0, 0, .78, .36) 1;
     animation: colorize 2s cubic-bezier(0, 0, .78, .36) 1;
     background: transparent;
@@ -78,3 +127,4 @@ img {
         filter: grayscale(0%);
     }
 }
+
