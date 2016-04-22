@@ -2,7 +2,7 @@
 Python app to control MARSEM
 
 ## WiPI
-The name of the wifi is Rasberry42
+The name of the wifi is Raspberry42
 
 ## How to PI
 * Connect to the Rasberry PI though ssh (ask for the password)
@@ -13,6 +13,11 @@ The name of the wifi is Rasberry42
 * Run OpenCV stream
 * ???
 * Profit
+
+
+
+
+
 
 
 
