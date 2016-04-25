@@ -1,5 +1,5 @@
-import pygtk
 import gtk
+import pygtk
 
 
 class Base:
