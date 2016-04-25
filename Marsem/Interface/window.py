@@ -69,7 +69,7 @@ class Menu:
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         window.connect("destroy", lambda wid: gtk.main_quit())
         window.connect("delete_event", lambda a1, a2: gtk.main_quit())
-        window.set_title("Item Factory")
+        window.set_title("Marsem")
         window.set_size_request(300, 200)
 
         main_box = gtk.VBox(False, 1)
