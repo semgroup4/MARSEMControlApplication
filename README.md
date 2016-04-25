@@ -15,6 +15,15 @@ The name of the wifi is Raspberry42
 * Profit
 
 
+## Car
+Runs on port 8000, takes a query parameter called 'action=action' where action can be:
+* forward - move a step forward
+* backward - move a step backward
+* left - move a step left
+* right - move a step right
+
+
+
 ## Notes
 
 ### Run the raspivid on the Raspberry PI
