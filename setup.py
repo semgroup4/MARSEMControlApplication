@@ -9,4 +9,3 @@ setup(name='Marsem',
       url='https://github.com/semgroup4/MARSEMControlApplication',
       packages=['marsem']
 )
-   
