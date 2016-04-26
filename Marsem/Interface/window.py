@@ -1,11 +1,15 @@
 #!/usr/bin/env python
 import pygtk
+import gtk
+from os import listdir
+from os.path import isfile, join
 
 pygtk.require('2.0')
-import gtk
+
 
 def picture_clicked(self):
     print"take picture"
+
 
 def start_clicked(self):
     print "Start"
@@ -15,18 +19,22 @@ def download_clicked(self):
     print "Download"
 
 
+# Not necessary?
 def new_file(self):
     print "Creates a file"
 
 
+# Not necessary?
 def open_file(self):
     print "Opens a file"
 
 
+# Not necessary? Change to "image path"?
 def save_file(self):
     print "Saves a file"
 
 
+# Not necessary?
 def save_as_file(self):
     print "Saves a file as"
 
@@ -43,6 +51,11 @@ class Menu:
     def print_hello(self, w, data):
         print "Welcome to Marsem"
 
+
+    def display_pictures(self):
+        print "yoyo"
+
+
     def get_main_menu(self, window):
         accel_group = gtk.AccelGroup()
         item_factory = gtk.ItemFactory(gtk.MenuBar, "<main>", accel_group)
@@ -53,6 +66,10 @@ class Menu:
 
 
     def __init__(self):
+        def folder_clicked(self, folder):
+            print folder.get_Label()
+
+
         self.menu_items = (
             ("/_File", None, None, 0, "<Branch>"),
             ("/File/_New", "<control>N", new_file(self), 0, None),
@@ -66,48 +83,76 @@ class Menu:
             ("/_Help", None, help_menu(self), 0, "<LastBranch>"),
             ("/_Help/About", None, None, 0, None),
         )
+
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         window.connect("destroy", lambda wid: gtk.main_quit())
         window.connect("delete_event", lambda a1, a2: gtk.main_quit())
         window.set_title("Marsem")
-        window.set_size_request(300, 200)
+        window.set_size_request(600, 400)
 
         main_box = gtk.VBox(False, 1)
         main_box.set_border_width(1)
         window.add(main_box)
         main_box.show()
 
-        button_box = gtk.HBox(False, 20)
-        button_box.set_border_width(0)
-        window.add(button_box)
-        button_box.show()
+        # Adding the menu bar.
         menubar = self.get_main_menu(window)
+        main_box.pack_start(menubar, False, True, 0)
+        menubar.show()
 
-        # Buttons
-        # Start
+        # Adding picture area.
+        picture_header = gtk.Label("Taken picture sets below:")
+        picture_header.set_size_request(width=100, height=20)
+
+        picture_path = '/Users/MTs/MARSEM'
+        picture_folders = [folder for folder in listdir(picture_path) if not isfile(join(picture_path, folder))]
+
+        picture_box = gtk.VBox(False, 1)
+        picture_box.set_border_width(1)
+        picture_box.show()
+        main_box.pack_start(picture_box)
+
+        picture_box.pack_start(picture_header)
+        self.picture_buttons = []
+        for folder in picture_folders:
+            self.picture_buttons.append(gtk.Button(label=folder, stock=None).connect("clicked", lambda f=folder: folder_clicked(self, f)))
+            print self.picture_buttons
+        picture_box.show_all()
+
+        for stuff in self.picture_buttons:
+            print stuff
+
+        for button in range(0, len(self.picture_buttons)):
+            picture_box.pack_start(self.picture_buttons[int(button)], False, False, 10)
+
+        # Start button
         start_button = gtk.Button(label="Start", stock=None)
         start_button.connect("clicked", start_clicked)
         start_button.set_size_request(width=70, height=20)
         start_button.show()
-        # Download
+
+        # Download button
         download_button = gtk.Button(label="Download", stock=None)
         download_button.connect("clicked", download_clicked)
         download_button.set_size_request(width=70, height=20)
         download_button.show()
-        # Pictures
+
+        # Take picture
         picture_button = gtk.Button(label="Take image", stock=None)
         picture_button.connect("clicked", picture_clicked)
         picture_button.set_size_request(width=90, height=20)
         picture_button.show()
 
-        main_box.pack_start(menubar, False, True, 0)
-        main_box.pack_end(button_box, False, True, 0)
+        button_box = gtk.HBox(False, 20)
+        button_box.set_border_width(0)
+        window.add(button_box)
+        button_box.show()
+
         button_box.pack_start(start_button, False, False, 10)
         button_box.pack_start(download_button, False, False, 10)
         button_box.pack_end(picture_button, False, False, 10)
+        main_box.pack_end(button_box, False, True, 0)
 
-        button_box.show
-        menubar.show()
         window.show()
 
 
