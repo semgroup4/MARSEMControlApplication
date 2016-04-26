@@ -1,6 +1,13 @@
 # MARSEMControlApplication
 Python app to control MARSEM
 
+## Deploy
+In order to deploy the application, run
+```
+python setup.py sdist
+```
+This will create a dist folder \(if there is none\). The resulting tar.gz is the application.
+
 ## WiPI
 The name of the wifi is Raspberry42
 
@@ -21,8 +28,6 @@ Runs on port 8000, takes a query parameter called 'action=action' where action c
 * backward - move a step backward
 * left - move a step left
 * right - move a step right
-
-
 
 ## Notes
 
