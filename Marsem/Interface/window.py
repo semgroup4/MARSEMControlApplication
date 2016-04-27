@@ -1,17 +1,74 @@
 #!/usr/bin/env python
 import gtk
 import pygtk
+
 pygtk.require('2.0')
 
+main_box = gtk.VBox(False, 40)
+main_box.set_border_width(1)
+main_box.show()
+
+menu_box = gtk.HBox(False, 0)
+menu_box.set_border_width(0)
+menu_box.show()
+
+button_box = gtk.HBox(False, 20)
+button_box.set_border_width(0)
+button_box.show()
+
+
 def open_file(self):
-    print "Open"
+    chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_OPEN,
+                                    buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                             gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+    chooser.set_default_response(gtk.RESPONSE_OK)
+
+    open_filter = gtk.FileFilter()
+    open_filter.set_name("Images")
+    open_filter.add_mime_type("image/png")
+    open_filter.add_mime_type("image/jpeg")
+    open_filter.add_mime_type("image/gif")
+    open_filter.add_pattern("*.jpg")
+    chooser.add_filter(open_filter)
+
+    response = chooser.run()
+    if response == gtk.RESPONSE_OK:
+        print chooser.get_filename(), 'selected'
+
+    elif response == gtk.RESPONSE_CANCEL():
+        print 'Closed, you did not choose any files'
+    chooser.destroy()
 
 
-def save_file(self):
-    print "Save"
+def save_as_file(self):
+    chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
+                                    buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
+                                             gtk.STOCK_OPEN, gtk.RESPONSE_OK))
+
+    chooser.set_default_response(gtk.RESPONSE_OK)
+
+    new_filter = gtk.FileFilter()
+    new_filter.set_name("Images")
+    new_filter.add_mime_type("image/png")
+    new_filter.add_mime_type("image/jpeg")
+    new_filter.add_mime_type("image/gif")
+    new_filter.add_pattern("*.jpg")
+    chooser.add_filter(new_filter)
+
+    response = chooser.run()
+    if response == gtk.RESPONSE_OK:
+        print chooser.get_filename(), 'selected'
+
+    elif response == gtk.RESPONSE_CANCEL():
+        print 'Closed, you did not choose any files'
+
+    chooser.destroy()
+
 
 def quit_file(self):
+    gtk.main_quit()
     print "Quit"
+
 
 def start_clicked(self):
     print "Start"
@@ -25,7 +82,7 @@ def picture_clicked(self):
     print "Image taken"
 
 
-class Menu:
+class Window:
     def __init__(self):
         window = gtk.Window(gtk.WINDOW_TOPLEVEL)
         window.connect("destroy", lambda wid: gtk.main_quit())
@@ -33,8 +90,17 @@ class Menu:
         window.set_title("Marsem")
         window.set_size_request(300, 200)
 
-        file_menu = gtk.Menu()  # Don't need to show menus
-        #Menu Items
+        main_box.pack_start(menu_box, False, True, 0)
+        main_box.pack_start(button_box, False, True, 0)
+
+        window.add(main_box)
+        window.show()
+
+
+class Menu:
+    def __init__(self):
+        file_menu = gtk.Menu()
+        # Menu Items
         open_item = gtk.MenuItem("Open")
         save_item = gtk.MenuItem("Save")
         quit_item = gtk.MenuItem("Quit")
@@ -43,37 +109,32 @@ class Menu:
         file_menu.append(save_item)
         file_menu.append(quit_item)
 
-        #CallBack to menu items
+        # CallBack to menu items
         open_item.connect_object("activate", open_file, "file.open")
-        save_item.connect_object("activate", save_file, "file.save")
+        save_item.connect_object("activate", save_as_file, "file.save")
         quit_item.connect_object("activate", quit_file, "file.quit")
 
         open_item.show()
         save_item.show()
         quit_item.show()
 
-        menu_bar = gtk.MenuBar()
+        self.menu_bar = gtk.MenuBar()
         file_item = gtk.MenuItem("File")
         file_item.show()
         file_item.set_submenu(file_menu)
-        menu_bar.append(file_item)
+        self.menu_bar.append(file_item)
+        self.menu_bar.show()
 
-        main_box = gtk.VBox(False, 1)
-        main_box.set_border_width(1)
-        window.add(main_box)
-        main_box.show()
+        menu_box.pack_start(self.menu_bar, False, False, 0)
 
-        button_box = gtk.HBox(False, 20)
-        button_box.set_border_width(0)
-        button_box.show()
-        start_clicked
-        download_clicked
-        picture_clicked
+
+class Buttons:
+    def __init__(self):
         # Buttons
         # Start
         start_button = gtk.Button(label="Start", stock=None)
-        start_button.connect("clicked", start_clicked)
         start_button.set_size_request(width=70, height=20)
+        start_button.connect("clicked", start_clicked)
         start_button.show()
         # Download
         download_button = gtk.Button(label="Download", stock=None)
@@ -86,15 +147,19 @@ class Menu:
         picture_button.set_size_request(width=90, height=20)
         picture_button.show()
 
-        main_box.pack_start(menu_bar, False, True, 0)
-        main_box.pack_end(button_box, False, True, 0)
-        button_box.pack_start(start_button, False, False, 10)
-        button_box.pack_start(download_button, False, False, 10)
-        button_box.pack_end(picture_button, False, False, 10)
+        map = start_button.get_colormap()
+        color = map.alloc_color("blue")
 
-        button_box.show
-        menu_bar.show()
-        window.show()
+        # copy the current style and replace the background
+        style = start_button.get_style().copy()
+        style.bg[gtk.STATE_NORMAL] = color
+
+        # set the button's style to the one you created
+
+        start_button.set_style(style)
+        button_box.pack_start(start_button, False, False, 10)
+        button_box.pack_start(download_button, False, False, 0)
+        button_box.pack_end(picture_button, False, False, 10)
 
 
 def main():
@@ -103,5 +168,7 @@ def main():
 
 
 if __name__ == "__main__":
+    Window()
     Menu()
+    Buttons()
     main()
