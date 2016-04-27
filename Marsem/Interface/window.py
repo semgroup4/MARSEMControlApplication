@@ -14,7 +14,7 @@ def start_clicked():
     print "Start"
 
 
-def open_file():
+def open_file(self):
     chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_OPEN,
                                     buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                              gtk.STOCK_OPEN, gtk.RESPONSE_OK))
@@ -36,7 +36,7 @@ def open_file():
     chooser.destroy()
 
 
-def save_as_file():
+def save_as_file(self):
     chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
                                     buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                              gtk.STOCK_OPEN, gtk.RESPONSE_OK))
@@ -57,7 +57,7 @@ def save_as_file():
     chooser.destroy()
 
 
-def quit_file():
+def quit_file(self):
     gtk.main_quit()
     print "Quit"
 
