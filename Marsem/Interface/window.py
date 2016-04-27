@@ -4,6 +4,12 @@ import gtk
 from os import listdir
 from os.path import isfile, join
 pygtk.require('2.0')
+import gobject
+import urllib
+import threading
+
+STREAM_URL = 'https://jpeg.org/images/jpeg-home.jpg'
+
 
 main_box = gtk.VBox(False, 40)
 main_box.set_border_width(1)
@@ -84,6 +90,16 @@ def display_pictures(self):
 
 
 def picture_clicked(self):
+    take_picture = gtk.Dialog(title="Take picture", parent=None, flags=0, buttons=None)
+    gobject.threads_init()
+
+    img = gtk.Image()
+    img.show()
+
+    t = VideoThread(img)
+    t.start()
+    take_picture.action_area.pack_start(img , True, True, 0)
+    take_picture.show()
     print "Image taken"
 
 
@@ -136,12 +152,12 @@ class Menu:
 
         menu_box.pack_start(self.menu_bar, False, False, 0)
 
-        # Adding picture area.
+        '''# Adding picture area.
         picture_header = gtk.Label("Taken picture sets below:")
         picture_header.set_size_request(width=100, height=20)
 
         # TODO! Prompt user to select path upon app start.
-        picture_path = '/Users/MTs/MARSEM'
+        picture_path = '/Users/Frank/MARSEM'
         picture_folders = [folder for folder in listdir(picture_path) if not isfile(join(picture_path, folder))]
 
         picture_box = gtk.VBox(False, 1)
@@ -162,7 +178,7 @@ class Menu:
             picture_box.pack_start(create_button(str(folder)))
 
         picture_box.show_all()
-
+        '''
 
 class Buttons:
     def __init__(self):
@@ -196,6 +212,42 @@ class Buttons:
         button_box.pack_start(start_button, False, False, 10)
         button_box.pack_start(download_button, False, False, 0)
         button_box.pack_end(picture_button, False, False, 10)
+
+
+class VideoThread(threading.Thread):
+
+    def __init__(self, widget):
+        super(VideoThread, self).__init__()
+        self.widget = widget
+        self.quit = False
+        print 'connecting to', STREAM_URL
+        self.stream = urllib.urlopen(STREAM_URL)
+
+    def get_raw_frame(self):
+        raw_buffer = ''
+        while True:
+            new = self.stream.read(1034)
+            if not new:
+                # Connection dropped
+                yield None
+            raw_buffer += new
+            a = raw_buffer.find('\xff\xd8')
+            b = raw_buffer.find('\xff\xd9')
+            if a != -1 and b != -1:
+                frame = raw_buffer[a:b+2]
+                raw_buffer = raw_buffer[b+2:]
+                yield frame
+
+    def run(self):
+        for frame in self.get_raw_frame():
+            if self.quit or frame is None:
+                return
+            loader = gtk.gdk.PixbufLoader('jpeg')
+            loader.write(frame)
+            loader.close()
+            pixbuf = loader.get_pixbuf()
+            # Schedule image update to happen in main thread
+            gobject.idle_add(self.widget.set_from_pixbuf, pixbuf)
 
 
 def main():
