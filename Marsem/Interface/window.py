@@ -1,17 +1,19 @@
 #!/usr/bin/env python
+import threading
+import urllib
+import gobject
 import pygtk
 import gtk
 from os import listdir
 from os.path import isfile, join
 pygtk.require('2.0')
 
+#Path to stream, should be localhost
+STREAM_URL = 'https://jpeg.org/images/jpeg-home.jpg'
+
 main_box = gtk.VBox(False, 40)
 main_box.set_border_width(1)
 main_box.show()
-
-
-def start_clicked():
-    print "Start"
 
 
 def open_file(self):
@@ -74,7 +76,19 @@ def display_pictures():
     print "yoyo"
 
 
-def picture_clicked():
+def take_image(self):
+    # Dialog for deciding colors in Image
+    image_dialog = gtk.Dialog(title="Take picture", parent=None, flags=0, buttons=None)
+
+    gobject.threads_init()
+
+    img = gtk.Image()
+    img.show()
+
+    t = VideoThread(img)
+    t.start()
+    image_dialog.action_area.pack_start(img, True, True, 0)
+    image_dialog.show()
     print "Image taken"
 
 
@@ -153,8 +167,6 @@ class Menu:
 Handling pictures, both listing folders available (containing picture sets) but also provides a function to display
 all pictures of a clicked folder inside the application.
 
-"""
-
 
 class PictureHandler:
 
@@ -194,7 +206,7 @@ class PictureHandler:
 
         # Final pack into main_box to show in open window.
         main_box.pack_start(picture_box, False, False, 10)
-
+"""
 
 class Buttons:
 
@@ -224,7 +236,7 @@ class Buttons:
         download_button.set_size_request(width=70, height=20)
 
         picture_button = gtk.Button(label="Take image", stock=None)
-        picture_button.connect("clicked", picture_clicked)
+        picture_button.connect("clicked", take_image)
         picture_button.set_size_request(width=90, height=20)
 
         # TODO: Research more about coloring widgets.
@@ -253,6 +265,41 @@ class Buttons:
         # Insert button_box into main_box for displaying everything in the open window.
         main_box.pack_start(button_vbox, False, False, 5)
 
+class VideoThread(threading.Thread):
+
+    def __init__(self, widget):
+        super(VideoThread, self).__init__()
+        self.widget = widget
+        self.quit = False
+        print 'connecting to', STREAM_URL
+        self.stream = urllib.urlopen(STREAM_URL)
+
+    def get_raw_frame(self):
+        raw_buffer = ''
+        while True:
+            new = self.stream.read(1034)
+            if not new:
+                # Connection dropped
+                yield None
+            raw_buffer += new
+            a = raw_buffer.find('\xff\xd8')
+            b = raw_buffer.find('\xff\xd9')
+            if a != -1 and b != -1:
+                frame = raw_buffer[a:b + 2]
+                raw_buffer = raw_buffer[b + 2:]
+                yield frame
+
+    def run(self):
+        for frame in self.get_raw_frame():
+            if self.quit or frame is None:
+                return
+            loader = gtk.gdk.PixbufLoader('jpeg')
+            loader.write(frame)
+            loader.close()
+            pixbuf = loader.get_pixbuf()
+            # Schedule image update to happen in main thread
+            gobject.idle_add(self.widget.set_from_pixbuf, pixbuf)
+
 
 # Main loop of the application.
 def main():
@@ -264,7 +311,7 @@ if __name__ == "__main__":
     # The order of class names below determines where in the window they will be inserted. Adding menu last will place
     # the menu bar at the bottom of the screen.
     Menu()
-    PictureHandler()
+    #PictureHandler()
     Buttons()
     Marsem()
     main()
