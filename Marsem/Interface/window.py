@@ -66,8 +66,8 @@ class Menu:
 
 
     def __init__(self):
-        def folder_clicked(self, folder):
-            print folder.get_Label()
+        def folder_clicked(name):
+            print name
 
 
         self.menu_items = (
@@ -104,6 +104,7 @@ class Menu:
         picture_header = gtk.Label("Taken picture sets below:")
         picture_header.set_size_request(width=100, height=20)
 
+        # TODO! Prompt user to select path upon app start.
         picture_path = '/Users/MTs/MARSEM'
         picture_folders = [folder for folder in listdir(picture_path) if not isfile(join(picture_path, folder))]
 
@@ -113,17 +114,19 @@ class Menu:
         main_box.pack_start(picture_box)
 
         picture_box.pack_start(picture_header)
-        self.picture_buttons = []
+
+        print(picture_folders)
+
+        def create_button(name):
+            new_button = gtk.Button(label = str(name), stock=None)
+            new_button.connect("clicked", lambda e: folder_clicked(name))
+            return new_button
+
         for folder in picture_folders:
-            self.picture_buttons.append(gtk.Button(label=folder, stock=None).connect("clicked", lambda f=folder: folder_clicked(self, f)))
-            print self.picture_buttons
+            picture_box.pack_start(create_button(str(folder)))
+
         picture_box.show_all()
 
-        for stuff in self.picture_buttons:
-            print stuff
-
-        for button in range(0, len(self.picture_buttons)):
-            picture_box.pack_start(self.picture_buttons[int(button)], False, False, 10)
 
         # Start button
         start_button = gtk.Button(label="Start", stock=None)
@@ -145,7 +148,6 @@ class Menu:
 
         button_box = gtk.HBox(False, 20)
         button_box.set_border_width(0)
-        window.add(button_box)
         button_box.show()
 
         button_box.pack_start(start_button, False, False, 10)
