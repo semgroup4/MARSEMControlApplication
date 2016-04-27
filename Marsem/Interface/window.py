@@ -10,11 +10,11 @@ main_box.set_border_width(1)
 main_box.show()
 
 
-def start_clicked(self):
+def start_clicked():
     print "Start"
 
 
-def open_file(self):
+def open_file():
     chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_OPEN,
                                     buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                              gtk.STOCK_OPEN, gtk.RESPONSE_OK))
@@ -36,7 +36,7 @@ def open_file(self):
     chooser.destroy()
 
 
-def save_as_file(self):
+def save_as_file():
     chooser = gtk.FileChooserDialog(title=None, action=gtk.FILE_CHOOSER_ACTION_SAVE,
                                     buttons=(gtk.STOCK_CANCEL, gtk.RESPONSE_CANCEL,
                                              gtk.STOCK_OPEN, gtk.RESPONSE_OK))
@@ -57,24 +57,24 @@ def save_as_file(self):
     chooser.destroy()
 
 
-def quit_file(self):
+def quit_file():
     gtk.main_quit()
     print "Quit"
 
 
-def start_clicked(self):
+def start_clicked():
     print "Start"
 
 
-def download_clicked(self):
+def download_clicked():
     print "Download"
 
 
-def display_pictures(self):
+def display_pictures():
     print "yoyo"
 
 
-def picture_clicked(self):
+def picture_clicked():
     print "Image taken"
 
 
@@ -84,7 +84,7 @@ def folder_clicked(folder_name):
 
 """
 
-Main class, when called it created the entire Application.
+Main class, when called it creates the Application window.
 
 """
 
@@ -199,11 +199,20 @@ class PictureHandler:
 class Buttons:
 
     def __init__(self):
-        
-        # Hbox for adding all funcionality buttons to the window.
-        button_box = gtk.HBox(False, 20)
-        button_box.set_border_width(0)
-        button_box.show()
+
+        # Boxes for adding all functionality buttons to the window.
+        button_hbox = gtk.HBox(False, 10)
+        button_hbox.set_border_width(0)
+        button_hbox.show()
+
+        button_vbox = gtk.VBox(False, 0)
+        button_vbox.set_border_width(0)
+        button_vbox.show()
+
+        valign = gtk.Alignment(0, 1, 0, 0)
+        halign = gtk.Alignment(0, 0, 0, 0)
+
+        button_vbox.pack_start(valign)
 
         # Creating the buttons:
         start_button = gtk.Button(label="Start", stock=None)
@@ -230,15 +239,19 @@ class Buttons:
         # start_button.set_style(style)
 
         # Packing created buttons into button_box.
-        button_box.pack_start(start_button, False, False, 5)
-        button_box.pack_start(download_button, False, False, 0)
-        button_box.pack_end(picture_button, False, False, 5)
+        button_hbox.add(start_button)
+        button_hbox.add(download_button)
+        button_hbox.add(picture_button)
+
+        halign.add(button_hbox)
+
+        button_vbox.pack_start(halign, False, False, 5)
 
         # Show all packed widgets.
-        button_box.show_all()
+        button_vbox.show_all()
 
         # Insert button_box into main_box for displaying everything in the open window.
-        main_box.pack_start(button_box, False, False, 5)
+        main_box.pack_start(button_vbox, False, False, 5)
 
 
 # Main loop of the application.
