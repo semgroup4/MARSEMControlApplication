@@ -73,12 +73,12 @@ while True:
         if value > 30:
             print('right')
             if MOVE:
-                car.move(action="right")
+                car.move_right()
 
         if value < 30:
             print('forward')
             if MOVE:
-                car.move(action="forward")
+                car.move_forward()
 
         samples = []
 
