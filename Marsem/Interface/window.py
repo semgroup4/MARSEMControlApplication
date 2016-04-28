@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 import threading
+import urllib
 import gobject
 import pygtk
 import gtk
-import urllib
 from os import listdir
 from os.path import isfile, join
 pygtk.require('2.0')
@@ -64,21 +64,21 @@ def quit_file(self):
     print "Quit"
 
 
-def start_clicked(self):
+def start_clicked():
     print "Start"
 
 
-def download_clicked(self):
+def download_clicked():
     print "Download"
 
 
-def display_pictures(self):
+def display_pictures():
     print "yoyo"
 
 
-def picture_clicked(self):
-    #Dialog for deciding colors in Image
-    picture_dialog = gtk.Dialog(title="Take picture", parent=None, flags=0, buttons=None)
+def take_image(self):
+    # Dialog for deciding colors in Image
+    image_dialog = gtk.Dialog(title="Take picture", parent=None, flags=0, buttons=None)
 
     gobject.threads_init()
 
@@ -87,8 +87,8 @@ def picture_clicked(self):
 
     t = VideoThread(img)
     t.start()
-    picture_dialog.action_area.pack_start(img, True, True, 0)
-    picture_dialog.show()
+    image_dialog.action_area.pack_start(img, True, True, 0)
+    image_dialog.show()
     print "Image taken"
 
 
@@ -98,7 +98,7 @@ def folder_clicked(folder_name):
 
 """
 
-Main class, when called it created the entire Application.
+Main class, when called it creates the Application window.
 
 """
 
@@ -168,8 +168,6 @@ Handling pictures, both listing folders available (containing picture sets) but 
 all pictures of a clicked folder inside the application.
 
 
-#Commented out until proper implementation
-
 class PictureHandler:
 
     def __init__(self):
@@ -214,10 +212,19 @@ class Buttons:
 
     def __init__(self):
 
-        # Hbox for adding all funcionality buttons to the window.
-        button_box = gtk.HBox(False, 20)
-        button_box.set_border_width(0)
-        button_box.show()
+        # Boxes for adding all functionality buttons to the window.
+        button_hbox = gtk.HBox(False, 10)
+        button_hbox.set_border_width(0)
+        button_hbox.show()
+
+        button_vbox = gtk.VBox(False, 0)
+        button_vbox.set_border_width(0)
+        button_vbox.show()
+
+        valign = gtk.Alignment(0, 1, 0, 0)
+        halign = gtk.Alignment(0, 0, 0, 0)
+
+        button_vbox.pack_start(valign)
 
         # Creating the buttons:
         start_button = gtk.Button(label="Start", stock=None)
@@ -229,7 +236,7 @@ class Buttons:
         download_button.set_size_request(width=70, height=20)
 
         picture_button = gtk.Button(label="Take image", stock=None)
-        picture_button.connect("clicked", picture_clicked)
+        picture_button.connect("clicked", take_image)
         picture_button.set_size_request(width=90, height=20)
 
         # TODO: Research more about coloring widgets.
@@ -244,15 +251,19 @@ class Buttons:
         # start_button.set_style(style)
 
         # Packing created buttons into button_box.
-        button_box.pack_start(start_button, False, False, 5)
-        button_box.pack_start(download_button, False, False, 0)
-        button_box.pack_end(picture_button, False, False, 5)
+        button_hbox.add(start_button)
+        button_hbox.add(download_button)
+        button_hbox.add(picture_button)
+
+        halign.add(button_hbox)
+
+        button_vbox.pack_start(halign, False, False, 5)
 
         # Show all packed widgets.
-        button_box.show_all()
+        button_vbox.show_all()
 
         # Insert button_box into main_box for displaying everything in the open window.
-        main_box.pack_start(button_box, False, False, 5)
+        main_box.pack_start(button_vbox, False, False, 5)
 
 class VideoThread(threading.Thread):
 
