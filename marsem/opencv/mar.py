@@ -6,7 +6,7 @@ import sys
 import numpy as np
 from time import sleep
 
-from marsem import connect
+from marsem.protocol import car
 
 MOVE = True
 
@@ -73,12 +73,12 @@ while True:
         if value > 30:
             print('right')
             if MOVE:
-                connect.move(action="right")
+                car.move(action="right")
 
         if value < 30:
             print('forward')
             if MOVE:
-                connect.move(action="forward")
+                car.move(action="forward")
 
         samples = []
 
