@@ -1,59 +1,12 @@
 #!/usr/bin/python2 -tt
 # -*- coding: utf-8 -*-
 
-"""
-
-import numpy as np
-import cv2
-
-cap = cv2.VideoCapture(0)
-
-
-#img = cv2.imread('sachin.jpg')
-
-while True:
-    # Capture frame-by-frame
-    ret, frame = cap.read()
-
-    # Our operations on the frame come here
-    #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-    # Display the resulting frame
-    cv2.imshow('frame',frame)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-    faces = face_cascade.detectMultiScale(frame, 1.3, 5)
-    print(faces)
-    #print(faces)
-    for (x,y,w,h) in faces:
-        img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-        roi_gray = gray[y:y+h, x:x+w]
-        roi_color = img[y:y+h, x:x+w]
-        eyes = eye_cascade.detectMultiScale(roi_gray)
-        for (ex,ey,ew,eh) in eyes:
-            cv2.rectangle(roi_color,(ex,ey),(ex+ew,ey+eh),(0,255,0),2)
-
-cv2.imshow('img',img)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
-# When everything done, release the capture
-cap.release()
-cv2.destroyAllWindows()
-
-"""
-
-
-
-
-
-
 import cv2
 import sys
 import numpy as np
 from time import sleep
-import requests
+
+from marsem import connect
 
 MOVE = True
 
@@ -120,24 +73,16 @@ while True:
         if value > 30:
             print('right')
             if MOVE:
-                requests.get('http://192.168.2.1:8000/?action=right')
+                connect.move(action="right")
 
         if value < 30:
             print('forward')
             if MOVE:
-                requests.get('http://192.168.2.1:8000/?action=forward')
+                connect.move(action="forward")
 
         samples = []
 
-    """
-    faces = faceCascade.detectMultiScale(
-        frame,
-        scaleFactor=1.1,
-        minNeighbors=5,
-        minSize=(30, 30),
-        flags=cv2.cv.CV_HAAR_SCALE_IMAGE
-    )
-    """
+
 
     # Draw a rectangle around the faces
     #for (x, y, w, h) in faces:
