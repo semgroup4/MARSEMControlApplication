@@ -1,0 +1,52 @@
+<HomeScreen>:
+    CustomLayout:
+        Button:
+            id: 'go_to_settings'
+            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
+            size: 100, 50
+            text: 'Settings'
+            on_release:
+                root.manager.transition.direction = 'left'
+                root.manager.current = 'settings'
+        StartButton:
+            pos: self.width/2, self.height/2
+            size: 100, 100
+            text: 'Start'
+            on_release: self.start()
+        PhotoProgress:
+            pos: 200, 50
+            size: root.width-250, 10
+
+<SettingsScreen>:
+    CustomLayout:
+        Button:
+            id: 'back_to_home'
+            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
+            size: 100, 50
+            text: 'Home'
+            on_release:
+                root.manager.transition.direction = 'right'
+                root.manager.current = 'home'
+
+# This is the layout template used for all screens of the application.
+<CustomLayout>:
+    # Changes background. Needs 'before' so that the rectangle is rendered prior to widgets.
+    canvas.before:
+        Color:
+            rgba: 0.251, 0.247, 0.243, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    # Header for each screen.
+    Label:
+        text: 'MARSEM'
+        font_size: 50
+        pos: self.width, root.height-root.height/6
+    # Visual traits such as the line below the header goes here.
+    Decorations:
+        canvas:
+            Color:
+                rgba: 0.945, 0.945, 0.945, 1
+            Line:
+                points: 35, root.height-root.height/7, root.width-35, root.height-root.height/7
+                width: 2
