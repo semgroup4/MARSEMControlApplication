@@ -22,7 +22,7 @@ class HomeScreen(Screen):
                             size_hint=(0.9, 0.9))
         self._popup.open()
 
-    # Shows save file
+    #Shows save file
     def show_save(self):
         content = SaveDialog(save=self.save, cancel=self.dismiss_popup)
         self._popup = Popup(title="Save file", content=content,
