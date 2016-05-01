@@ -1,0 +1,107 @@
+<HomeScreen>:
+    CustomLayout:
+        Button:
+            id: menu_button
+            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
+            size: 100, 50
+            text: 'File'
+            on_release: dropdown.open(self)
+        StartButton:
+            pos: self.width/2, self.height/2
+            size: 100, 100
+            text: 'Start'
+            on_release: self.start()
+        PhotoProgress:
+            pos: 200, 50
+            size: root.width-250, 10
+        Menu:
+            DropDown:
+                id: dropdown
+                on_parent: self.dismiss()
+                on_select: menu_button.text = '{}'.format(args[1])
+                Button:
+                    text: 'Open'
+                    size_hint_y: None
+                    height: '48dp'
+                    on_release: root.show_load()
+                Button:
+                    text: 'Save'
+                    size_hint_y: None
+                    height: '48dp'
+                    on_release: root.show_save()
+                Button:
+                    text: 'Settings'
+                    size_hint_y: None
+                    height: '48dp'
+                    on_release: app.open_settings()
+<LoadDialog>:
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Load"
+                on_release: root.load(filechooser.path, filechooser.selection)
+
+<SaveDialog>:
+    text_input: text_input
+    BoxLayout:
+        size: root.size
+        pos: root.pos
+        orientation: "vertical"
+        FileChooserListView:
+            id: filechooser
+            on_selection: text_input.text = self.selection and self.selection[0] or ''
+
+        TextInput:
+            id: text_input
+            size_hint_y: None
+            height: 30
+            multiline: False
+
+        BoxLayout:
+            size_hint_y: None
+            height: 30
+            Button:
+                text: "Cancel"
+                on_release: root.cancel()
+
+            Button:
+                text: "Save"
+                on_release: root.save(filechooser.path, text_input.text)
+
+
+
+
+# This is the layout template used for all screens of the application.
+<CustomLayout>:
+    # Changes background. Needs 'before' so that the rectangle is rendered prior to widgets.
+    canvas.before:
+        Color:
+            rgba: 0.251, 0.247, 0.243, 1
+        Rectangle:
+            pos: self.pos
+            size: self.size
+    # Header for each screen.
+    Label:
+        text: 'MARSEM'
+        font_size: 50
+        pos: self.width, root.height-root.height/6
+    # Visual traits such as the line below the header goes here.
+    Decorations:
+        canvas:
+            Color:
+                rgba: 0.945, 0.945, 0.945, 1
+            Line:
+                points: 35, root.height-root.height/7, root.width-35, root.height-root.height/7
+                width: 2
