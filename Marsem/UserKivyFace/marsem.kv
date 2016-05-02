@@ -1,4 +1,23 @@
+
+<ScreenManagement>:
+    HomeScreen:
+    SettingsScreen:
+    PhotoScreen:
+
+<SettingsScreen>
+    name: "Settings"
+    CustomLayout:
+        Button:
+            size: 100, 100
+            text: 'Home'
+            on_release: app.root.current = "HomeScreen"
+<PhotoScreen>:
+    name: 'Photo'
+
+
 <HomeScreen>:
+    name: "HomeScreen"
+    DamnButton:
     CustomLayout:
         Button:
             id: menu_button
@@ -6,6 +25,12 @@
             size: 100, 50
             text: 'Menu'
             on_release: dropdown.open(self)
+        Button:
+            id: menu_button
+            pos: root.width-self.width-35, root.height-self.height*4+self.height/1
+            size: 100, 50
+            text: 'Settings'
+            on_release: app.root.current = "Settings"
         StartButton:
             pos: self.width/2, self.height/2
             size: 100, 100
@@ -14,8 +39,6 @@
         PhotoProgress:
             pos: 200, 50
             size: root.width-250, 10
-        MjpegViewer:
-            pos: root.width/2, root.height/2
 
         Menu:
             DropDown:
