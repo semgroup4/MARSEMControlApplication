@@ -14,6 +14,7 @@ from kivy.uix.button import Button
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
+import marsem.opencv as opencv
 
 
 class HomeScreen(Screen):
@@ -47,11 +48,11 @@ class HomeScreen(Screen):
         self.dismiss_popup()
 
 
-class VideoStream(Video):
+class VideoStream(Widget):
     def show_stream(stream):
         self.video = Video(stream)
         self.video.bind(position=self.on_position_change,
-                        duration=self.on_durattion_change)
+                        duration=self.on_duration_change)
         
 
     def on_position_change(instance, value):
@@ -129,7 +130,7 @@ class Marsem(App):
         screenManager.add_widget(PhotoScreen())
 
         return screenManager
-
+    
 
 if __name__ == "__main__":
     Marsem().run()
