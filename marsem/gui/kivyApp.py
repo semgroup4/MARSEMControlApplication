@@ -48,16 +48,17 @@ class HomeScreen(Screen):
 
 
 class VideoStream(Video):
+    def show_stream(stream):
+        self.video = Video(stream)
+        self.video.bind(position=self.on_position_change,
+                        duration=self.on_durattion_change)
+        
+
     def on_position_change(instance, value):
         print('The position in the video is', value)
 
     def on_duration_change(instance, value):
-        print('The duration of the video is', video)
-
-    video = Video(source='PandaSneezes.avi')
-    video.bind(position=on_position_change,
-               duration=on_duration_change)
-
+        print('The duration of the video is', value)
 
 class SettingsScreen(Screen):
     pass
