@@ -8,4 +8,4 @@ config = {
 }
 
 host_index = "http://" + config['host'] + ":" + config['port']
-host_stream = "http://" + config['host'] + "/stream/" + ":" + config['port']
+host_stream = "http://" + config['host'] + ":" +config['port'] + "/stream/"
