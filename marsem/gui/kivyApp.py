@@ -10,12 +10,15 @@ from kivy.uix.button import Button
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
+# Issue5 starts here!!!
+from Marsem.gui.settings import SettingsScreen
+from kivy.lang import Builder
+
+# Builder is used to load .kv files for other .py files.
+Builder.load_file('settings.kv')
+
 
 class HomeScreen(Screen):
-    pass
-
-
-class SettingsScreen(Screen):
     pass
 
 
@@ -105,7 +108,7 @@ class Marsem(App):
         Factory.register('LoadDialog', cls=LoadDialog)
         Factory.register('SaveDialog', cls=SaveDialog)
 
-        screenManager = ScreenManagement()
+        screenManager = ScreenManagement(transition=FadeTransition())
         screenManager.add_widget(HomeScreen())
         screenManager.add_widget(SettingsScreen())
         screenManager.add_widget(PhotoScreen())

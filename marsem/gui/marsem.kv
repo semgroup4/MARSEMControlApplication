@@ -1,19 +1,10 @@
-
 <ScreenManagement>:
     HomeScreen:
     SettingsScreen:
     PhotoScreen:
 
-<SettingsScreen>
-    name: "Settings"
-    CustomLayout:
-        Button:
-            size: 100, 100
-            text: 'Home'
-            on_release: app.root.current = "HomeScreen"
 <PhotoScreen>:
     name: 'Photo'
-
 
 <HomeScreen>:
     name: "HomeScreen"
@@ -27,7 +18,7 @@
             on_release: dropdown.open(self)
         Button:
             id: menu_button
-            pos: root.width-self.width-35, root.height-self.height*4+self.height/1
+            pos: root.width-self.width-35-self.width, root.height-self.height*2+self.height/2
             size: 100, 50
             text: 'Settings'
             on_release: app.root.current = "Settings"
