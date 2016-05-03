@@ -67,3 +67,9 @@ misc.xml
 modules.xml
 vcs.xml
 workspace.xml
+profiles_settings.xml
+Project_Default.xml
+alignment.py
+images.py
+tutorial.py
+MTs.xml
