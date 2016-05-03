@@ -19,7 +19,6 @@ from collections import deque
 
 
 class HomeScreen(Screen):
-
     def dismiss_popup(self):
         self._popup.dismiss()
 
@@ -49,6 +48,9 @@ class HomeScreen(Screen):
 
         self.dismiss_popup()
 
+
+class VideoStream(Image):
+    pass
 
 class SettingsScreen(Screen):
     pass
@@ -83,6 +85,7 @@ class DamnButton(Button):
 
 class DamnButton2(Button):
     pass
+
 
 """
 class MjpegViewer(Image):
@@ -132,9 +135,10 @@ class MjpegViewer(Image):
             self.texture_size = im.texture.size
 """
 
+
 class StartButton(Button):
     def start(self, *args):
-        print ('Start-the-car-code goes here')
+        print('Start-the-car-code goes here')
 
 
 class PhotoProgress(ProgressBar):
@@ -144,6 +148,7 @@ class PhotoProgress(ProgressBar):
 class LoadDialog(FloatLayout):
     pass
 
+
 class SaveDialog(FloatLayout):
     pass
 
@@ -151,24 +156,22 @@ class SaveDialog(FloatLayout):
 class Root(FloatLayout):
     pass
 
+
 class Marsem(App):
     def build(self):
-
-
         Factory.register('Root', cls=Root)
         Factory.register('LoadDialog', cls=LoadDialog)
         Factory.register('SaveDialog', cls=SaveDialog)
 
-#        viewer = MjpegViewer()
-#        viewer.start()
+        #        viewer = MjpegViewer()
+        #        viewer.start()
 
         screenManager = ScreenManagement()
         screenManager.add_widget(HomeScreen())
         screenManager.add_widget(SettingsScreen())
         screenManager.add_widget(PhotoScreen())
 
-
-#        main.add_widget(viewer)
+        #        main.add_widget(viewer)
 
         return screenManager
 
