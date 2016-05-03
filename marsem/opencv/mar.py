@@ -2,8 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-## TODO make this module more like an api
-## Functions instead of "main"
 import cv2
 import sys
 import numpy as np
@@ -11,7 +9,7 @@ from time import sleep
 
 import requests
 
-from marsem.protocol import car
+import marsem.protocol.car as car
 
 MOVE = True
 
@@ -40,10 +38,6 @@ max_color = np.array(max_color, dtype='uint8')
 
 kernel = np.ones((5,5),np.uint8)
 
-samples = []
-
-burst = 0
-
 def connect():
     if video_capture.open("tcp://192.168.2.1:2222"):
         print("Success in connecting to remote file")
@@ -51,7 +45,7 @@ def connect():
         print("Failed to open remote file, make sure the server is running and not busy")
 
 
-def run():
+def run(burst=0, samples=[], callback=None):
     while True:
         # Capture frame-by-frame
         ret, frame = video_capture.read()
@@ -79,7 +73,7 @@ def run():
             samples.append(x)
 
             #cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-            center = x + (w / 2)
+            center = x + int(w / 2)
             cv2.rectangle(frame, (center, 0), (center, 480), (0, 255, 0), 2)
         else:
             samples.append(0)
@@ -91,28 +85,30 @@ def run():
             if value > 30:
                 print('right')
                 if MOVE:
-                    pass
-                #car.move_right()
+                    car.move_right()
 
             if value < 30:
                 print('forward')
                 if MOVE:
-                    pass
-                #car.move_forward()
+                    car.move_forward()
             samples = []
 
-    # Draw a rectangle around the faces
-    #for (x, y, w, h) in faces:
-    #    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
+        # Draw a rectangle around the faces
+        #for (x, y, w, h) in faces:
+        #    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
 
-    # Display the resulting frame
-    cv2.imshow('Video', frame)
+        # Display the resulting frame
+        cv2.imshow('Video', frame)
 
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+        key = cv2.waitKey(1)
+        if key == ord('q'):
+            if callback:
+                stop(callback=callback)
+            stop()
+            break
 
-def stop():
+def stop(callback=None):
     video_capture.release()
     cv2.destroyAllWindows()
-#video_capture.release()
-#cv2.destroyAllWindows()
+    if callback:
+        callback()
