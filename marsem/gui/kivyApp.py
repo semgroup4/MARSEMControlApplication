@@ -1,22 +1,41 @@
 import os
-
 from kivy.app import App
-
 from kivy.factory import Factory
 from kivy.properties import ObjectProperty
-from kivy.uix import video
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
-from kivy.uix.video import Video
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
 
-
 class HomeScreen(Screen):
+    pass
+
+
+class SettingsScreen(Screen):
+    pass
+
+
+class PhotoScreen(Screen):
+    pass
+
+
+class ScreenManagement(ScreenManager):
+    pass
+
+
+class CustomLayout(Widget):
+    pass
+
+
+class Decorations(Widget):
+    pass
+
+
+class Menu(FloatLayout):
     def dismiss_popup(self):
         self._popup.dismiss()
 
@@ -45,42 +64,6 @@ class HomeScreen(Screen):
             stream.write(self.text_input.text)
 
         self.dismiss_popup()
-
-
-class VideoStream(Video):
-    def on_position_change(instance, value):
-        print('The position in the video is', value)
-
-    def on_duration_change(instance, value):
-        print('The duration of the video is', video)
-
-    video = Video(source='PandaSneezes.avi')
-    video.bind(position=on_position_change,
-               duration=on_duration_change)
-
-
-class SettingsScreen(Screen):
-    pass
-
-
-class PhotoScreen(Screen):
-    pass
-
-
-class ScreenManagement(ScreenManager):
-    pass
-
-
-class CustomLayout(Widget):
-    pass
-
-
-class Decorations(Widget):
-    pass
-
-
-class Menu(FloatLayout):
-    pass
 
 
 class DropDown(Button):
