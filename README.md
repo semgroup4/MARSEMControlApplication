@@ -9,12 +9,9 @@ python setup.py sdist
 This will create a dist folder \(if there is none\). The resulting tar.gz is the application.
 
 ## Setup OpenCV (MAC OsX)
-Make sure you're using pip for python 2.7
-* brew install opencv
-* cd /Library/Python/2.7/site-packages/
-* ln -s /usr/local/Cellar/opencv/2.4.8/lib/python2.7/site-packages/cv.py cv.py
-* ln -s /usr/local/Cellar/opencv/2.4.8/lib/python2.7/site-packages/cv2.so cv2.so
-* pip install numpy
+Make sure you have atleast python 3.4
+* brew install opencv3 --with-ffmpeg
+* pip3 install numpy
 
 
 
