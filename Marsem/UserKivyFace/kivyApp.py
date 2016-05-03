@@ -5,7 +5,6 @@ import threading
 from kivy.app import App
 from kivy.atlas import CoreImage
 from kivy.factory import Factory
-from kivy.properties import ObjectProperty
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
@@ -19,9 +18,7 @@ from kivy.clock import Clock
 from collections import deque
 
 
-
 class HomeScreen(Screen):
-
 
     def dismiss_popup(self):
         self._popup.dismiss()
@@ -56,6 +53,7 @@ class HomeScreen(Screen):
 class SettingsScreen(Screen):
     pass
 
+
 class PhotoScreen(Screen):
     pass
 
@@ -75,20 +73,21 @@ class Decorations(Widget):
 class Menu(FloatLayout):
     pass
 
+
 class DamnButton(Button):
     def __init__(self, **kw):
         super(DamnButton, self).__init__(**kw)
         self.ddn = DropDown()
         self.ddn.bind(on_release=self.on_release)
 
+
 class DamnButton2(Button):
     pass
 
-
+"""
 class MjpegViewer(Image):
     url = "http://195.235.198.107:3344/axis-cgi/mjpg/video.cgi?resolution=320x240"
 
-    self = ObjectProperty()
 
     def start(self):
         self.quit = False
@@ -131,10 +130,11 @@ class MjpegViewer(Image):
         if im is not None:
             self.texture = im.texture
             self.texture_size = im.texture.size
+"""
 
 class StartButton(Button):
     def start(self, *args):
-        print 'Start-the-car-code goes here'
+        print ('Start-the-car-code goes here')
 
 
 class PhotoProgress(ProgressBar):
@@ -142,32 +142,25 @@ class PhotoProgress(ProgressBar):
 
 
 class LoadDialog(FloatLayout):
-    load = ObjectProperty(None)
-    cancel = ObjectProperty(None)
-
+    pass
 
 class SaveDialog(FloatLayout):
-    save = ObjectProperty(None)
-    text_input = ObjectProperty(None)
-    cancel = ObjectProperty(None)
+    pass
 
 
 class Root(FloatLayout):
-    loadfile = ObjectProperty(None)
-    savefile = ObjectProperty(None)
-    text_input = ObjectProperty(None)
-
+    pass
 
 class Marsem(App):
     def build(self):
-        main = FloatLayout()
+
 
         Factory.register('Root', cls=Root)
         Factory.register('LoadDialog', cls=LoadDialog)
         Factory.register('SaveDialog', cls=SaveDialog)
 
-        viewer = MjpegViewer()
-        viewer.start()
+#        viewer = MjpegViewer()
+#        viewer.start()
 
         screenManager = ScreenManagement()
         screenManager.add_widget(HomeScreen())
@@ -175,12 +168,9 @@ class Marsem(App):
         screenManager.add_widget(PhotoScreen())
 
 
-        main.add_widget(screenManager)
-        main.add_widget(viewer)
+#        main.add_widget(viewer)
 
-        return main
-
-
+        return screenManager
 
 
 if __name__ == "__main__":
