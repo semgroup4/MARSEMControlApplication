@@ -41,10 +41,12 @@ kernel = np.ones((5,5),np.uint8)
 def connect(callback=None):
     if video_capture.open("tcp://192.168.2.1:2222"):
         print("Success in connecting to remote file")
+        return True
     else:
         if callback:
             callback()
         print("Failed to open remote file, make sure the server is running and not busy")
+        return False
 
 
 def run(burst=0, samples=[], callback=None):
@@ -113,7 +115,8 @@ def get_video(callback=None):
     if video_capture.isOpened():
         return video_capture.retrieve() # retval, image
     else:
-        callback() # If things are not connected
+        if callback:
+            callback() # If things are not connected
 
 def stop(callback=None):
     video_capture.release()
