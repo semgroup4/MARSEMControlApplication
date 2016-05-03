@@ -10,7 +10,7 @@ This will create a dist folder \(if there is none\). The resulting tar.gz is the
 
 ## Setup OpenCV (MAC OsX)
 Make sure you have atleast python 3.4
-* brew install opencv3
+* brew install opencv3 --with-ffmpeg
 * pip3 install numpy
 
 
