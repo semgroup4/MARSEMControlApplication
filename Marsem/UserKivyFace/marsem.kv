@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 <ScreenManagement>:
     HomeScreen:
@@ -31,6 +32,26 @@
             size: 100, 50
             text: 'Settings'
             on_release: app.root.current = "Settings"
+=======
+# The home screen, this will be displayed when the application is started.
+<HomeScreen>:
+    CustomLayout:
+    # Top navigation bar:
+        Button:
+            id: go_to_settings
+            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
+            text: 'Settings'
+            on_release:
+                root.manager.current = 'settings'
+        Button:
+            id: go_to_pictures
+            pos: root.width-self.width-35-self.width, root.height-self.height*2+self.height/2
+            text: 'Pictures'
+            on_release:
+                root.manager.current = 'pictures'
+
+        # Screen content:
+>>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
         StartButton:
             pos: self.width/2, self.height/2
             size: 100, 100
@@ -40,6 +61,7 @@
             pos: 200, 50
             size: root.width-250, 10
 
+<<<<<<< HEAD
         Menu:
             DropDown:
                 id: dropdown
@@ -114,6 +136,29 @@
                 on_release: root.save(filechooser.path, text_input.text)
 
 
+=======
+# This screen contains functions to configure MARSEM.
+<SettingsScreen>:
+    CustomLayout:
+    # Top navigation bar:
+        Button:
+            id: go_to_home
+            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
+            text: 'Home'
+            on_release:
+                root.manager.current = 'home'
+
+# This screen contains functions to view taken pictures and get an overview of how many sets of pictures there are.
+<PictureScreen>:
+    CustomLayout:
+    # Top navigation bar:
+        Button:
+            id: go_to_home
+            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
+            text: 'Home'
+            on_release:
+                root.manager.current = 'home'
+>>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
 
 
 # This is the layout template used for all screens of the application.
@@ -125,12 +170,22 @@
         Rectangle:
             pos: self.pos
             size: self.size
+<<<<<<< HEAD
     # Header for each screen.
+=======
+
+    # Header:
+>>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
     Label:
         text: 'MARSEM'
         font_size: 50
         pos: self.width, root.height-root.height/6
+<<<<<<< HEAD
     # Visual traits such as the line below the header goes here.
+=======
+
+    # Visual traits such as the line below the header goes here:
+>>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
     Decorations:
         canvas:
             Color:
@@ -138,3 +193,10 @@
             Line:
                 points: 35, root.height-root.height/7, root.width-35, root.height-root.height/7
                 width: 2
+<<<<<<< HEAD
+=======
+
+# Set size for all ordinary buttons, conserving space.
+<Button>:
+    size: 100, 50
+>>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
