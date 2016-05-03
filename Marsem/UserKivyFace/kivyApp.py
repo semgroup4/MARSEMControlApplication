@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import os
 import io
 import urllib
@@ -9,16 +8,10 @@ from kivy.factory import Factory
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
-=======
-from kivy.app import App
-
-from kivy.uix.scrollview import ScrollView
->>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
-<<<<<<< HEAD
 from kivy.uix.image import Image
 from kivy.core.image import Image as CoreImage
 from kivy.clock import Clock
@@ -59,31 +52,15 @@ class HomeScreen(Screen):
 class VideoStream(Image):
     pass
 
-=======
-
-
-class HomeScreen(Screen):
-    pass
-
-
->>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
 class SettingsScreen(Screen):
     pass
 
 
-<<<<<<< HEAD
 class PhotoScreen(Screen):
     pass
 
 
 class ScreenManagement(ScreenManager):
-=======
-class PictureScreen(Screen):
-    pass
-
-
-class PictureView(ScrollView):
->>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
     pass
 
 
@@ -95,7 +72,6 @@ class Decorations(Widget):
     pass
 
 
-<<<<<<< HEAD
 class Menu(FloatLayout):
     pass
 
@@ -161,15 +137,10 @@ class MjpegViewer(Image):
 
 
 class StartButton(Button):
-=======
-class StartButton(Button):
-
->>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
     def start(self, *args):
         print('Start-the-car-code goes here')
 
 
-<<<<<<< HEAD
 class PhotoProgress(ProgressBar):
     pass
 
@@ -183,18 +154,10 @@ class SaveDialog(FloatLayout):
 
 
 class Root(FloatLayout):
-=======
-class BackButton(Button):
-    pass
-
-
-class PhotoProgress(ProgressBar):
->>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
     pass
 
 
 class Marsem(App):
-<<<<<<< HEAD
     def build(self):
         Factory.register('Root', cls=Root)
         Factory.register('LoadDialog', cls=LoadDialog)
@@ -211,16 +174,6 @@ class Marsem(App):
         #        main.add_widget(viewer)
 
         return screenManager
-=======
-
-    def build(self):
-        screenmanager = ScreenManager(transition=FadeTransition())
-        screenmanager.add_widget(HomeScreen(name='home'))
-        screenmanager.add_widget(PictureScreen(name='pictures'))
-        screenmanager.add_widget(SettingsScreen(name='settings'))
-
-        return screenmanager
->>>>>>> b8733bcbe0ca7b7fcba3e600e27b67650cf3609a
 
 
 if __name__ == "__main__":
