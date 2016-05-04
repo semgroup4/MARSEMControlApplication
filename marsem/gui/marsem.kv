@@ -13,6 +13,11 @@
             on_release: app.root.current = "HomeScreen"
 <PhotoScreen>:
     name: 'Photo'
+    CustomLayout:
+        PhotoController:
+            size: root.size
+            pos: root.width-self.width, root.height-self.height*1.7+self.height/2
+
 
 
 <HomeScreen>:
@@ -50,7 +55,7 @@
                     text: 'Pictures'
                     size_hint_y: None
                     height: '48dp'
-                    on_release: menu.show_load()
+                    on_release: app.root.current = 'Photo'
                 Button:
                     text: 'Save'
                     size_hint_y: None
@@ -73,7 +78,8 @@
         size: root.size
         pos: root.pos
         orientation: "vertical"
-        FileChooserListView:
+        FileChooserIconView:
+            dirselect: True
             id: filechooser
 
         BoxLayout:
@@ -93,7 +99,7 @@
         size: root.size
         pos: root.pos
         orientation: "vertical"
-        FileChooserListView:
+        FileChooserIconView:
             id: filechooser
             on_selection: text_input.text = self.selection and self.selection[0] or ''
 
@@ -114,6 +120,8 @@
                 text: "Save"
                 on_release: root.save(filechooser.path, text_input.text)
 
+<PhotoController>:
+    FileChooserIconView:
 
 
 

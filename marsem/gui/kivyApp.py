@@ -1,10 +1,12 @@
 import os
 from kivy.app import App
 from kivy.factory import Factory
-from kivy.properties import ObjectProperty
+from kivy.properties import ObjectProperty, StringProperty
 from kivy.uix.dropdown import DropDown
+from kivy.uix.filechooser import FileChooserController, FileChooserIconView
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
+from kivy.uix.stacklayout import StackLayout
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.progressbar import ProgressBar
@@ -22,6 +24,8 @@ class SettingsScreen(Screen):
 class PhotoScreen(Screen):
     pass
 
+class PhotoController(StackLayout):
+    pass
 
 class ScreenManagement(ScreenManager):
     pass
@@ -36,11 +40,13 @@ class Decorations(Widget):
 
 
 class Menu(FloatLayout):
+
     def dismiss_popup(self):
         self._popup.dismiss()
 
     # Shows open file
     def show_load(self):
+
         content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
         self._popup = Popup(title="Load file", content=content,
                             size_hint=(0.9, 0.9))
@@ -55,9 +61,8 @@ class Menu(FloatLayout):
 
     def load(self, path, filename):
         with open(os.path.join(path, filename[0])) as stream:
-            self.text_input.text = stream.read()
-
-        self.dismiss_popup()
+                self.text_input.text = stream.read()
+                self.dismiss_popup()
 
     def save(self, path, filename):
         with open(os.path.join(path, filename), 'w') as stream:
@@ -94,6 +99,7 @@ class SaveDialog(FloatLayout):
 
 
 class Root(FloatLayout):
+    rootpath = "Users/Frank/Documents/kivy"
     loadfile = ObjectProperty(None)
     savefile = ObjectProperty(None)
     text_input = ObjectProperty(None)
