@@ -1,7 +1,14 @@
 import os
+import sys
+
+from os.path import join
+
 from kivy.app import App
+
 from kivy.factory import Factory
+
 from kivy.properties import ObjectProperty
+
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
@@ -12,10 +19,24 @@ from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
 # Issue5 starts here!!!
 from Marsem.gui.settings import SettingsScreen
+
 from kivy.lang import Builder
 
 # Builder is used to load .kv files for other .py files.
 Builder.load_file('settings.kv')
+
+# Issue6 starts here!!!
+PICTURE_PATH = ''
+
+try:
+    saved_settings = open(join(sys.path[0], "settings.txt"), "r")
+    picture_path = saved_settings.readline()
+
+    PICTURE_PATH = picture_path[13:]
+except IOError:
+    print('Program settings could not be loaded, check if settings.txt exists.')
+
+print(PICTURE_PATH)
 
 
 class HomeScreen(Screen):
