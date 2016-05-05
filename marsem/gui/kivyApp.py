@@ -1,7 +1,6 @@
 import os
-import sys
 
-from os.path import join
+from Marsem.gui.config import *
 
 from kivy.app import App
 
@@ -26,17 +25,7 @@ from kivy.lang import Builder
 Builder.load_file('settings.kv')
 
 # Issue6 starts here!!!
-PICTURE_PATH = ''
-
-try:
-    saved_settings = open(join(sys.path[0], "settings.txt"), "r")
-    picture_path = saved_settings.readline()
-
-    PICTURE_PATH = picture_path[13:]
-except IOError:
-    print('Program settings could not be loaded, check if settings.txt exists.')
-
-print(PICTURE_PATH)
+# See config.py
 
 
 class HomeScreen(Screen):

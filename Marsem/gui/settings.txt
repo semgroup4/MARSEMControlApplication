@@ -1,1 +1,1 @@
-picture_path=Users/MTs
+picture_path=
