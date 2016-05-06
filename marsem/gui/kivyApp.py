@@ -26,6 +26,7 @@ Builder.load_file('settings.kv')
 
 # Issue6 starts here!!!
 # See config.py
+# Use change_picture_path("new path to picture folder") to change path.
 
 
 class HomeScreen(Screen):

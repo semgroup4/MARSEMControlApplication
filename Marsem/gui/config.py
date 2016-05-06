@@ -37,7 +37,9 @@ for setting in SETTINGS:
 def change_picture_path(new_path):
     # First, create a new .txt file to read the changes into. Keeping the original in case something goes wrong.
     tmp_settings = open(join(sys.path[0], "settings.txt.tmp"), "w")
-    tmp_settings.write("picture_path=\n")
+    tmp_settings.write("picture_path=" + new_path + "\n")
     # TODO Complete function by writing the new path and renaming the file back to settings.txt.
+    tmp_settings.close()
+    os.rename("settings.txt.tmp", "settings.txt")
 
     SETTINGS[0] = new_path
