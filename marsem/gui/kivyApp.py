@@ -13,26 +13,17 @@ from kivy.uix.button import Button
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
-# Issue5 starts here!!!
+# Issue5 starts here! Simply import the crap here.
 from Marsem.gui.settingsscreen import SettingsScreen
 from Marsem.gui.customlayout import CustomLayout
 
-from kivy.lang import Builder
-
-# Builder is used to load .kv files for other .py files.
-# TODO DOES NOT WORK PROPERLY! START HERE! Builder.load_file actually works in the individual .py files.
-#Builder.load_file('settingsscreen.kv')
-
-
-# Issue6 starts here!!!
+# Issue6 starts here!
 from Marsem.gui.config import *
 # See config.py
-# Prints current picture path.
-print(SETTINGS[0])
 # Use change_picture_path("new path to picture folder") to change path.
 
 
-# Main application file for starting the MARSEM control system. This
+# Main application file for starting the MARSEM control system.
 
 
 class HomeScreen(Screen):
