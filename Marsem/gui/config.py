@@ -5,11 +5,19 @@ import time
 from os.path import join
 
 
+# Config is loaded upon each application start and contains information that the application needs to function
+# properly. All available settings can be reached from other files by referencing the SETTINGS list. Settings are
+# first loaded through a text file and then input to the SETTINGS list.
+#
+# Author:
+
+# List containing all available settings for the application.
 SETTINGS = []
 
 # Check if settings file exists to avoid errors.
 if os.path.exists(join(sys.path[0], "settings.txt")):
     try:
+        # Temporary storage for settings before they are pushed to global variable.
         settings = []
         with open(join(sys.path[0], "settings.txt"), "r") as file:
             # Read the opened file line by line into a list.
@@ -27,10 +35,6 @@ else:
     time.sleep(1)
     fresh_settings.write("picture_path=\n")
     fresh_settings.close()
-
-print('Settings loaded: ')
-for setting in SETTINGS:
-    print(setting)
 
 
 # When the user wishes to change the path to save pictures in, here is where they end up.

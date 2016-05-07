@@ -1,6 +1,3 @@
-import os
-
-from Marsem.gui.config import *
 
 from kivy.app import App
 
@@ -17,16 +14,25 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
 # Issue5 starts here!!!
-from Marsem.gui.settings import SettingsScreen
+from Marsem.gui.settingsscreen import SettingsScreen
+from Marsem.gui.customlayout import CustomLayout
 
 from kivy.lang import Builder
 
 # Builder is used to load .kv files for other .py files.
-Builder.load_file('settings.kv')
+# TODO DOES NOT WORK PROPERLY! START HERE! Builder.load_file actually works in the individual .py files.
+#Builder.load_file('settingsscreen.kv')
+
 
 # Issue6 starts here!!!
+from Marsem.gui.config import *
 # See config.py
+# Prints current picture path.
+print(SETTINGS[0])
 # Use change_picture_path("new path to picture folder") to change path.
+
+
+# Main application file for starting the MARSEM control system. This
 
 
 class HomeScreen(Screen):
@@ -38,10 +44,6 @@ class PhotoScreen(Screen):
 
 
 class ScreenManagement(ScreenManager):
-    pass
-
-
-class CustomLayout(Widget):
     pass
 
 
