@@ -67,15 +67,9 @@ misc.xml
 modules.xml
 vcs.xml
 workspace.xml
-<<<<<<< HEAD
-MTs.xml
-profiles_settings.xml
-Project_Default.xml
-=======
 profiles_settings.xml
 Project_Default.xml
 alignment.py
 images.py
 tutorial.py
 MTs.xml
->>>>>>> ac6d61200985738d91172835c55dcd74f5bb4974
