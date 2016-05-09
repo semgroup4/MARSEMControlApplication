@@ -1,4 +1,3 @@
-import os
 
 from kivy.app import App
 
@@ -17,6 +16,10 @@ from kivy.uix.screenmanager import ScreenManager, FadeTransition
 from Marsem.gui.settings import SettingsScreen
 from Marsem.gui.home import HomeScreen
 from Marsem.gui.picture import PictureScreen
+
+from Marsem.gui.config import *
+# See config.py
+# Use change_picture_path("new path to picture folder") to change path.
 
 
 class ScreenManagement(ScreenManager):
@@ -92,10 +95,10 @@ class Marsem(App):
         Factory.register('LoadDialog', cls=LoadDialog)
         Factory.register('SaveDialog', cls=SaveDialog)
 
-        screenmanager = ScreenManagement(transition=FadeTransition())
+        screenManager = ScreenManagement(transition=FadeTransition())
 
-        return screenmanager
-
+        return screenManager
+    
 
 if __name__ == "__main__":
     Marsem().run()
