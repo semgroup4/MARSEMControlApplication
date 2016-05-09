@@ -123,3 +123,7 @@ def stop(callback=None):
     cv2.destroyAllWindows()
     if callback:
         callback()
+
+if __name__ == '__main__':
+    connect()
+    run()
