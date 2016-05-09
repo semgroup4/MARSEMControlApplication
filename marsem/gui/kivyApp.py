@@ -13,17 +13,13 @@ from kivy.uix.button import Button
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
-# Issue5 starts here! Simply import the crap here.
-from Marsem.gui.settingsscreen import SettingsScreen
-from Marsem.gui.customlayout import CustomLayout
-
-# Issue6 starts here!
 from Marsem.gui.config import *
 # See config.py
 # Use change_picture_path("new path to picture folder") to change path.
 
 
 # Main application file for starting the MARSEM control system.
+import marsem.opencv as opencv
 
 
 class HomeScreen(Screen):
@@ -118,7 +114,7 @@ class Marsem(App):
         screenManager.add_widget(PhotoScreen())
 
         return screenManager
-
+    
 
 if __name__ == "__main__":
     Marsem().run()
