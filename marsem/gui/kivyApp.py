@@ -19,10 +19,18 @@ from Marsem.gui.config import *
 
 
 # Main application file for starting the MARSEM control system.
-import marsem.opencv as opencv
+#import Marsem.opencv as opencv
+
+
+class CustomLayout(Widget):
+    pass
 
 
 class HomeScreen(Screen):
+    pass
+
+
+class SettingsScreen(Screen):
     pass
 
 
@@ -109,9 +117,6 @@ class Marsem(App):
         Factory.register('SaveDialog', cls=SaveDialog)
 
         screenManager = ScreenManagement(transition=FadeTransition())
-        screenManager.add_widget(HomeScreen())
-        screenManager.add_widget(SettingsScreen())
-        screenManager.add_widget(PhotoScreen())
 
         return screenManager
     
