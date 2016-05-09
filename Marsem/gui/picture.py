@@ -3,8 +3,8 @@ from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 
 
-Builder.load_file("settings.kv")
+Builder.load_file("picture.kv")
 
 
-class SettingsScreen(Screen):
+class PictureScreen(Screen):
     pass

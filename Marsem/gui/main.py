@@ -1,29 +1,19 @@
 import os
+
 from kivy.app import App
 from kivy.factory import Factory
 from kivy.properties import ObjectProperty
+from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
+from kivy.uix.screenmanager import ScreenManager, FadeTransition
 from kivy.uix.widget import Widget
-from kivy.uix.button import Button
-from kivy.uix.progressbar import ProgressBar
-from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
-# Issue5 starts here!!!
+# Issue5 starts here!
 from Marsem.gui.settings import SettingsScreen
-from kivy.lang import Builder
-
-# Builder is used to load .kv files for other .py files.
-Builder.load_file('settings.kv')
-
-
-class HomeScreen(Screen):
-    pass
-
-
-class PhotoScreen(Screen):
-    pass
+from Marsem.gui.home import HomeScreen
+from Marsem.gui.picture import PictureScreen
 
 
 class ScreenManagement(ScreenManager):
@@ -36,6 +26,13 @@ class CustomLayout(Widget):
 
 class Decorations(Widget):
     pass
+
+
+class DropDown(Button):
+    def __init__(self, **kw):
+        super(DropDown, self).__init__(**kw)
+        self.dropdown = DropDown()
+        self.dropdown.bind(on_release=self.on_release)
 
 
 class Menu(FloatLayout):
@@ -69,19 +66,7 @@ class Menu(FloatLayout):
         self.dismiss_popup()
 
 
-class DropDown(Button):
-    def __init__(self, **kw):
-        super(DropDown, self).__init__(**kw)
-        self.ddn = DropDown()
-        self.ddn.bind(on_release=self.on_release)
-
-
-class StartButton(Button):
-    def start(self, *args):
-        print('Start-the-car-code goes here')
-
-
-class PhotoProgress(ProgressBar):
+class Home(Button):
     pass
 
 
@@ -108,12 +93,9 @@ class Marsem(App):
         Factory.register('LoadDialog', cls=LoadDialog)
         Factory.register('SaveDialog', cls=SaveDialog)
 
-        screenManager = ScreenManagement(transition=FadeTransition())
-        screenManager.add_widget(HomeScreen())
-        screenManager.add_widget(SettingsScreen())
-        screenManager.add_widget(PhotoScreen())
+        screenmanager = ScreenManagement(transition=FadeTransition())
 
-        return screenManager
+        return screenmanager
 
 
 if __name__ == "__main__":
