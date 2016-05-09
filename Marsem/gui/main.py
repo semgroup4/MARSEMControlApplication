@@ -5,45 +5,40 @@ from kivy.factory import Factory
 
 from kivy.properties import ObjectProperty
 
+from kivy.uix.widget import Widget
+from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
-from kivy.uix.widget import Widget
-from kivy.uix.button import Button
-from kivy.uix.progressbar import ProgressBar
-from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+from kivy.uix.screenmanager import ScreenManager, FadeTransition
+
+# Issue5 starts here!
+from Marsem.gui.settings import SettingsScreen
+from Marsem.gui.home import HomeScreen
+from Marsem.gui.picture import PictureScreen
 
 from Marsem.gui.config import *
 # See config.py
 # Use change_picture_path("new path to picture folder") to change path.
 
 
-# Main application file for starting the MARSEM control system.
-#import Marsem.opencv as opencv
+class ScreenManagement(ScreenManager):
+    pass
 
 
 class CustomLayout(Widget):
     pass
 
 
-class HomeScreen(Screen):
-    pass
-
-
-class SettingsScreen(Screen):
-    pass
-
-
-class PhotoScreen(Screen):
-    pass
-
-
-class ScreenManagement(ScreenManager):
-    pass
-
-
 class Decorations(Widget):
     pass
+
+
+class DropDown(Button):
+    def __init__(self, **kw):
+        super(DropDown, self).__init__(**kw)
+        self.dropdown = DropDown()
+        self.dropdown.bind(on_release=self.on_release)
 
 
 class Menu(FloatLayout):
@@ -75,22 +70,6 @@ class Menu(FloatLayout):
             stream.write(self.text_input.text)
 
         self.dismiss_popup()
-
-
-class DropDown(Button):
-    def __init__(self, **kw):
-        super(DropDown, self).__init__(**kw)
-        self.ddn = DropDown()
-        self.ddn.bind(on_release=self.on_release)
-
-
-class StartButton(Button):
-    def start(self, *args):
-        print('Start-the-car-code goes here')
-
-
-class PhotoProgress(ProgressBar):
-    pass
 
 
 class LoadDialog(FloatLayout):
