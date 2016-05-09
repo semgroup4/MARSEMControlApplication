@@ -1,14 +1,7 @@
 <ScreenManagement>:
     HomeScreen:
-
     SettingsScreen:
-        Home:
-            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
-            size: 100, 50
     PictureScreen:
-        Home:
-            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
-            size: 100, 50
 
 # This is the layout template used for all screens of the application.
 <CustomLayout>:
@@ -32,40 +25,6 @@
             Line:
                 points: 35, root.height-root.height/7, root.width-35, root.height-root.height/7
                 width: 2
-
-# FIX THIS PART!
-<Menu>:
-    id: menu
-    Button:
-        id: menu_button
-        pos: root.width-self.width-35, root.height-self.height*2+self.height/2
-        size: 100, 50
-        text: 'Menu'
-        on_release: dropdown.open(self)
-    DropDown:
-        id: dropdown
-        on_parent: self.dismiss()
-        on_select: menu_button.text = '{}'.format(args[1])
-        Button:
-            text: 'Pictures'
-            size_hint_y: None
-            height: '48dp'
-            on_release: app.root.current = 'Pictures'
-        Button:
-            text: 'Settings'
-            size_hint_y: None
-            height: '48dp'
-            on_release: app.root.current = 'Settings'
-        Button:
-            text: 'Save'
-            size_hint_y: None
-            height: '48dp'
-            on_release: menu.show_save()
-        Button:
-            text: 'Quit'
-            size_hint_y: None
-            height: '48dp'
-            on_release: app.get_running_app().stop()
 
 <LoadDialog>:
     BoxLayout:
@@ -110,8 +69,3 @@
             Button:
                 text: "Save"
                 on_release: root.save(filechooser.path, text_input.text)
-
-<Home>:
-    text: 'Home'
-    size_hint: None, None
-    on_release: app.root.current = "Home"

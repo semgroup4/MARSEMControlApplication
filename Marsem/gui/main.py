@@ -1,14 +1,17 @@
 import os
 
 from kivy.app import App
+
 from kivy.factory import Factory
+
 from kivy.properties import ObjectProperty
+
+from kivy.uix.widget import Widget
 from kivy.uix.button import Button
 from kivy.uix.dropdown import DropDown
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.popup import Popup
 from kivy.uix.screenmanager import ScreenManager, FadeTransition
-from kivy.uix.widget import Widget
 
 # Issue5 starts here!
 from Marsem.gui.settings import SettingsScreen
@@ -64,10 +67,6 @@ class Menu(FloatLayout):
             stream.write(self.text_input.text)
 
         self.dismiss_popup()
-
-
-class Home(Button):
-    pass
 
 
 class LoadDialog(FloatLayout):
