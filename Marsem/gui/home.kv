@@ -1,21 +1,11 @@
 <HomeScreen>:
-    name: "Home"
+    name: "HomeScreen"
     CustomLayout:
-        Button:
-            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
-            size: 100, 50
-            text: 'Settings'
-            on_release: app.root.current = "Settings"
-        Button:
-            pos: root.width-self.width-35-self.width, root.height-self.height*2+self.height/2
-            size: 100, 50
-            text: 'Pictures'
-            on_release: app.root.current = "Pictures"
         StartButton:
             pos: self.width/2, self.height/2
             size: 100, 100
             text: 'Start'
             on_release: self.start()
-        PictureProgress:
+        PhotoProgress:
             pos: 200, 50
             size: root.width-250, 10
