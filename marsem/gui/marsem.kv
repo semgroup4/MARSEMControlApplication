@@ -1,10 +1,12 @@
+#import fileChooser
 
 <ScreenManagement>:
     HomeScreen:
     SettingsScreen:
     PhotoScreen:
+    PhotoViewer:
 
-<SettingsScreen>
+<SettingsScreen>:
     name: "Settings"
     CustomLayout:
         Button:
@@ -14,28 +16,23 @@
 <PhotoScreen>:
     name: 'Photo'
     CustomLayout:
-        PhotoController:
+        FileChooserIconView:
+            pos: root.width-self.width, root.height-self.height*1.7+self.height/2
+            size: root.size
+            on_selection: root.loadImage(self)
+            filters: ['*.png']
+
+<PhotoViewer>:
+    name: 'PhotoViewer'
+    on_enter: root.showImages()
+    CustomLayout:
+        StackLayout:
             size: root.size
             pos: root.width-self.width, root.height-self.height*1.7+self.height/2
 
-
-
 <HomeScreen>:
     name: "HomeScreen"
-    DropDown:
     CustomLayout:
-        Button:
-            id: menu_button
-            pos: root.width-self.width-35, root.height-self.height*2+self.height/2
-            size: 100, 50
-            text: 'Menu'
-            on_release: dropdown.open(self)
-        Button:
-            id: menu_button
-            pos: root.width-self.width-35, root.height-self.height*4+self.height/1
-            size: 100, 50
-            text: 'Settings'
-            on_release: app.root.current = "Settings"
         StartButton:
             pos: self.width/2, self.height/2
             size: 100, 100
@@ -45,85 +42,35 @@
             pos: 200, 50
             size: root.width-250, 10
 
-        Menu:
-            id: menu
-            DropDown:
-                id: dropdown
-                on_parent: self.dismiss()
-                on_select: menu_button.text = '{}'.format(args[1])
-                Button:
-                    text: 'Pictures'
-                    size_hint_y: None
-                    height: '48dp'
-                    on_release: app.root.current = 'Photo'
-                Button:
-                    text: 'Save'
-                    size_hint_y: None
-                    height: '48dp'
-                    on_release: menu.show_save()
-                Button:
-                    text: 'Settings'
-                    size_hint_y: None
-                    height: '48dp'
-                    on_release: app.open_settings()
-                Button:
-                    text: 'Quit'
-                    size_hint_y: None
-                    height: '48dp'
-                    on_release: app.get_running_app().stop()
-
-
-<LoadDialog>:
+<Menu>:
     BoxLayout:
-        size: root.size
-        pos: root.pos
-        orientation: "vertical"
-        FileChooserIconView:
-            dirselect: True
-            id: filechooser
+        pos: root.width-self.width+470, root.height-self.height*2+self.height*6.2
+        size: 100, 50
+        Button:
+            text: 'Pictures'
+            size: 75, 50
+            size_hint: None,None
+            height: '48dp'
+            on_release: app.root.current = 'Photo'
 
-        BoxLayout:
-            size_hint_y: None
-            height: 30
-            Button:
-                text: "Cancel"
-                on_release: root.cancel()
-
-            Button:
-                text: "Load"
-                on_release: root.load(filechooser.path, filechooser.selection)
-
-<SaveDialog>:
-    text_input: text_input
-    BoxLayout:
-        size: root.size
-        pos: root.pos
-        orientation: "vertical"
-        FileChooserIconView:
-            id: filechooser
-            on_selection: text_input.text = self.selection and self.selection[0] or ''
-
-        TextInput:
-            id: text_input
-            size_hint_y: None
-            height: 30
-            multiline: False
-
-        BoxLayout:
-            size_hint_y: None
-            height: 30
-            Button:
-                text: "Cancel"
-                on_release: root.cancel()
-
-            Button:
-                text: "Save"
-                on_release: root.save(filechooser.path, text_input.text)
-
-<PhotoController>:
-    FileChooserIconView:
-
-
+        Button:
+            text: 'Settings'
+            size: 75, 50
+            size_hint: None,None
+            height: '48dp'
+            on_release: app.open_settings()
+        Button:
+            text: 'Quit'
+            size: 75, 50
+            size_hint: None,None
+            height: '48dp'
+            on_release: app.get_running_app().stop()
+        Button:
+            text: 'Photos'
+            size: 75, 50
+            size_hint: None,None
+            height: '48dp'
+            on_release: app.root.current = 'PhotoViewer'
 
 # This is the layout template used for all screens of the application.
 <CustomLayout>:
@@ -134,6 +81,7 @@
         Rectangle:
             pos: self.pos
             size: self.size
+
     # Header for each screen.
     Label:
         text: 'MARSEM'
@@ -147,3 +95,4 @@
             Line:
                 points: 35, root.height-root.height/7, root.width-35, root.height-root.height/7
                 width: 2
+    Menu:
