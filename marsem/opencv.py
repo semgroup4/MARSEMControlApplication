@@ -50,7 +50,7 @@ def connect(callback=None):
 
 
 def run(burst=0, samples=[], callback=None):
-    while True:
+    while video_capture.isOpened():
         # Capture frame-by-frame
         ret, frame = video_capture.read()
         
@@ -84,15 +84,12 @@ def run(burst=0, samples=[], callback=None):
 
         if len(samples) == 2:
             value = sum(samples) / len(samples)
-            print(value)
 
             if value > 30:
-                print('right')
                 if MOVE:
                     car.move_right()
 
             if value < 30:
-                print('forward')
                 if MOVE:
                     car.move_forward()
             samples = []
@@ -104,11 +101,11 @@ def run(burst=0, samples=[], callback=None):
         # Display the resulting frame
         cv2.imshow('Video', frame)
 
-        key = cv2.waitKey(1)
-        if key == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord('q'):
             if callback:
                 stop(callback=callback)
-            stop()
+            else:
+                stop()
             break
 
 def get_video(callback=None):
