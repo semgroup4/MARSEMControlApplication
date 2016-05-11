@@ -10,11 +10,11 @@ from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
 
 # Issue5 starts here!
-from Marsem.gui.settings import SettingsScreen
-from Marsem.gui.home import HomeScreen
-from Marsem.gui.photo import PhotoScreen
+from marsem.gui.settings import SettingsScreen
+from marsem.gui.home import HomeScreen
+from marsem.gui.photo import PhotoScreen
 
-from Marsem.gui.config import *
+from marsem.gui.config import *
 # See config.py
 # See config.py
 # Use change_picture_path("new path to picture folder") to change path.
