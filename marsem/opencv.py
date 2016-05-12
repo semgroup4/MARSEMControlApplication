@@ -12,31 +12,23 @@ import marsem.protocol.car as car
 
 MOVE = True
 
-#cascPath = sys.argv[1]
-#faceCascade = cv2.CascadeClassifier(cascPath)
-
-#faceCascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
-#faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
-#eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
-
 #video_capture = cv2.VideoCapture(0)
-video_capture = cv2.VideoCapture(0) 
-# Handle this better
-#if not video_capture.open('tcp://192.168.2.1:2222'):
-#    print("Failed to open remote file, make sure server is running & not busy")
-#    exit(1)
+video_capture = cv2.VideoCapture() 
 
-
-
+# Break into a color in the future
 min_color, max_color = ([86, 31, 4], [220, 88, 50]) # blue
 #min_color, max_color = ([17, 15, 140], [50, 56, 200]) # red
 
+# Make the colors into numpy arrays of type uint8
 min_color = np.array(min_color, dtype='uint8')
 max_color = np.array(max_color, dtype='uint8')
 
+
 kernel = np.ones((5,5),np.uint8)
 
+
 def connect(callback=None):
+    """ Connects to the videostream on the raspberry pi """
     if video_capture.open("tcp://192.168.2.1:2222"):
         print("Success in connecting to remote file")
         return True
@@ -73,7 +65,6 @@ def run(burst=0, samples=[], callback=None):
 
             samples.append(x)
 
-            #cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
             center = x + int(w / 2)
             cv2.rectangle(frame, (center, 0), (center, 480), (0, 255, 0), 2)
         else:
@@ -91,11 +82,6 @@ def run(burst=0, samples=[], callback=None):
                     car.move_forward()
             samples = []
 
-        # Draw a rectangle around the faces
-        #for (x, y, w, h) in faces:
-        #    cv2.rectangle(frame, (x, y), (x+w, y+h), (0, 255, 0), 2)
-
-        # Display the resulting frame
         cv2.imshow('Video', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
