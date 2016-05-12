@@ -8,21 +8,19 @@ import numpy as np
 from time import sleep
 
 import requests
-
 import marsem.protocol.car as car
 
 MOVE = True
 
-
 #cascPath = sys.argv[1]
 #faceCascade = cv2.CascadeClassifier(cascPath)
 
-faceCascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
+#faceCascade = cv2.CascadeClassifier('./haarcascade_frontalface_default.xml')
 #faceCascade = cv2.CascadeClassifier('haarcascade_frontalface_alt.xml')
 #eye_cascade = cv2.CascadeClassifier('haarcascade_eye.xml')
 
 #video_capture = cv2.VideoCapture(0)
-video_capture = cv2.VideoCapture() 
+video_capture = cv2.VideoCapture(0) 
 # Handle this better
 #if not video_capture.open('tcp://192.168.2.1:2222'):
 #    print("Failed to open remote file, make sure server is running & not busy")
@@ -68,11 +66,10 @@ def run(burst=0, samples=[], callback=None):
         erosion = cv2.erode(dilation,kernel,iterations=14)
         #opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
 
-        (cnts, _, heir) = cv2.findContours(erosion.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_SIMPLE)
-        if cnts.any():
+        (_, cnts, heir) = cv2.findContours(erosion.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+        if cnts:
             cnt = cnts[0]
             x,y,w,h = cv2.boundingRect(cnt)
-            #print(x, y, w, h)
 
             samples.append(x)
 
