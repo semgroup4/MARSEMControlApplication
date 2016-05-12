@@ -1,25 +1,39 @@
-
+from PIL import Image
 from kivy.app import App
-
-from kivy.factory import Factory
-
-from kivy.properties import ObjectProperty
-
+from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
-from kivy.uix.dropdown import DropDown
+from kivy.config import ConfigParser
+from kivy.uix.progressbar import ProgressBar
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.popup import Popup
-from kivy.uix.screenmanager import ScreenManager, FadeTransition
+from kivy.uix.stacklayout import StackLayout
+from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
+# Use change_picture_path("new path to picture folder") to change path.
+
 
 # Issue5 starts here!
-from Marsem.gui.settings import SettingsScreen
-from Marsem.gui.home import HomeScreen
-from Marsem.gui.picture import PictureScreen
+from marsem.gui.homeScreen import HomeScreen
+from marsem.gui.photoScreen import PhotoScreen
+from marsem.gui.settingsjson import settings_json
 
-from Marsem.gui.config import *
+
+from marsem.gui.config import *
+# See config.py
 # See config.py
 # Use change_picture_path("new path to picture folder") to change path.
+
+
+class pathSettings(BoxLayout):
+    config = ConfigParser()
+    config.read('myconfig.ini')
+
+
+class PhotoViewer(Screen):
+    pass
+
+
+class PhotoController(StackLayout):
+    pass
 
 
 class ScreenManagement(ScreenManager):
@@ -34,72 +48,42 @@ class Decorations(Widget):
     pass
 
 
-class DropDown(Button):
-    def __init__(self, **kw):
-        super(DropDown, self).__init__(**kw)
-        self.dropdown = DropDown()
-        self.dropdown.bind(on_release=self.on_release)
-
-
 class Menu(FloatLayout):
-    def dismiss_popup(self):
-        self._popup.dismiss()
-
-    # Shows open file
-    def show_load(self):
-        content = LoadDialog(load=self.load, cancel=self.dismiss_popup)
-        self._popup = Popup(title="Load file", content=content,
-                            size_hint=(0.9, 0.9))
-        self._popup.open()
-
-    # Shows save file
-    def show_save(self):
-        content = SaveDialog(save=self.save, cancel=self.dismiss_popup)
-        self._popup = Popup(title="Save file", content=content,
-                            size_hint=(0.9, 0.9))
-        self._popup.open()
-
-    def load(self, path, filename):
-        with open(os.path.join(path, filename[0])) as stream:
-            self.text_input.text = stream.read()
-
-        self.dismiss_popup()
-
-    def save(self, path, filename):
-        with open(os.path.join(path, filename), 'w') as stream:
-            stream.write(self.text_input.text)
-
-        self.dismiss_popup()
+    pass
 
 
-class LoadDialog(FloatLayout):
-    load = ObjectProperty(None)
-    cancel = ObjectProperty(None)
+class StartButton(Button):
+    def start(self, *args):
+        print('Start-the-car-code goes here')
 
 
-class SaveDialog(FloatLayout):
-    save = ObjectProperty(None)
-    text_input = ObjectProperty(None)
-    cancel = ObjectProperty(None)
-
-
-class Root(FloatLayout):
-    loadfile = ObjectProperty(None)
-    savefile = ObjectProperty(None)
-    text_input = ObjectProperty(None)
+class PhotoProgress(ProgressBar):
+    pass
 
 
 class Marsem(App):
     def build(self):
-        Factory.register('Root', cls=Root)
-        Factory.register('LoadDialog', cls=LoadDialog)
-        Factory.register('SaveDialog', cls=SaveDialog)
 
-        screenManager = ScreenManagement(transition=FadeTransition())
+        self.use_kivy_settings = False
+        setting = self.config.get('section_settings', 'save_path')
 
-        return screenManager
-    
+        return ScreenManagement(transition = FadeTransition())
+
+    def build_config(self, config):
+        config.setdefaults('section_settings', {
+            'save_path': '/Users/Frank/Documents/kivy'})
+
+    def build_settings(self, settings):
+        settings.add_json_panel('Marsem Settings',
+                                self.config,
+                                data=settings_json)
+
+    def on_config_change(self, config, section,
+                         key, value):
+        print(
+        config, section, key, value)
 
 if __name__ == "__main__":
     Marsem().run()
+
 

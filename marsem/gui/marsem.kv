@@ -1,7 +1,6 @@
 <ScreenManagement>:
     HomeScreen:
-    SettingsScreen:
-    PictureScreen:
+    PhotoScreen:
 
 # This is the layout template used for all screens of the application.
 <CustomLayout>:
@@ -13,10 +12,12 @@
             pos: self.pos
             size: self.size
     # Header for each screen.
-    Label:
+    Button:
         text: 'MARSEM'
         font_size: 50
-        pos: self.width, root.height-root.height/6
+        pos: self.width-170, root.height-root.height/7
+        size: 220, 70
+        on_release: app.root.current = 'HomeScreen'
     # Visual traits such as the line below the header goes here.
     Decorations:
         canvas:
@@ -25,47 +26,29 @@
             Line:
                 points: 35, root.height-root.height/7, root.width-35, root.height-root.height/7
                 width: 2
+    Menu:
 
-<LoadDialog>:
+
+<Menu>:
     BoxLayout:
-        size: root.size
-        pos: root.pos
-        orientation: "vertical"
-        FileChooserListView:
-            id: filechooser
+        pos: root.width-self.width+540, root.height-self.height*2+self.height*6.2
+        size: 100, 50
+        Button:
+            text: 'Pictures'
+            size: 75, 50
+            size_hint: None,None
+            height: '48dp'
+            on_release: app.root.current = 'PhotoScreen'
 
-        BoxLayout:
-            size_hint_y: None
-            height: 30
-            Button:
-                text: "Cancel"
-                on_release: root.cancel()
-            Button:
-                text: "Load"
-                on_release: root.load(filechooser.path, filechooser.selection)
-
-<SaveDialog>:
-    text_input: text_input
-    BoxLayout:
-        size: root.size
-        pos: root.pos
-        orientation: "vertical"
-        FileChooserListView:
-            id: filechooser
-            on_selection: text_input.text = self.selection and self.selection[0] or ''
-
-        TextInput:
-            id: text_input
-            size_hint_y: None
-            height: 30
-            multiline: False
-
-        BoxLayout:
-            size_hint_y: None
-            height: 30
-            Button:
-                text: "Cancel"
-                on_release: root.cancel()
-            Button:
-                text: "Save"
-                on_release: root.save(filechooser.path, text_input.text)
+        Button:
+            text: 'Settings'
+            size: 75, 50
+            size_hint: None,None
+            height: '48dp'
+            on_release: app.open_settings()
+        Button:
+            text: 'Quit'
+            size: 75, 50
+            size_hint: None,None
+            height: '48dp'
+            on_release: app.get_running_app().stop()
