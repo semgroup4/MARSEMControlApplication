@@ -2,9 +2,9 @@
 
 from distutils.core import setup, find_packages
 
-setup(name='Marsem',
+setup(name='marsem',
       version='0.1',
-      description='Marsem Control Application',
+      description='marsem Control Application',
       author='Group 4',
       url='https://github.com/semgroup4/MARSEMControlApplication',
       packages=find_packages("marsem", exclude=["test"]),

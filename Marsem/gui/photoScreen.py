@@ -2,11 +2,12 @@ import os
 
 from PIL import Image
 from kivy.uix.screenmanager import Screen
+#from marsem.gui.marsem.ini import *
 
 from kivy.lang import Builder
 
 
-Builder.load_file("photo.kv")
+Builder.load_file("photoScreen.kv")
 
 
 class PhotoScreen(Screen):
@@ -33,3 +34,4 @@ class PhotoScreen(Screen):
             listFiles(imagePath)
         except NameError:
             pass
+

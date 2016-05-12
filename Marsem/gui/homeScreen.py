@@ -5,7 +5,7 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.lang import Builder
 
 
-Builder.load_file("home.kv")
+Builder.load_file("homeScreen.kv")
 
 
 class HomeScreen(Screen):
