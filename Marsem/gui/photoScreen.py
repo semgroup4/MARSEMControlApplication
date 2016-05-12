@@ -1,8 +1,7 @@
+import configparser
 import os
-
 from PIL import Image
 from kivy.uix.screenmanager import Screen
-#from marsem.gui.marsem.ini import *
 
 from kivy.lang import Builder
 
@@ -11,6 +10,13 @@ Builder.load_file("photoScreen.kv")
 
 
 class PhotoScreen(Screen):
+    def getPath(self):
+        config = configparser.ConfigParser()
+        config.read('marsem.ini')
+        settings_path = config.get('section_settings', 'save_path')
+        return settings_path
+
+
     # provides filechooser path
     def loadImage(self, fileChooser):
         global imagePath

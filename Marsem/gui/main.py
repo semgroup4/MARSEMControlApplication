@@ -28,9 +28,6 @@ class pathSettings(BoxLayout):
     config.read('myconfig.ini')
 
 
-
-
-
 class PhotoViewer(Screen):
     pass
 
@@ -68,13 +65,13 @@ class Marsem(App):
     def build(self):
 
         self.use_kivy_settings = False
-        setting = self.config.get('Marsem Config', 'Save Path')
+        setting = self.config.get('section_settings', 'save_path')
 
         return ScreenManagement(transition = FadeTransition())
 
     def build_config(self, config):
-        config.setdefaults('Marsem Config', {
-            'Save Path': '/Users/Frank/Documents/kivy'})
+        config.setdefaults('section_settings', {
+            'save_path': '/Users/Frank/Documents/kivy'})
 
     def build_settings(self, settings):
         settings.add_json_panel('Marsem Settings',

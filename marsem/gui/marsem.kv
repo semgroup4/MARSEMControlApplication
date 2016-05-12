@@ -12,10 +12,12 @@
             pos: self.pos
             size: self.size
     # Header for each screen.
-    Label:
+    Button:
         text: 'MARSEM'
         font_size: 50
-        pos: self.width, root.height-root.height/6
+        pos: self.width-170, root.height-root.height/7
+        size: 220, 70
+        on_release: app.root.current = 'HomeScreen'
     # Visual traits such as the line below the header goes here.
     Decorations:
         canvas:
