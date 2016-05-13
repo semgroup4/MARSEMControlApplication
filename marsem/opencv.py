@@ -16,8 +16,8 @@ MOVE = True
 video_capture = cv2.VideoCapture() 
 
 # Break into a color in the future
-min_color, max_color = ([86, 31, 4], [220, 88, 50]) # blue
-#min_color, max_color = ([17, 15, 140], [50, 56, 200]) # red
+#min_color, max_color = ([86, 31, 4], [220, 88, 50]) # blue
+min_color, max_color = ([17, 15, 140], [50, 56, 200]) # red
 
 # Make the colors into numpy arrays of type uint8
 min_color = np.array(min_color, dtype='uint8')
@@ -73,11 +73,11 @@ def run(burst=0, samples=[], callback=None):
         if len(samples) == 2:
             value = sum(samples) / len(samples)
 
-            if value > 30:
+            if value > 45:
                 if MOVE:
                     car.move_right()
 
-            if value < 30:
+            if value < 45:
                 if MOVE:
                     car.move_forward()
             samples = []
