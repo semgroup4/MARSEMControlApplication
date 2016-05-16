@@ -1,9 +1,14 @@
 #!/usr/bin/env
 
 import requests
+
 import marsem.protocol.config as cfg
 
+from threading import Thread
+from queue import Queue
 
+# This queue is filled with move commands
+queue = Queue(maxsize=1)
 
 def move_left():
     return move(action="left")
@@ -24,8 +29,17 @@ def stop_stream():
     return stream(False)
 
 # desc: sends a move action to the Car
-def move(action=None):
+def move(action, q):
     r = requests.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
+    q.get()
+    q.task_done()
+
+def move_car(action=None):
+    if queue.empty():
+        worker = Thread(target=move, args(action, queue,))
+        worker.deamon = True
+        worker.start()
+        queue.put(action)
 
 
 # desc: starts/stops the camera stream on the Car
