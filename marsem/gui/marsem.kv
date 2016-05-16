@@ -31,24 +31,24 @@
 
 <Menu>:
     BoxLayout:
-        pos: root.width-self.width+540, root.height-self.height*2+self.height*6.2
+        pos: root.width-self.width+1115, root.height-self.height*2+self.height*11.3
         size: 100, 50
         Button:
             text: 'Pictures'
-            size: 75, 50
+            size: 150, 50
             size_hint: None,None
             height: '48dp'
             on_release: app.root.current = 'PhotoScreen'
 
         Button:
             text: 'Settings'
-            size: 75, 50
+            size: 150, 50
             size_hint: None,None
             height: '48dp'
             on_release: app.open_settings()
         Button:
             text: 'Quit'
-            size: 75, 50
+            size: 150, 50
             size_hint: None,None
             height: '48dp'
             on_release: app.get_running_app().stop()

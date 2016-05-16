@@ -1,7 +1,7 @@
 #!/usr/bin/env
 
 import requests
-import marsem.protocol.config as cfg
+import config as cfg
 
 
 

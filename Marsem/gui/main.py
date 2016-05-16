@@ -1,5 +1,9 @@
 from PIL import Image
+
+import sys
+sys.path.append("/Users/Frank/MARSEMControlApplication/marsem/protocol/") 
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
@@ -12,12 +16,13 @@ from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
 
 # Issue5 starts here!
-from marsem.gui.homeScreen import HomeScreen
-from marsem.gui.photoScreen import PhotoScreen
-from marsem.gui.settingsjson import settings_json
+from homeScreen import HomeScreen
+from photoScreen import PhotoScreen
+from settingsjson import settings_json
 
 
-from marsem.gui.config import *
+from config import *
+import car
 # See config.py
 # See config.py
 # Use change_picture_path("new path to picture folder") to change path.
@@ -82,6 +87,16 @@ class Marsem(App):
                          key, value):
         print(
         config, section, key, value)
+
+    def on_startup(dt):
+        print("starting")
+        try:
+            pass
+            # car.stream(True)
+        except NameError:
+            print ("shits gone wrong")
+    Clock.schedule_once(on_startup, 1)
+    
 
 if __name__ == "__main__":
     Marsem().run()
