@@ -3,7 +3,7 @@
 import numpy as np
 import cv2
 import time
-
+import threading
 import car
 import config 
 
@@ -43,8 +43,9 @@ if __name__ == '__main__':
 
         if len(samples) == 2:
             value = sum(samples) / len(samples)
-            car.move_forward()
-            print("MOved the car")
+            car.move_car(action="forward")
+            print(threading.active_count())
+
             samples = []
         
         cv2.imshow('Video', frame)

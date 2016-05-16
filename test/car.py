@@ -2,19 +2,24 @@
 
 import requests
 import time
+from threading import Thread
+from queue import Queue
 import config as cfg
 
+queue = Queue(maxsize=1)
+
+
 def move_left():
-    return move(action="left")
+    return move_car(action="left")
 
 def move_right():
-    return move(action="right")
+    return move_car(action="right")
 
 def move_forward():
-    return move(action="forward")
+    return move_car(action="forward")
 
 def move_backward():
-    return move(action="backward")
+    return move_car(action="backward")
 
 def start_stream():
     return stream(True)
@@ -22,22 +27,19 @@ def start_stream():
 def stop_stream():
     return stream(False)
 
-def moved(response):
-    print("Car has moved")
-    return True
-
-def handle_response(response):
-    print(response)
-
 # desc: sends a move action to the Car
-def move(action=None):
+def move(action, q):
     r = requests.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
-    if (r.status_code == 200):
-        return True
-    else:
-        return False
+    # We need a way to know if the server is responding at all, if not. Stop!
+    q.get() # remove the action from the queue
+    q.task_done()
     
-
+def move_car(action=None):
+    if queue.empty():
+        worker = Thread(target=move, args=(action, queue,))
+        worker.deamon = True
+        worker.start()
+        queue.put(action)
 
 # desc: starts/stops the camera stream on the Car
 # params: run, specifices if to start (True) or stop (False)
