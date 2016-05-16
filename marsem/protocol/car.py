@@ -11,16 +11,16 @@ from queue import Queue
 queue = Queue(maxsize=1)
 
 def move_left():
-    return move(action="left")
+    return move_car(action="left")
 
 def move_right():
-    return move(action="right")
+    return move_car(action="right")
 
 def move_forward():
-    return move(action="forward")
+    return move_car(action="forward")
 
 def move_backward():
-    return move(action="backward")
+    return move_car(action="backward")
 
 def start_stream():
     return stream(True)
