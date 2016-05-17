@@ -31,15 +31,18 @@ def stop_stream():
 # desc: sends a move action to the Car
 def move(action, q):
     r = requests.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
-    q.get()
+    # We need a way to know if the server is responding at all, if not. Stop!
+    q.get() # remove the action from the queue
     q.task_done()
-
+    
 def move_car(action=None):
     if queue.empty():
-        worker = Thread(target=move, args(action, queue,))
+        worker = Thread(target=move, args=(action, queue,))
         worker.deamon = True
         worker.start()
         queue.put(action)
+
+
 
 
 # desc: starts/stops the camera stream on the Car
