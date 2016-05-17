@@ -8,6 +8,9 @@ from kivy.uix.progressbar import ProgressBar
 from kivy.lang import Builder
 
 
+from test.kivystreamtest import OpenCVStream
+
+
 Builder.load_file("homeScreen.kv")
 
 

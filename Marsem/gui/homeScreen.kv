@@ -1,6 +1,15 @@
 <HomeScreen>:
     name: "HomeScreen"
     CustomLayout:
+        OpenCVStream:
+            id: stream
+            pos: root.width/2-self.width/2, root.height/2-self.height/2
+            size: 750, 750
+        Button:
+            pos: root.width/2, root.height/2
+            size: 100, 100
+            text: 'Stream!'
+            on_release: stream.start()
         StartButton:
             pos: self.width/2, self.height/2
             size: 100, 100
