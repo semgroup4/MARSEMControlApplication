@@ -3,12 +3,12 @@
     CustomLayout:
         OpenCVStream:
             id: stream
-            pos: root.width/2-self.width/2, root.height/2-self.height/2
-            size: 750, 750
+            pos: root.width-self.width-35, root.height/2-self.height/2
+            size: 1250, 1250
         Button:
-            pos: root.width/2, root.height/2
+            text: 'Start Stream'
+            pos: self.width/2, root.height/2-self.height/2
             size: 100, 100
-            text: 'Stream!'
             on_release: stream.start()
         StartButton:
             pos: self.width/2, self.height/2
@@ -18,3 +18,5 @@
         PhotoProgress:
             pos: 200, 50
             size: root.width-250, 10
+
+<OpenCVStream>: 

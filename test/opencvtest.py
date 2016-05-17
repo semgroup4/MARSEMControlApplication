@@ -15,14 +15,14 @@ max_color = np.array(max_color, dtype='uint8')
 
 kernel = np.ones((5,5), np.uint8)
 
-samples = []
-
-cap = cv2.VideoCapture(config.stream_file)
+#samples = []
 
 f_frame = None
 
 
 def main(samples=[]):
+    global cap
+    cap = cv2.VideoCapture(config.stream_file)
     print('>> OpenCV stream has started!')
     # The frame needs to be declared global to be able to be read from get_video
     global f_frame
