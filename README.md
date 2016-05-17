@@ -13,7 +13,9 @@ Make sure you have atleast python 3.4
 * brew install opencv3 --with-ffmpeg
 * pip3 install numpy
 
-
+## How to run Kivy app
+Stand in MARSEMControlApplication
+PYTHONPATH=. python3 marsem/gui/main.py
 
 
 ## WiPI

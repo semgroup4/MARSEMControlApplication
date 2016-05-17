@@ -10,23 +10,30 @@ from queue import Queue
 # This queue is filled with move commands
 queue = Queue(maxsize=1)
 
+
 def move_left():
     return move_car(action="left")
+
 
 def move_right():
     return move_car(action="right")
 
+
 def move_forward():
     return move_car(action="forward")
+
 
 def move_backward():
     return move_car(action="backward")
 
+
 def start_stream():
     return stream(True)
 
+
 def stop_stream():
     return stream(False)
+
 
 # desc: sends a move action to the Car
 def move(action, q):

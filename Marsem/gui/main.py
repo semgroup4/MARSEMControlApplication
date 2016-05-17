@@ -1,39 +1,23 @@
+#!/usr/bin/python3.4 -tt
+# -*- coding: utf-8 -*-
+
+
 from PIL import Image
+
 from kivy.app import App
+from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
-from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
-# Use change_picture_path("new path to picture folder") to change path.
 
-
-# Issue5 starts here!
 from marsem.gui.homeScreen import HomeScreen
 from marsem.gui.photoScreen import PhotoScreen
 from marsem.gui.settingsjson import settings_json
-
-
-from marsem.gui.config import *
-# See config.py
-# See config.py
-# Use change_picture_path("new path to picture folder") to change path.
-
-
-class pathSettings(BoxLayout):
-    config = ConfigParser()
-    config.read('myconfig.ini')
-
-
-class PhotoViewer(Screen):
-    pass
-
-
-class PhotoController(StackLayout):
-    pass
+import marsem.protocol.car
 
 
 class ScreenManagement(ScreenManager):
@@ -49,15 +33,6 @@ class Decorations(Widget):
 
 
 class Menu(FloatLayout):
-    pass
-
-
-class StartButton(Button):
-    def start(self, *args):
-        print('Start-the-car-code goes here')
-
-
-class PhotoProgress(ProgressBar):
     pass
 
 
@@ -82,6 +57,16 @@ class Marsem(App):
                          key, value):
         print(
         config, section, key, value)
+
+    def on_startup(dt):
+        print("starting")
+        try:
+            pass
+            # car.stream(True)
+        except NameError:
+            print ("shits gone wrong")
+    Clock.schedule_once(on_startup, 1)
+    
 
 if __name__ == "__main__":
     Marsem().run()
