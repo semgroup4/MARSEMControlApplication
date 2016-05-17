@@ -1,44 +1,23 @@
+#!/usr/bin/python3.4 -tt
+# -*- coding: utf-8 -*-
+
+
 from PIL import Image
 
-import sys
-sys.path.append("/Users/Frank/MARSEMControlApplication/marsem/protocol/") 
 from kivy.app import App
 from kivy.clock import Clock
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
 from kivy.uix.button import Button
-from kivy.config import ConfigParser
 from kivy.uix.progressbar import ProgressBar
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.stacklayout import StackLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
-# Use change_picture_path("new path to picture folder") to change path.
 
-
-# Issue5 starts here!
-from homeScreen import HomeScreen
-from photoScreen import PhotoScreen
-from settingsjson import settings_json
-
-
-from config import *
-import car
-# See config.py
-# See config.py
-# Use change_picture_path("new path to picture folder") to change path.
-
-
-class pathSettings(BoxLayout):
-    config = ConfigParser()
-    config.read('myconfig.ini')
-
-
-class PhotoViewer(Screen):
-    pass
-
-
-class PhotoController(StackLayout):
-    pass
+from marsem.gui.homeScreen import HomeScreen
+from marsem.gui.photoScreen import PhotoScreen
+from marsem.gui.settingsjson import settings_json
+import marsem.protocol.car
 
 
 class ScreenManagement(ScreenManager):
@@ -54,15 +33,6 @@ class Decorations(Widget):
 
 
 class Menu(FloatLayout):
-    pass
-
-
-class StartButton(Button):
-    def start(self, *args):
-        print('Start-the-car-code goes here')
-
-
-class PhotoProgress(ProgressBar):
     pass
 
 

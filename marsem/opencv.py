@@ -8,7 +8,7 @@ import numpy as np
 from time import sleep
 
 import requests
-import car *
+import marsem.protocol.car
 
 MOVE = True
 

@@ -1,27 +1,32 @@
 #!/usr/bin/env
 
 import requests
-import config as cfg
-
+import marsem.protocol.config as cfg
 
 
 def move_left():
     return move(action="left")
 
+
 def move_right():
     return move(action="right")
+
 
 def move_forward():
     return move(action="forward")
 
+
 def move_backward():
     return move(action="backward")
+
 
 def start_stream():
     return stream(True)
 
+
 def stop_stream():
     return stream(False)
+
 
 # desc: sends a move action to the Car
 def move(action=None):
