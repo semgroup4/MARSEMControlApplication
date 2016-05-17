@@ -19,9 +19,12 @@ samples = []
 
 cap = cv2.VideoCapture(config.stream_file)
 
-def main():
+f_frame = None
+
+def main(samples=[]):
     while cap.isOpened():
         ret, frame = cap.read()
+        f_frame = frame
         mask = cv2.inRange(frame, min_color, max_color)
         blue = cv2.bitwise_and(frame,frame,mask=mask)
         gray = cv2.cvtColor(blue, cv2.COLOR_BGR2GRAY)
@@ -58,7 +61,7 @@ def main():
 
 def get_video(callback=None):
     if cap.isOpened():
-        return cap.retrieve() # retval, image
+        return f_frame # retval, image
     else:
         if callback:
             callback() # If things are not connected
