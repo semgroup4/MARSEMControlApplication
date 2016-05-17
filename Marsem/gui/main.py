@@ -46,7 +46,7 @@ class Marsem(App):
 
     def build_config(self, config):
         config.setdefaults('section_settings', {
-            'save_path': '/Users/Frank/Documents/kivy'})
+            'save_path': '~/'})
 
     def build_settings(self, settings):
         settings.add_json_panel('Marsem Settings',

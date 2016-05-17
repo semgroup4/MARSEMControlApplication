@@ -3,6 +3,9 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+# Kivy settings files
+marsem.ini
+
 # C extensions
 *.so
 
