@@ -17,9 +17,9 @@ kernel = np.ones((5,5), np.uint8)
 
 samples = []
 
-if __name__ == '__main__':
-    cap = cv2.VideoCapture(config.stream_file)
-    
+cap = cv2.VideoCapture(config.stream_file)
+
+def main():
     while cap.isOpened():
         ret, frame = cap.read()
         mask = cv2.inRange(frame, min_color, max_color)
@@ -55,3 +55,10 @@ if __name__ == '__main__':
 
     cap.release()
     cv2.destroyAllWindows()
+
+def get_video(callback=None):
+    if cap.isOpened():
+        return cap.retrieve() # retval, image
+    else:
+        if callback:
+            callback() # If things are not connected

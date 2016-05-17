@@ -12,7 +12,6 @@ import marsem.protocol.car as car
 
 MOVE = True
 
-#video_capture = cv2.VideoCapture(0)
 video_capture = cv2.VideoCapture() 
 
 # Break into a color in the future
@@ -39,14 +38,10 @@ def connect(callback=None):
         return False
 
 
-def run(burst=0, samples=[], callback=None):
+def run(samples=[], callback=None):
     while video_capture.isOpened():
         # Capture frame-by-frame
         ret, frame = video_capture.read()
-        
-        burst += 1
-        if burst < 200:
-            continue
         
         mask = cv2.inRange(frame, min_color, max_color)
         blue = cv2.bitwise_and(frame, frame, mask=mask)
@@ -56,7 +51,6 @@ def run(burst=0, samples=[], callback=None):
         im_bw = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)[1]
         dilation = cv2.dilate(im_bw,kernel,iterations=10)
         erosion = cv2.erode(dilation,kernel,iterations=14)
-        #opening = cv2.morphologyEx(erosion, cv2.MORPH_OPEN, kernel)
 
         (_, cnts, heir) = cv2.findContours(erosion.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
         if cnts:
@@ -90,6 +84,9 @@ def run(burst=0, samples=[], callback=None):
             else:
                 stop()
             break
+
+def set_colors(min_color=[], max_color=[]):
+    print("Set colors")
 
 def get_video(callback=None):
     if video_capture.isOpened():
