@@ -68,8 +68,9 @@ def stream(run):
 def start_server():
     try:
         ssh.connect("192.168.2.1", username="pi", password="raspberry")
-        stdin, stdout, stderr = ssh.exec_command("ps cax | grep python3")
-        stdin, stdout, stderr = ssh.exec_command("python3 marsem/server/main.py &")
+        stdin, stdout, stderr = ssh.exec_command("ps cax | grep \"python3 marsem/server/main.py\"")
+        if stdout == 1:
+            stdin, stdout, stderr = ssh.exec_command("python3 marsem/server/main.py &")
         return True
     except SSHException as error:
         print(error)
