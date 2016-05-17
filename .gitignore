@@ -73,3 +73,6 @@ alignment.py
 images.py
 tutorial.py
 MTs.xml
+
+.DS_STORE
+MANIFEST
