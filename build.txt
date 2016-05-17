@@ -1,0 +1,16 @@
+PYGAME:
+
+brew install mercurial
+brew install sdl sdl_image sdl_mixer sdl_ttf smpeg portmidi
+pip3 install hg+http://bitbucket.org/pygame/pygame
+
+KIVY:
+
+brew install sdl2 sdl2_image sdl2_ttf sdl2_mixer gstreamer
+pip3 install cython
+USE_OSX_FRAMEWORKS=0 pip3 install kivy
+USE_OSX_FRAMEWORKS=0 pip3 install https://github.com/kivy/kivy/archive/master.zip
+
+PACKAGES:
+
+pip3 install pillow
