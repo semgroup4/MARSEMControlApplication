@@ -17,7 +17,10 @@ from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 from marsem.gui.homeScreen import HomeScreen
 from marsem.gui.photoScreen import PhotoScreen
 from marsem.gui.settingsjson import settings_json
-import marsem.protocol.car
+from marsem.protocol import car
+import requests
+import marsem.protocol.config as cfg
+
 
 
 class ScreenManagement(ScreenManager):
@@ -33,7 +36,20 @@ class Decorations(Widget):
 
 
 class Menu(FloatLayout):
-    pass
+    
+    #car.picture()
+    #The picture function is currently bound to the "Settings Button"
+    def picture(self):
+        """ Returns an image binary captured from the raspberry pi camera.
+        Encoding is JPEG."""
+        r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'])
+        if (r.status_code == 200):
+            return print(r.content)
+            print("yep")    
+        else:
+            return False
+            print("nope")
+            
 
 
 class Marsem(App):
@@ -46,26 +62,26 @@ class Marsem(App):
 
     def build_config(self, config):
         config.setdefaults('section_settings', {
-            'save_path': '~/'})
+        'save_path': '~/'})
 
     def build_settings(self, settings):
-        settings.add_json_panel('Marsem Settings',
-                                self.config,
-                                data=settings_json)
+            settings.add_json_panel('Marsem Settings',
+                            self.config,
+                            data=settings_json)
 
     def on_config_change(self, config, section,
-                         key, value):
+                     key, value):
         print(
-        config, section, key, value)
+            config, section, key, value)
 
     def on_startup(dt):
         print("starting")
         try:
             pass
-            # car.stream(True)
+        # car.stream(True)
         except NameError:
             print ("shits gone wrong")
-    Clock.schedule_once(on_startup, 1)
+        Clock.schedule_once(on_startup, 1)
     
 
 if __name__ == "__main__":
