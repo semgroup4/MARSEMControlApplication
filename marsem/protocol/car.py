@@ -60,3 +60,11 @@ def stream(run):
         return True
     else:
         return False
+
+
+def picture():
+    r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'])
+    if (r.status_code == 200):
+        return r.content
+    else:
+        return False
