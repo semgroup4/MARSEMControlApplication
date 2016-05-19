@@ -22,21 +22,14 @@ from threading import Thread
 Builder.load_file("homeScreen.kv")
 
 
-loaded = False
-
-
 class HomeScreen(Screen):
     pass
 
 
 class OpenCVStream(BoxLayout):
     def load(self):
-        global loaded
-
-        if not loaded:
-            self.stream_image = Image(source='stop_icon.png')
-            self.add_widget(self.stream_image)
-            loaded = True
+        self.stream_image = Image(source='stop_icon.png')
+        self.add_widget(self.stream_image)
 
     def update(self, dt):
         try:
