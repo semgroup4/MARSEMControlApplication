@@ -1,6 +1,9 @@
+
 #!/usr/bin/python3.4 -tt
 # -*- coding: utf-8 -*-
 
+from PIL import Image
+from io import BytesIO
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -16,8 +19,6 @@ from marsem.protocol import car
 import marsem.protocol.config as cfg
 import io
 #import requests
-#from io import BytesIO
-
 
 
 
@@ -38,7 +39,6 @@ class Menu(FloatLayout):
     def car_picture(self):
         byte_stream = io.BytesIO(car.picture())
         img = Image.open(byte_stream)
-        
 
 class Marsem(App):
     def build(self):
@@ -61,15 +61,6 @@ class Marsem(App):
                      key, value):
         print(
             config, section, key, value)
-
-    def on_startup(dt):
-        print("starting")
-        try:
-            pass
-        
-        except NameError:
-            print ("shits gone wrong")
-        Clock.schedule_once(on_startup, 1)
     
 
 if __name__ == "__main__":
