@@ -36,19 +36,11 @@ class Decorations(Widget):
 
 
 class Menu(FloatLayout):
-    
-    #car.picture()
     #The picture function is currently bound to the "Settings Button"
-    def picture(self):
-        """ Returns an image binary captured from the raspberry pi camera.
-        Encoding is JPEG."""
-        r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'])
-        if (r.status_code == 200):
-            return print(r.content)
-            print("yep")    
-        else:
-            return False
-            print("nope")
+    def car_picture(self):
+        car.picture()
+
+   
             
 
 
@@ -78,7 +70,7 @@ class Marsem(App):
         print("starting")
         try:
             pass
-        # car.stream(True)
+        
         except NameError:
             print ("shits gone wrong")
         Clock.schedule_once(on_startup, 1)

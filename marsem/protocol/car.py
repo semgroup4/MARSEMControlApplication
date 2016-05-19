@@ -65,7 +65,7 @@ def stream(run):
 def picture():
     """ Returns an image binary captured from the raspberry pi camera.
     Encoding is JPEG."""
-    r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'])
+    r = requests.get("http://localhost:8000/picture",params={"picture": True}, headers=cfg.config['headers'])
     if (r.status_code == 200):
         return r.content
     else:
