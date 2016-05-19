@@ -1,15 +1,20 @@
 #!/usr/bin/env
 
 import requests
-
-import marsem.protocol.config as cfg
-
 from threading import Thread
 from queue import Queue
 
+import marsem.protocol.config as cfg
+import paramiko
+
+# Global state variables
+SERVER_RUNNING = False
+
 # This queue is filled with move commands
 queue = Queue(maxsize=1)
-
+ssh = paramiko.client.SSHClient()
+# Warning
+ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # There be dragons here, do not use with untrusted hosts!
 
 def move_left():
     return move_car(action="left")
@@ -60,3 +65,52 @@ def stream(run):
         return True
     else:
         return False
+
+
+# This should probably be threaded, since the server might not be available,
+# Will currently block the main thread when this is executed    
+def start_server():
+    global SERVER_RUNNING
+    if SERVER_RUNNING:
+        return SERVER_RUNNING
+    else:
+        try:
+            if ssh.get_transport() == None:
+                ssh.connect(cfg.config['host'], username="pi", password="raspberry")
+            stdin, stdout, stderr = ssh.exec_command("pgrep python3")
+            if len(stdout.readlines()) == 0:
+                stdin, stdout, stderr = ssh.exec_command("python3 marsem/server/main.py &")
+            SERVER_RUNNING = True
+            return True
+        except paramiko.SSHException as error:
+            print(error)
+            SERVER_RUNNING = False
+            return False
+        finally:
+            ssh.close()
+
+def stop_server():
+    global SERVER_RUNNING
+    if not SERVER_RUNNING:
+        return not SERVER_RUNNING
+    else:
+        try:
+            if ssh.get_transport() == None:
+                ssh.connect(cfg.config['host'], username="pi", password="raspberry")
+            stdin, stdout, stderr = ssh.exec_command("pgrep python")
+            res = stdout.readlines()
+            if len(res) == 1:
+                res = format_value(res[0])
+                stdin, stdout, stderr = ssh.exec_command("kill -s SIGTERM " + res)
+            SERVER_RUNNING = False
+            return True
+        except paramiko.SSHException as error:
+            print(error)
+            SERVER_RUNNING = True
+            return False
+        finally:
+            ssh.close()
+
+
+def format_value(x):
+    return x.strip("\n")

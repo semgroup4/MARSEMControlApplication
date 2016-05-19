@@ -38,6 +38,7 @@ def connect(callback=None):
         return False
 
 
+# This needs to be threaded, to prevent main thread block
 def run(samples=[], callback=None):
     while video_capture.isOpened():
         # Capture frame-by-frame
