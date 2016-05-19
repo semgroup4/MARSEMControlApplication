@@ -12,9 +12,12 @@ from marsem.gui.homeScreen import HomeScreen
 from marsem.gui.photoScreen import PhotoScreen
 from marsem.gui.settingsjson import settings_json
 from marsem.protocol import car
-import requests
-from io import BytesIO
+
 import marsem.protocol.config as cfg
+import io
+#import requests
+#from io import BytesIO
+
 
 
 
@@ -33,7 +36,8 @@ class Decorations(Widget):
 class Menu(FloatLayout):
     #The picture function is currently bound to the "Settings Button"
     def car_picture(self):
-        car.picture()
+        byte_stream = io.BytesIO(car.picture())
+        img = Image.open(byte_stream)
         
 
 class Marsem(App):
