@@ -37,8 +37,11 @@ class Decorations(Widget):
 class Menu(FloatLayout):
     #The picture function is currently bound to the "Settings Button"
     def car_picture(self):
-        byte_stream = io.BytesIO(car.picture())
+        picture = car.picture()
+        byte_stream = io.BytesIO(picture)
+        print(byte_stream)
         img = Image.open(byte_stream)
+        print("img", img)
 
 class Marsem(App):
     def build(self):
