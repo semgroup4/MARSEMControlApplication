@@ -1,7 +1,9 @@
 #!/usr/bin/env
 
 import requests
-
+from PIL import Image
+from io import BytesIO
+from io import TextIOWrapper
 import marsem.protocol.config as cfg
 
 from threading import Thread
@@ -66,7 +68,10 @@ def picture():
     """ Returns an image binary captured from the raspberry pi camera.
     Encoding is JPEG."""
     r = requests.get("http://localhost:8000/picture",params={"picture": True}, headers=cfg.config['headers'])
+    c = (BytesIO(r.content))
+    view = c.getbuffer()
+
     if (r.status_code == 200):
-        return r.content
+        return  print(view)
     else:
         return False
