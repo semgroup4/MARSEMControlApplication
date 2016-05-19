@@ -1,6 +1,7 @@
 #!/usr/bin/env
 
 import requests
+import json
 from threading import Thread
 from queue import Queue
 
@@ -60,7 +61,8 @@ def move_car(action=None):
 def stream(run):
     r = requests.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'])
     if (r.status_code == 200):
-        return True
+        response = json.loads(r.json())
+        return response['running']
     else:
         return False
 
