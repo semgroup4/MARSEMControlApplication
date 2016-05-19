@@ -1,0 +1,42 @@
+<HomeScreen>:
+    name: "HomeScreen"
+    CustomLayout:
+        OpenCVStream:
+            id: stream
+            pos: root.width-self.width-self.width/11, root.height/2-self.height/2
+            size: '500dp', '500dp'
+            on_parent: self.load()
+        CustomButton:
+            id: connect
+            text: 'Connect'
+            pos: root.width/4-self.width/2, root.height/2-self.height/2+self.height
+            size: '75dp', '50dp'
+            on_release: stream.connect()
+            on_release: start.enabled = True
+            on_release: self.enabled = False
+        CustomButton:
+            id: start
+            text: 'Start'
+            pos: root.width/4-self.width/2, root.height/2-self.height/2
+            size: '75dp', '50dp'
+            on_parent: self.enabled = False
+            on_release: stream.start()
+            on_release: stop.enabled = True
+            on_release: self.enabled = False
+        CustomButton:
+            id: stop
+            text: 'Stop'
+            pos: root.width/4-self.width/2, root.height/2-self.height/2-self.height
+            size: '75dp', '50dp'
+            on_parent: self.enabled = False
+            on_release: stream.stop()
+            on_release: connect.enabled = True
+            on_release: self.enabled = False
+        StartButton:
+            text: 'Start'
+            pos: self.width/2, self.height/2
+            size: '50dp', '50dp'
+            on_release: self.start()
+        PhotoProgress:
+            pos: '150dp', '35dp'
+            size: root.width/1.5, '1dp'
