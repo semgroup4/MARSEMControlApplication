@@ -1,8 +1,10 @@
 #!/usr/bin/env
 
 import requests
+import binascii
 from PIL import Image
 from io import BytesIO
+from io import StringIO
 from io import TextIOWrapper
 import marsem.protocol.config as cfg
 
@@ -67,11 +69,13 @@ def stream(run):
 def picture():
     """ Returns an image binary captured from the raspberry pi camera.
     Encoding is JPEG."""
-    r = requests.get("http://localhost:8000/picture",params={"picture": True}, headers=cfg.config['headers'])
+    r = requests.get("http://localhost:8000/picture")
     c = (BytesIO(r.content))
-    view = c.getbuffer()
+    view = (c.getbuffer())
+  
+    if r.status_code == 200:
+        with open("test.jpg", "w+b") as pic:
+            return print(pic.write(view))
 
-    if (r.status_code == 200):
-        return  print(view)
     else:
         return False
