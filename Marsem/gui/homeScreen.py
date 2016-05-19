@@ -15,6 +15,7 @@ from kivy.uix.progressbar import ProgressBar
 import cv2
 
 import marsem.opencv as opencv
+import marsem.protocol.car as car
 
 from threading import Thread
 
@@ -22,21 +23,31 @@ from threading import Thread
 Builder.load_file("homeScreen.kv")
 
 
-loaded = False
-
-
 class HomeScreen(Screen):
     pass
 
 
 class OpenCVStream(BoxLayout):
-    def load(self):
-        global loaded
+    car_stream_active = BooleanProperty(False)
+    loaded = False
 
-        if not loaded:
+    def load(self):
+        self.loaded
+
+        if not self.loaded:
             self.stream_image = Image(source='stop_icon.png')
+            self.stream_image.keep_ratio = False
+            self.stream_image.allow_stretch = True
             self.add_widget(self.stream_image)
-            loaded = True
+            self.loaded = True
+
+    def toggle_stream(self):
+        if not self.car_stream_active:
+            car.stream(True)
+            self.car_stream_active = True
+        else:
+            car.stream(False)
+            self.car_stream_active = False
 
     def update(self, dt):
         try:

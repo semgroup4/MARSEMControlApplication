@@ -4,18 +4,24 @@
         OpenCVStream:
             canvas:
                 Color:
-                    rgba: 0.102, 0.251, 0.424, 1
+                    rgba: 0.945, 0.945, 0.945, 1
                 Rectangle:
-                    pos: self.x-20, self.y+200
-                    size: self.width+40, self.height-400
+                    pos: self.x, self.y
+                    size: 840, 680
             id: stream
             pos: root.width-self.width-35, root.height/2-self.height/2
-            size: 1000, 1000
+            size: 840, 680
             on_parent: self.load()
+        CustomButton:
+            id: carstream
+            text: 'Camera'
+            pos: root.width/3+self.width/2, root.height/2-self.height/2+self.height*2
+            size: 150, 100
+            on_release: stream.toggle_stream()
         CustomButton:
             id: connect
             text: 'Connect'
-            pos: root.width/4-self.width/2, root.height/2-self.height/2+self.height
+            pos: root.width/3+self.width/2, root.height/2-self.height/2+self.height
             size: 150, 100
             on_release: stream.connect()
             on_release: start.enabled = True
@@ -23,7 +29,7 @@
         CustomButton:
             id: start
             text: 'Start'
-            pos: root.width/4-self.width/2, root.height/2-self.height/2
+            pos: root.width/3+self.width/2, root.height/2-self.height/2
             size: 150, 100
             on_parent: self.enabled = False
             on_release: stream.start()
@@ -32,7 +38,7 @@
         CustomButton:
             id: stop
             text: 'Stop'
-            pos: root.width/4-self.width/2, root.height/2-self.height/2-self.height
+            pos: root.width/3+self.width/2, root.height/2-self.height/2-self.height
             size: 150, 100
             on_parent: self.enabled = False
             on_release: stream.stop()
