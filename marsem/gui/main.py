@@ -1,6 +1,9 @@
+
 #!/usr/bin/python3.4 -tt
 # -*- coding: utf-8 -*-
 
+from PIL import Image
+from io import BytesIO
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -12,9 +15,7 @@ from marsem.gui.homeScreen import HomeScreen
 from marsem.gui.photoScreen import PhotoScreen
 from marsem.gui.settingsjson import settings_json
 from marsem.protocol import car
-import requests
-from io import BytesIO
-import marsem.protocol.config as cfg
+
 
 
 
@@ -33,8 +34,11 @@ class Decorations(Widget):
 class Menu(FloatLayout):
     #The picture function is currently bound to the "Settings Button"
     def car_picture(self):
-        car.picture()
-        
+        byte_stream = BytesIO(car.picture())
+        img = Image.open(byte_stream)
+        img.show()
+       
+
 
 class Marsem(App):
     def build(self):
@@ -57,15 +61,6 @@ class Marsem(App):
                      key, value):
         print(
             config, section, key, value)
-
-    def on_startup(dt):
-        print("starting")
-        try:
-            pass
-        
-        except NameError:
-            print ("shits gone wrong")
-        Clock.schedule_once(on_startup, 1)
     
 
 if __name__ == "__main__":
