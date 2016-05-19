@@ -4,13 +4,13 @@
         OpenCVStream:
             id: stream
             pos: root.width-self.width-self.width/11, root.height/2-self.height/2
-            size: '500dp', '500dp'
+            size: '420dp', '340dp'
             on_parent: self.load()
         CustomButton:
             id: carstream
             text: 'Camera'
-            pos: root.width/3+self.width/2, root.height/2-self.height/2+self.height*2
-            size: 150, 100
+            pos: root.width/4-self.width/2, root.height/2-self.height/2+self.height*2
+            size: '75dp', '50dp'
             on_release: stream.toggle_stream()
         CustomButton:
             id: connect
