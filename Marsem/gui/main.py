@@ -2,16 +2,10 @@
 # -*- coding: utf-8 -*-
 
 
-from PIL import Image
-
 from kivy.app import App
 from kivy.clock import Clock
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.widget import Widget
-from kivy.uix.button import Button
-from kivy.uix.progressbar import ProgressBar
 from kivy.uix.floatlayout import FloatLayout
-from kivy.uix.stacklayout import StackLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
 from marsem.gui.homeScreen import HomeScreen
