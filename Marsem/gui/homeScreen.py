@@ -33,6 +33,8 @@ class OpenCVStream(BoxLayout):
 
     def load(self):
         self.loaded
+        self.stream_image = Image(source='stop_icon.png')
+        self.add_widget(self.stream_image)
 
         if not self.loaded:
             self.stream_image = Image(source='stop_icon.png')
