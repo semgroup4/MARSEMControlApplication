@@ -55,8 +55,6 @@ def move_car(action=None):
         queue.put(action)
 
 
-
-
 # desc: starts/stops the camera stream on the Car
 # params: run, specifices if to start (True) or stop (False)
 def stream(run):
