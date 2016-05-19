@@ -32,14 +32,14 @@ class OpenCVStream(BoxLayout):
     loaded = False
 
     def load(self):
-        self.loaded
-
         if not self.loaded:
+            self.loaded = True
+
             self.stream_image = Image(source='stop_icon.png')
             self.stream_image.keep_ratio = False
             self.stream_image.allow_stretch = True
+
             self.add_widget(self.stream_image)
-            self.loaded = True
 
     def toggle_stream(self):
         if not self.car_stream_active:
