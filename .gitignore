@@ -9,6 +9,10 @@ marsem.ini
 # C extensions
 *.so
 
+# Images
+*.png
+*.jpg
+
 # Distribution / packaging
 .Python
 env/

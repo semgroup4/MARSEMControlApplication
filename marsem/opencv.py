@@ -5,24 +5,34 @@
 import cv2
 import numpy as np
 
+from timeit import default_timer as timer
+
 import marsem.protocol.car as car
 
-MOVE = True
+class Color():
+    def __init__(self):
+        """ Defaults to red color """
+        self.min = create_color_range([17, 15, 140])
+        self.max = create_color_range([50, 56, 200])
 
-video_capture = cv2.VideoCapture() 
+    def set_min_max(xa, xb):
+        self.set_min(xa)
+        self.set_max(xb)
+        
+    def set_min(xs):
+        self.min = create_color_range(xs)
 
-# Break into a color in the future
-min_color, max_color = ([86, 31, 4], [220, 88, 50]) # blue
-#min_color, max_color = ([17, 15, 140], [50, 56, 200]) # red
+    def set_max(xs):
+        self.max = create_color_range(xs)
 
-# Make the colors into numpy arrays of type uint8
-min_color = np.array(min_color, dtype='uint8')
-max_color = np.array(max_color, dtype='uint8')
 
-kernel = np.ones((5,5),np.uint8)
-
+video_capture = cv2.VideoCapture()
+kernel = np.ones((5,5), np.uint8)
 current_frame = None
 
+
+def create_color_range(lst):
+    return np.array(lst, dtype='uint8')
 
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
@@ -38,14 +48,23 @@ def connect(callback=None):
 
 
 # This needs to be threaded, to prevent main thread block
-def run(samples=[], callback=None):
+def run(color=Color() ,samples=[], callback=None):
+    # Get the point in time where this def. was called to count from this point.
+    start_time = timer()
     global current_frame
 
     while video_capture.isOpened():
+        current_time = timer()              # Current execution time to be compared with start_time.
+        diff = current_time - start_time    # Calculate the difference.
+
+        if diff > 10.0:                     # If the difference is more than the set threshold, abort.
+            stop()
+            break
+
         # Capture frame-by-frame
         ret, frame = video_capture.read()
         
-        mask = cv2.inRange(frame, min_color, max_color)
+        mask = cv2.inRange(frame, color.min, color.max)
         blue = cv2.bitwise_and(frame, frame, mask=mask)
         gray = cv2.cvtColor(blue, cv2.COLOR_BGR2GRAY)
 
@@ -88,10 +107,6 @@ def run(samples=[], callback=None):
             else:
                 stop()
             break
-
-
-def set_colors(min_color=[], max_color=[]):
-    print("Set colors")
 
 
 def get_video(callback=None):
