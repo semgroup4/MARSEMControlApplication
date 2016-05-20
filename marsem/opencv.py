@@ -28,8 +28,8 @@ current_frame = None
 
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
-    #if video_capture.open("tcp://192.168.2.1:2222"):
-    if video_capture.open(0):
+    if video_capture.open("tcp://192.168.2.1:2222"):
+    #if video_capture.open(0):
         print("Success in connecting to remote file")
         return True
     else:
@@ -41,15 +41,16 @@ def connect(callback=None):
 
 # This needs to be threaded, to prevent main thread block
 def run(samples=[], callback=None):
+    # Get the point in time where this def. was called to count from this point.
     start_time = timer()
 
     global current_frame
 
     while video_capture.isOpened():
-        current_time = timer()
-        diff = current_time - start_time
+        current_time = timer()              # Current execution time to be compared with start_time.
+        diff = current_time - start_time    # Calculate the difference.
 
-        if diff > 10.0:
+        if diff > 10.0:                     # If the difference is more than the set threshold, abort.
             stop()
             break
 
