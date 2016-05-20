@@ -26,7 +26,7 @@ class OpenCVStream(BoxLayout):
             print('>> Could not retrieve frame, OpenCV may just be starting up')
 
     def start(self):
-        self.img1 = Image(source='stop_icon.png')
+        self.img1 = Image(source='stream_image.png')
         self.add_widget(self.img1)
 
         opencv_stream = Thread(target=opencv.main, args=(), daemon=True, name='OpenCV')

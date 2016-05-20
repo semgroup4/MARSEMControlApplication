@@ -46,6 +46,11 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 Stand in MARSEMControlApplication
 PYTHONPATH=. python3 marsem/gui/main.py
 
+## App images you need to get:
+All images can be found here: https://drive.google.com/drive/folders/0B8ZOX8oToxRGYU9CZUVma3pHaXM
+[stream_image.png]
+
+Put them in /yourpersonalpath/MARSEMControlApplication
 
 ## WiPI
 The name of the wifi is Raspberry42
