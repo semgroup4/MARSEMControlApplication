@@ -14,9 +14,9 @@
     # Header for each screen.
     Button:
         text: 'MARSEM'
-        font_size: 100
-        pos: 35, root.height-root.height/7
-        size: 450, 100
+        font_size: '50dp'
+        pos: '17dp', root.height-root.height/7
+        size: '225dp', '50dp'
         on_release: app.root.current = 'HomeScreen'
     # Visual traits such as the line below the header goes here.
     Decorations:
@@ -24,30 +24,31 @@
             Color:
                 rgba: 0.945, 0.945, 0.945, 1
             Line:
-                points: 35, root.height-root.height/7, root.width-35, root.height-root.height/7
-                width: 2
+                points: 0, root.height-root.height/7, root.width, root.height-root.height/7
+                width: 1
     Menu:
+        pos: root.width-self.width, root.height-root.height/7
+        size: '240dp', '1dp'
 
 <Menu>:
     BoxLayout:
-        pos: root.width-self.width+1115, root.height-self.height*2+self.height*11.3
-        size: 100, 50
+        pos: self.parent.x, self.parent.y
+        #pos: root.width*11, root.height-self.height*2+self.height*11.3
         Button:
             text: 'Pictures'
-            size: 150, 50
+            size: '75dp', '25dp'
             size_hint: None,None
             height: '48dp'
             on_release: app.root.current = 'PhotoScreen'
-
         Button:
             text: 'Settings'
-            size: 150, 50
+            size: '75dp', '25dp'
             size_hint: None,None
             height: '48dp'
             on_release: app.open_settings()
         Button:
             text: 'Quit'
-            size: 150, 50
+            size: '75dp', '25dp'
             size_hint: None,None
             height: '48dp'
             on_release: app.get_running_app().stop()

@@ -15,6 +15,7 @@ from kivy.uix.progressbar import ProgressBar
 import cv2
 
 import marsem.opencv as opencv
+import marsem.protocol.car as car
 
 from threading import Thread
 
@@ -22,21 +23,33 @@ from threading import Thread
 Builder.load_file("homeScreen.kv")
 
 
-loaded = False
-
-
 class HomeScreen(Screen):
     pass
 
 
 class OpenCVStream(BoxLayout):
-    def load(self):
-        global loaded
+    car_stream_active = BooleanProperty(False)
+    error_count = 0                     # Counting number of times a frame from OpenCV could not be parsed into texture.
 
-        if not loaded:
-            self.stream_image = Image(source='stop_icon.png')
+    loaded = False
+
+    def load(self):
+        if not self.loaded:
+            self.loaded = True
+
+            self.stream_image = Image(source='stream_image.png')
+            self.stream_image.keep_ratio = False
+            self.stream_image.allow_stretch = True
+
             self.add_widget(self.stream_image)
-            loaded = True
+
+    def toggle_stream(self):
+        if not self.car_stream_active:
+            car.stream(True)
+            self.car_stream_active = True
+        else:
+            car.stream(False)
+            self.car_stream_active = False
 
     def update(self, dt):
         try:
@@ -49,8 +62,18 @@ class OpenCVStream(BoxLayout):
             texture1.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
             self.stream_image.texture = texture1
+
+            self.error_count = 0        # Reset error count if all went well.
         except Exception:
+            self.error_count += 1       # Add 1 to error count since exception was raised.
+
             print('>> Could not retrieve frame, OpenCV may just be starting up')
+
+            if self.error_count >= 10:  # 10 or more errors were encountered, abort stream.
+                self.error_count = 0    # Reset error count to 0 in order to be able to start the stream again.
+                Clock.unschedule(self.update)
+
+                print('>> Stream seems to be unavailable')
 
     def start(self):
         opencv_stream = Thread(target=opencv.run, args=(), daemon=True, name='OpenCV')

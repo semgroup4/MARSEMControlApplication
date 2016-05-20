@@ -2,21 +2,21 @@
     name: "HomeScreen"
     CustomLayout:
         OpenCVStream:
-            canvas:
-                Color:
-                    rgba: 0.102, 0.251, 0.424, 1
-                Rectangle:
-                    pos: self.x-20, self.y+200
-                    size: self.width+40, self.height-400
             id: stream
-            pos: root.width-self.width-35, root.height/2-self.height/2
-            size: 1000, 1000
+            pos: root.width-self.width-self.width/11, root.height/2-self.height/2
+            size: '420dp', '340dp'
             on_parent: self.load()
+        CustomButton:
+            id: carstream
+            text: 'Camera'
+            pos: root.width/4-self.width/2, root.height/2-self.height/2+self.height*2
+            size: '75dp', '50dp'
+            on_release: stream.toggle_stream()
         CustomButton:
             id: connect
             text: 'Connect'
             pos: root.width/4-self.width/2, root.height/2-self.height/2+self.height
-            size: 150, 100
+            size: '75dp', '50dp'
             on_release: stream.connect()
             on_release: start.enabled = True
             on_release: self.enabled = False
@@ -24,7 +24,7 @@
             id: start
             text: 'Start'
             pos: root.width/4-self.width/2, root.height/2-self.height/2
-            size: 150, 100
+            size: '75dp', '50dp'
             on_parent: self.enabled = False
             on_release: stream.start()
             on_release: stop.enabled = True
@@ -33,7 +33,7 @@
             id: stop
             text: 'Stop'
             pos: root.width/4-self.width/2, root.height/2-self.height/2-self.height
-            size: 150, 100
+            size: '75dp', '50dp'
             on_parent: self.enabled = False
             on_release: stream.stop()
             on_release: connect.enabled = True
@@ -41,8 +41,8 @@
         StartButton:
             text: 'Start'
             pos: self.width/2, self.height/2
-            size: 100, 100
+            size: '50dp', '50dp'
             on_release: self.start()
         PhotoProgress:
-            pos: 200, 50
-            size: root.width-250, 10
+            pos: '150dp', '35dp'
+            size: root.width/1.5, '1dp'
