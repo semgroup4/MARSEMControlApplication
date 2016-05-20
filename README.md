@@ -21,9 +21,16 @@ We use the latest version (3.1) as of this writing.
 Documentation: [OpenCV Docs](http://docs.opencv.org/3.0-beta/doc/tutorials/introduction/linux_install/linux_install.html)
 
 
+
+- PYTHON3_PACKAGES_PATH, where to put the opencv module
+- PYTHON3_LIBRARY, the python dylib file to use
+- PYTHON3_INCLUDE_DIR, the python pythonV.m file to use
+- WITH_FFMPEG, raspberry camera sends an FFMPEG file, there fore we need this
+- OPENCV_EXTRA_MODULES_PATH, where you put your opencv_contrib folder
+
 ```
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
-	-D CMAKE_INSTALL_PREFIX=/usr/local \ #select where to install everything, make sure it's in your PATH
+	-D CMAKE_INSTALL_PREFIX=/usr/local \
 	-D PYTHON3_PACKAGES_PATH= /YOUR/PATH/TO/PYHON/3.4/site-packages \
 	-D PYTHON3_LIBRARY=/YOUR/PATH/TO/PYTHON/3.4/lib/libpython3.4m.dylib \
 	-D PYTHON3_INCLUDE_DIR= /YOUR/PATH/TO/PYTHON/3.4/include/python3.4m \
