@@ -5,6 +5,8 @@
 import cv2
 import numpy as np
 
+from timeit import default_timer as timer
+
 import marsem.protocol.car as car
 
 MOVE = True
@@ -26,8 +28,8 @@ current_frame = None
 
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
-    if video_capture.open("tcp://192.168.2.1:2222"):
-    #if video_capture.open(0):
+    #if video_capture.open("tcp://192.168.2.1:2222"):
+    if video_capture.open(0):
         print("Success in connecting to remote file")
         return True
     else:
@@ -39,9 +41,18 @@ def connect(callback=None):
 
 # This needs to be threaded, to prevent main thread block
 def run(samples=[], callback=None):
+    start_time = timer()
+
     global current_frame
 
     while video_capture.isOpened():
+        current_time = timer()
+        diff = current_time - start_time
+
+        if diff > 10.0:
+            stop()
+            break
+
         # Capture frame-by-frame
         ret, frame = video_capture.read()
         

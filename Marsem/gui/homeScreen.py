@@ -29,6 +29,8 @@ class HomeScreen(Screen):
 
 class OpenCVStream(BoxLayout):
     car_stream_active = BooleanProperty(False)
+    error_count = 0
+
     loaded = False
 
     def load(self):
@@ -60,8 +62,14 @@ class OpenCVStream(BoxLayout):
             texture1.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
 
             self.stream_image.texture = texture1
+            self.error_count = 0
         except Exception:
             print('>> Could not retrieve frame, OpenCV may just be starting up')
+            self.error_count += 1
+
+            if self.error_count >= 10:
+                Clock.unschedule(self.update)
+                print('>> Stream seems to be unavailable')
 
     def start(self):
         opencv_stream = Thread(target=opencv.run, args=(), daemon=True, name='OpenCV')
