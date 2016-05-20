@@ -10,6 +10,6 @@ paramiko==2.0.0
 Pillow==3.2.0
 pyasn1==0.1.9
 pycparser==2.14
-pygame==1.9.2.dev1
 requests==2.10.0
 six==1.10.0
+hg+http://bitbucket.org/pygame/pygame
