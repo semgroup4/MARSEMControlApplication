@@ -20,6 +20,8 @@ This will create a dist folder \(if there is none\). The resulting tar.gz is the
 We use the latest version (3.1) as of this writing.
 Documentation: [OpenCV Docs](http://docs.opencv.org/3.0-beta/doc/tutorials/introduction/linux_install/linux_install.html)
 
+
+```
 cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D CMAKE_INSTALL_PREFIX=/usr/local \ #select where to install everything, make sure it's in your PATH
 	-D PYTHON3_PACKAGES_PATH= /YOUR/PATH/TO/PYHON/3.4/site-packages \
@@ -31,6 +33,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D BUILD_opencv_python3=ON \
         -D WITH_FFMPEG=ON \
 	-D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules ..
+```
 
 ## How to run Kivy app
 Stand in MARSEMControlApplication
