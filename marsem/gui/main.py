@@ -1,6 +1,9 @@
+
 #!/usr/bin/python3.4 -tt
 # -*- coding: utf-8 -*-
 
+from PIL import Image
+from io import BytesIO
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -11,7 +14,12 @@ from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 from marsem.gui.homeScreen import HomeScreen
 from marsem.gui.photoScreen import PhotoScreen
 from marsem.gui.settingsjson import settings_json
-import marsem.protocol.car
+from marsem.protocol import car
+
+import marsem.protocol.config as cfg
+import io
+#import requests
+
 
 
 class ScreenManagement(ScreenManager):
@@ -27,8 +35,13 @@ class Decorations(Widget):
 
 
 class Menu(FloatLayout):
-    pass
-
+    #The picture function is currently bound to the "Settings Button"
+    def car_picture(self):
+        picture = car.picture()
+        byte_stream = io.BytesIO(picture)
+        print(byte_stream)
+        img = Image.open(byte_stream)
+        print("img", img)
 
 class Marsem(App):
     def build(self):
@@ -40,26 +53,17 @@ class Marsem(App):
 
     def build_config(self, config):
         config.setdefaults('section_settings', {
-            'save_path': '~/'})
+        'save_path': '~/'})
 
     def build_settings(self, settings):
-        settings.add_json_panel('Marsem Settings',
-                                self.config,
-                                data=settings_json)
+            settings.add_json_panel('Marsem Settings',
+                            self.config,
+                            data=settings_json)
 
     def on_config_change(self, config, section,
-                         key, value):
+                     key, value):
         print(
-        config, section, key, value)
-
-    def on_startup(dt):
-        print("starting")
-        try:
-            pass
-            # car.stream(True)
-        except NameError:
-            print ("shits gone wrong")
-    Clock.schedule_once(on_startup, 1)
+            config, section, key, value)
     
 
 if __name__ == "__main__":
