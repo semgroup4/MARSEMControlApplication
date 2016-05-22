@@ -44,10 +44,11 @@ def create_color_range(lst):
     return np.array(lst, dtype='uint8')
 
 
+# Connects the video capture to its video source.
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
-    #if video_capture.open("tcp://192.168.2.1:2222"):
-    if video_capture.open(0):
+    # TODO: This may well need to be changed, is the port correct?
+    if video_capture.open("tcp://192.168.2.1:2222"):
         print("Success in connecting to remote file")
         return True
     else:
@@ -57,10 +58,11 @@ def connect(callback=None):
         return False
 
 
+# Called to start OpenCV stream, this def. prepares some necessary args.
 def run(color=Color(), samples=[], callback=None):
     start_time = timer()    # Get the point in time where this def. was called to count from this point.
 
-    # You have to use a partial def. in order to schedule an event with arguments.
+    # You have to use a 'partial' def. in order to schedule an event *with* arguments.
     global partial_def
     # partial(def, arg, arg, arg, arg)
     partial_def = partial(update, start_time, color, samples, callback)
@@ -69,7 +71,7 @@ def run(color=Color(), samples=[], callback=None):
     Clock.schedule_interval(partial_def, 0.1)
 
 
-# Updating OpenCV stream frame
+# Updating OpenCV stream frame 'current_frame'
 def update(start_time, color, samples, callback, dt):
     global current_frame  # The current video frame captured by OpenCV
 
@@ -132,6 +134,7 @@ def update(start_time, color, samples, callback, dt):
             car.stream(False)
 
 
+# Returns a 'single' prepared frame from OpenCV
 def get_video(callback=None):
     if video_capture.isOpened():
         return current_frame
@@ -140,8 +143,11 @@ def get_video(callback=None):
             callback() # If things are not connected
 
 
+# Stops video capturing with OpenCV and stops the car stream (closes the camera).
 def stop(callback=None):
     video_capture.release()
+    # NEW, can we keep this?
+    car.stream(False)
     if callback:
         callback()
 

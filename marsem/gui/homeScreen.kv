@@ -1,40 +1,57 @@
 <HomeScreen>:
     name: "HomeScreen"
     CustomLayout:
+        Label:
+            text: 'Camera Stream'
+            pos: root.width/2-self.width/2, root.height/2+self.height*3
+            size: '75dp', '50dp'
         OpenCVStream:
             id: stream
             pos: root.width-self.width-self.width/11, root.height/2-self.height/2
             size: '420dp', '340dp'
             on_parent: self.load()
-        CustomButton:
-            id: carstream
-            text: 'Camera'
-            pos: root.width/4-self.width/2, root.height/2-self.height/2+self.height*2
+        BoxLayout:
+            pos: root.width/4-self.width*2, root.height/2
+            orientation: 'vertical'
+            size: '75dp', '200dp'
+            Label:
+                text: 'Server'
+                size: '75dp', '50dp'
+            Button:
+                text: 'Start'
+                size: '75dp', '50dp'
+                on_release: stream.start_server()
+            Button:
+                text: 'Stop'
+                size: '75dp', '50dp'
+                on_release: stream.stop_server()
+            Label:
+                size: '75dp', '50dp'
+        BoxLayout:
+            pos: root.width/4-self.width/2, root.height/2
+            orientation: 'vertical'
+            size: '75dp', '200dp'
+            Label:
+                text: 'Car'
+                size: '75dp', '50dp'
+            Button:
+                text: 'Connect'
+                size: '75dp', '50dp'
+                on_release: stream.connect()
+            Button:
+                text: 'Start'
+                size: '75dp', '50dp'
+                on_release: stream.start()
+                on_release: progress_bar.start()
+            Button:
+                text: 'Stop'
+                size: '75dp', '50dp'
+                on_release: stream.stop()
+        Label:
+            text: 'Progress overview'
+            pos: '60dp', root.height/2-self.width/1.5
             size: '75dp', '50dp'
-            on_release: stream.toggle_stream()
-        CustomButton:
-            id: connect
-            text: 'Connect'
-            pos: root.width/4-self.width/2, root.height/2-self.height/2+self.height
-            size: '75dp', '50dp'
-            on_release: stream.connect()
-        CustomButton:
-            id: start
-            text: 'Start'
-            pos: root.width/4-self.width/2, root.height/2-self.height/2
-            size: '75dp', '50dp'
-            on_release: stream.start()
-        CustomButton:
-            id: stop
-            text: 'Stop'
-            pos: root.width/4-self.width/2, root.height/2-self.height/2-self.height
-            size: '75dp', '50dp'
-            on_release: stream.stop()
-        StartButton:
-            text: 'Start'
-            pos: self.width/2, self.height/2
-            size: '50dp', '50dp'
-            on_release: self.start()
         PhotoProgress:
-            pos: '150dp', '35dp'
-            size: root.width/1.5, '1dp'
+            id: progress_bar
+            pos: '35dp', root.height/2-self.width/5
+            size: '220dp', '2dp'
