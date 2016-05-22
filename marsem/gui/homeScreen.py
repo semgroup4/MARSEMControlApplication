@@ -76,10 +76,14 @@ class OpenCVStream(BoxLayout):
                 print('>> Stream seems to be unavailable')
 
     def start(self):
-        opencv_stream = Thread(target=opencv.run, args=(), daemon=True, name='OpenCV')
-        opencv_stream.start()
+        # NEW
+        opencv.run()
 
-        Clock.schedule_interval(self.update, 1.0 / 33.0)
+        # OLD
+        #opencv_stream = Thread(target=opencv.run, args=(), daemon=True, name='OpenCV')
+        #opencv_stream.start()
+
+        Clock.schedule_interval(self.update, 0.1)
 
     def connect(self):
         opencv.connect()
