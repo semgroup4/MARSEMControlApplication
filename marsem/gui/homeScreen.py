@@ -17,8 +17,6 @@ import cv2
 import marsem.opencv as opencv
 import marsem.protocol.car as car
 
-from threading import Thread
-
 
 Builder.load_file("homeScreen.kv")
 

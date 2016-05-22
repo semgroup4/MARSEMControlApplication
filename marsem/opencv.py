@@ -2,11 +2,13 @@
 # -*- coding: utf-8 -*-
 
 
+from kivy.clock import Clock
+
 import cv2
+
 import numpy as np
 
 from timeit import default_timer as timer
-from kivy.clock import Clock
 
 # Necessary to call schedule_interval with common def args.
 from functools import partial
@@ -35,7 +37,7 @@ video_capture = cv2.VideoCapture()
 kernel = np.ones((5,5), np.uint8)
 
 current_frame = None
-cunt = None
+partial_def = None
 
 
 def create_color_range(lst):
@@ -55,17 +57,19 @@ def connect(callback=None):
         return False
 
 
-# This needs to be threaded, to prevent main thread block. Alt. schedule using kivy clock?
 def run(color=Color(), samples=[], callback=None):
     start_time = timer()    # Get the point in time where this def. was called to count from this point.
-    global cunt
-    cunt = partial(update, start_time, color, samples, callback)
 
-    # partial(def, arg, arg, arg, arg), Clock timestuff
-    Clock.schedule_interval(cunt, 0.1)
+    # You have to use a partial def. in order to schedule an event with arguments.
+    global partial_def
+    # partial(def, arg, arg, arg, arg)
+    partial_def = partial(update, start_time, color, samples, callback)
+
+    # partial def., Clock time interval
+    Clock.schedule_interval(partial_def, 0.1)
 
 
-# MAHMAHAMNASHA
+# Updating OpenCV stream frame
 def update(start_time, color, samples, callback, dt):
     global current_frame  # The current video frame captured by OpenCV
 
@@ -102,20 +106,21 @@ def update(start_time, color, samples, callback, dt):
             value = sum(samples) / len(samples)
 
             if value > 45:
-                #if MOVE:
                 car.move_right()
 
             if value < 45:
-                #if MOVE:
                 car.move_forward()
             samples = []
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             if callback:
                 stop(callback=callback)
+                Clock.unschedule(partial_def)
+                car.stream(False)
             else:
                 stop()
-            Clock.unschedule(cunt)
+                Clock.unschedule(partial_def)
+                car.stream(False)
 
         # Checking running time of OpenCV:
         current_time = timer()              # Current execution time to be compared with start_time.
@@ -123,7 +128,8 @@ def update(start_time, color, samples, callback, dt):
 
         if diff > 10.0:                     # If the difference is more than the set threshold, abort.
             stop()
-            Clock.unschedule(cunt)
+            Clock.unschedule(partial_def)
+            car.stream(False)
 
 
 def get_video(callback=None):

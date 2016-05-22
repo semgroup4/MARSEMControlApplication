@@ -17,6 +17,7 @@ ssh = paramiko.client.SSHClient()
 # Warning
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # There be dragons here, do not use with untrusted hosts!
 
+
 def move_left():
     return move_car(action="left")
 
@@ -47,7 +48,8 @@ def move(action, q):
     # We need a way to know if the server is responding at all, if not. Stop!
     q.get() # remove the action from the queue
     q.task_done()
-    
+
+
 def move_car(action=None):
     if queue.empty():
         worker = Thread(target=move, args=(action, queue,))
@@ -76,6 +78,7 @@ def picture():
     else:
         return False
 
+
 # This should probably be threaded, since the server might not be available,
 # Will currently block the main thread when this is executed    
 def start_server():
@@ -97,6 +100,7 @@ def start_server():
             return False
         finally:
             ssh.close()
+
 
 def stop_server():
     global SERVER_RUNNING
