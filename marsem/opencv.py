@@ -92,26 +92,13 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             if callback:
                 stop(callback=callback)
-                Clock.unschedule(partial_def)
-                car.stream(False)
             else:
                 stop()
-                Clock.unschedule(partial_def)
-                car.stream(False)
 
-        # Checking running time of OpenCV:
-        current_time = timer()              # Current execution time to be compared with start_time.
-        diff = current_time - start_time    # Calculate the difference.
-
-        if diff > 60.0:                     # If the difference is more than the set threshold, abort.
-            stop()
-            Clock.unschedule(partial_def)
-            car.stream(False)
 
 def move_car(samples):
     if len(samples) == 2:
         value = sum(samples) / len(samples)
-
         if value > 45:
             car.move_right()
         if value < 45:
@@ -130,7 +117,6 @@ def get_video(callback=None):
 # Stops video capturing with OpenCV and stops the car stream (closes the camera).
 def stop(callback=None):
     video_capture.release()
-    # NEW, can we keep this?
-    car.stream(False)
+    cv2.destroyAllWindows()
     if callback:
         callback()
