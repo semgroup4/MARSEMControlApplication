@@ -2,21 +2,11 @@
 # -*- coding: utf-8 -*-
 
 
-from kivy.clock import Clock
-
 import cv2
-
 import numpy as np
 
-from timeit import default_timer as timer
-
-# Necessary to call schedule_interval with common def args.
-from functools import partial
-
 import marsem.protocol.car as car
-
 import marsem.protocol.config as cfg
-
 
 class Color():
     def __init__(self):
@@ -39,17 +29,18 @@ video_capture = cv2.VideoCapture()
 kernel = np.ones((5,5), np.uint8)
 
 current_frame = None
-partial_def = None
 
 
 def create_color_range(lst):
     return np.array(lst, dtype='uint8')
 
+def update_current_frame(f):
+    global current_frame
+    current_frame = f
 
 # Connects the video capture to its video source.
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
-    # TODO: This may well need to be changed, is the port correct?
     if video_capture.open(cfg.stream_file):
         print("Success in connecting to remote file")
         return True
@@ -60,25 +51,13 @@ def connect(callback=None):
         return False
 
 
-# Called to start OpenCV stream, this def. prepares some necessary args.
-def run(color=Color(), samples=[], callback=None):
-    start_time = timer()    # Get the point in time where this def. was called to count from this point.
+# This needs to be threaded, to prevent main thread block
+def run(color=Color() ,samples=[], callback=None, timeout=60):
+    # Get the point in time where this def. was called to count from this point.
+    global current_frame
+    t_end = time.time() + timeout
 
-    # You have to use a 'partial' def. in order to schedule an event *with* arguments.
-    global partial_def
-    # partial(def, arg, arg, arg, arg)
-    partial_def = partial(update, start_time, color, samples, callback)
-
-    # partial def., Clock time interval
-    Clock.schedule_interval(partial_def, 0.01)
-
-
-# Updating OpenCV stream frame 'current_frame'
-def update(start_time, color, samples, callback, dt):
-    global current_frame  # The current video frame captured by OpenCV
-
-    if video_capture.isOpened():
-        # Capture frame-by-frame
+    while video_capture.isOpened() and t_end =< time.time():
         ret, frame = video_capture.read()
         
         mask = cv2.inRange(frame, color.min, color.max)
@@ -104,17 +83,11 @@ def update(start_time, color, samples, callback, dt):
             samples.append(0)
 
         # At this point, the green line has been added to the frame and the frame can be made available.
-        current_frame = frame
+        update_global_frame(frame)
+        move_car(samples)
+        samples = []
 
-        if len(samples) == 2:
-            value = sum(samples) / len(samples)
-
-            if value > 45:
-                car.move_right()
-
-            if value < 45:
-                car.move_forward()
-            samples = []
+        cv2.imshow('M.A.R.S.E.M Vision', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             if callback:
@@ -135,6 +108,15 @@ def update(start_time, color, samples, callback, dt):
             Clock.unschedule(partial_def)
             car.stream(False)
 
+def move_car(samples):
+    if len(samples) == 2:
+        value = sum(samples) / len(samples)
+
+        if value > 45:
+            car.move_right()
+        if value < 45:
+            car.move_forward()
+        
 
 # Returns a 'single' prepared frame from OpenCV
 def get_video(callback=None):
@@ -152,7 +134,3 @@ def stop(callback=None):
     car.stream(False)
     if callback:
         callback()
-
-if __name__ == '__main__':
-    connect()
-    run()
