@@ -12,12 +12,14 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.button import Button
 from kivy.uix.progressbar import ProgressBar
 
+from timeit import default_timer as timer
+
+import time
+
 import cv2
 
 import marsem.opencv as opencv
 import marsem.protocol.car as car
-
-from threading import Thread
 
 
 Builder.load_file("homeScreen.kv")
@@ -28,10 +30,15 @@ class HomeScreen(Screen):
 
 
 class OpenCVStream(BoxLayout):
-    car_stream_active = BooleanProperty(False)
     error_count = 0                     # Counting number of times a frame from OpenCV could not be parsed into texture.
 
     loaded = False
+
+    def start_server(self):
+        car.start_server()
+
+    def stop_server(self):
+        car.stop_server()
 
     def load(self):
         if not self.loaded:
@@ -42,14 +49,6 @@ class OpenCVStream(BoxLayout):
             self.stream_image.allow_stretch = True
 
             self.add_widget(self.stream_image)
-
-    def toggle_stream(self):
-        if not self.car_stream_active:
-            car.stream(True)
-            self.car_stream_active = True
-        else:
-            car.stream(False)
-            self.car_stream_active = False
 
     def update(self, dt):
         try:
@@ -73,36 +72,22 @@ class OpenCVStream(BoxLayout):
                 self.error_count = 0    # Reset error count to 0 in order to be able to start the stream again.
                 Clock.unschedule(self.update)
 
-                print('>> Stream seems to be unavailable')
+                print('>> Stream unavailable')
 
     def start(self):
-        opencv_stream = Thread(target=opencv.run, args=(), daemon=True, name='OpenCV')
-        opencv_stream.start()
-
-        Clock.schedule_interval(self.update, 1.0 / 33.0)
+        # NEW, added car.stream here instead for automation purposes.
+        # TODO: check if this works.
+        opencv.run()
+        Clock.schedule_interval(self.update, 0.1)
 
     def connect(self):
-        opencv.connect()
+        if car.stream(True):
+            time.sleep(2)
+            opencv.connect()
 
     def stop(self):
         opencv.stop()
         Clock.unschedule(self.update)
-
-
-class CustomButton(Button):
-    enabled = BooleanProperty(True)
-
-    def on_enabled(self, instance, value):
-        if value:
-            self.background_color = [1,1,1,1]
-            self.color = [1,1,1,1]
-        else:
-            self.background_color = [1,1,1,.3]
-            self.color = [1,1,1,.5]
-
-    def on_touch_down(self, touch):
-        if self.enabled:
-            return super(self.__class__, self).on_touch_down(touch)
 
 
 class StartButton(Button):
@@ -111,4 +96,13 @@ class StartButton(Button):
 
 
 class PhotoProgress(ProgressBar):
-    pass
+    def start(self):
+        self.max = 600
+
+        Clock.schedule_interval(self.update, 0.1)
+
+    def update(self, dt):
+        self.value += 1
+
+        if self.value is 60:
+            Clock.unschedule(self.update())

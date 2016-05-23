@@ -4,10 +4,9 @@
 
 import cv2
 import numpy as np
-import time
 
 import marsem.protocol.car as car
-
+import marsem.protocol.config as cfg
 
 class Color():
     def __init__(self):
@@ -15,19 +14,20 @@ class Color():
         self.min = create_color_range([17, 15, 140])
         self.max = create_color_range([50, 56, 200])
 
-    def set_min_max(xa, xb):
+    def set_min_max(self, xa, xb):
         self.set_min(xa)
         self.set_max(xb)
         
-    def set_min(xs):
+    def set_min(self, xs):
         self.min = create_color_range(xs)
 
-    def set_max(xs):
+    def set_max(self, xs):
         self.max = create_color_range(xs)
 
 
 video_capture = cv2.VideoCapture()
 kernel = np.ones((5,5), np.uint8)
+
 current_frame = None
 
 
@@ -38,9 +38,10 @@ def update_current_frame(f):
     global current_frame
     current_frame = f
 
+# Connects the video capture to its video source.
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
-    if video_capture.open("tcp://192.168.2.1:2222"):
+    if video_capture.open(cfg.stream_file):
         print("Success in connecting to remote file")
         return True
     else:
@@ -57,7 +58,6 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
     t_end = time.time() + timeout
 
     while video_capture.isOpened() and t_end =< time.time():
-        # Capture frame-by-frame
         ret, frame = video_capture.read()
         
         mask = cv2.inRange(frame, color.min, color.max)
@@ -92,9 +92,21 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
         if cv2.waitKey(1) & 0xFF == ord('q'):
             if callback:
                 stop(callback=callback)
+                Clock.unschedule(partial_def)
+                car.stream(False)
             else:
                 stop()
-            break
+                Clock.unschedule(partial_def)
+                car.stream(False)
+
+        # Checking running time of OpenCV:
+        current_time = timer()              # Current execution time to be compared with start_time.
+        diff = current_time - start_time    # Calculate the difference.
+
+        if diff > 60.0:                     # If the difference is more than the set threshold, abort.
+            stop()
+            Clock.unschedule(partial_def)
+            car.stream(False)
 
 def move_car(samples):
     if len(samples) == 2:
@@ -106,6 +118,7 @@ def move_car(samples):
             car.move_forward()
         
 
+# Returns a 'single' prepared frame from OpenCV
 def get_video(callback=None):
     if video_capture.isOpened():
         return current_frame
@@ -114,7 +127,10 @@ def get_video(callback=None):
             callback() # If things are not connected
 
 
+# Stops video capturing with OpenCV and stops the car stream (closes the camera).
 def stop(callback=None):
     video_capture.release()
+    # NEW, can we keep this?
+    car.stream(False)
     if callback:
         callback()

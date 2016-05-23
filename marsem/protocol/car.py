@@ -17,6 +17,7 @@ ssh = paramiko.client.SSHClient()
 # Warning
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # There be dragons here, do not use with untrusted hosts!
 
+
 def move_left():
     return move_car(action="left")
 
@@ -47,7 +48,8 @@ def move(action, q):
     # We need a way to know if the server is responding at all, if not. Stop!
     q.get() # remove the action from the queue
     q.task_done()
-    
+
+
 def move_car(action=None):
     if queue.empty():
         worker = Thread(target=move, args=(action, queue,))
@@ -59,6 +61,7 @@ def move_car(action=None):
 # desc: starts/stops the camera stream on the Car
 # params: run, specifices if to start (True) or stop (False)
 def stream(run):
+    # TODO: Is the port really correct?
     r = requests.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'])
     if (r.status_code == 200):
         response = json.loads(r.json())
@@ -88,6 +91,7 @@ def start_server():
                 ssh.connect(cfg.config['host'], username="pi", password="raspberry")
             stdin, stdout, stderr = ssh.exec_command("pgrep python3")
             if len(stdout.readlines()) == 0:
+                print('Server is starting')
                 stdin, stdout, stderr = ssh.exec_command("python3 marsem/server/main.py &")
             SERVER_RUNNING = True
             return True
@@ -97,6 +101,7 @@ def start_server():
             return False
         finally:
             ssh.close()
+
 
 def stop_server():
     global SERVER_RUNNING
