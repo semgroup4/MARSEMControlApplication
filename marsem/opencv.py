@@ -70,7 +70,7 @@ def run(color=Color(), samples=[], callback=None):
     partial_def = partial(update, start_time, color, samples, callback)
 
     # partial def., Clock time interval
-    Clock.schedule_interval(partial_def, 0.1)
+    Clock.schedule_interval(partial_def, 0.01)
 
 
 # Updating OpenCV stream frame 'current_frame'
@@ -130,7 +130,7 @@ def update(start_time, color, samples, callback, dt):
         current_time = timer()              # Current execution time to be compared with start_time.
         diff = current_time - start_time    # Calculate the difference.
 
-        if diff > 10.0:                     # If the difference is more than the set threshold, abort.
+        if diff > 60.0:                     # If the difference is more than the set threshold, abort.
             stop()
             Clock.unschedule(partial_def)
             car.stream(False)

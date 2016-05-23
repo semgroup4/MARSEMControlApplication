@@ -62,29 +62,22 @@ def move_car(action=None):
 # params: run, specifices if to start (True) or stop (False)
 def stream(run):
     # TODO: Is the port really correct?
-    if SERVER_RUNNING:
-        r = requests.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'])
-        if (r.status_code == 200):
-            response = json.loads(r.json())
-            return response['running']
-        else:
-            return False
+    r = requests.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'])
+    if (r.status_code == 200):
+        response = json.loads(r.json())
+        return response['running']
     else:
-        print('>> Not connected...')
+        return False
 
 
 def picture():
     """ Returns an image binary captured from the raspberry pi camera.
     Encoding is JPEG."""
-    if SERVER_RUNNING:
-        r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'])
-        if (r.status_code == 200):
-            return r.content
-        else:
-            return False
+    r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'])
+    if (r.status_code == 200):
+        return r.content
     else:
-        print('>> Not connected...')
-
+        return False
 
 # This should probably be threaded, since the server might not be available,
 # Will currently block the main thread when this is executed    

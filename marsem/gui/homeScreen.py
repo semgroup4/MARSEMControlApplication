@@ -14,6 +14,8 @@ from kivy.uix.progressbar import ProgressBar
 
 from timeit import default_timer as timer
 
+import time
+
 import cv2
 
 import marsem.opencv as opencv
@@ -75,12 +77,13 @@ class OpenCVStream(BoxLayout):
     def start(self):
         # NEW, added car.stream here instead for automation purposes.
         # TODO: check if this works.
-        if car.stream(True):
-            opencv.run()
-            Clock.schedule_interval(self.update, 0.1)
+        opencv.run()
+        Clock.schedule_interval(self.update, 0.1)
 
     def connect(self):
-        opencv.connect()
+        if car.stream(True):
+            time.sleep(2)
+            opencv.connect()
 
     def stop(self):
         opencv.stop()
