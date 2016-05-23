@@ -5,9 +5,8 @@
 import cv2
 import numpy as np
 
-from timeit import default_timer as timer
-
 import marsem.protocol.car as car
+import time
 
 class Color():
     def __init__(self):
@@ -51,11 +50,12 @@ def connect(callback=None):
 
 
 # This needs to be threaded, to prevent main thread block
-def run(color=Color() ,samples=[], callback=None):
+def run(color=Color() ,samples=[], callback=None, timeout=60):
     # Get the point in time where this def. was called to count from this point.
     global current_frame
+    t_end = time.time() + timeout
 
-    while video_capture.isOpened():
+    while video_capture.isOpened() and t_end =< time.time():
         # Capture frame-by-frame
         ret, frame = video_capture.read()
         
