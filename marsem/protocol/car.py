@@ -17,6 +17,7 @@ ssh = paramiko.client.SSHClient()
 # Warning
 ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # There be dragons here, do not use with untrusted hosts!
 
+
 def move_left():
     return move_car(action="left")
 
@@ -47,7 +48,8 @@ def move(action, q):
     # We need a way to know if the server is responding at all, if not. Stop!
     q.get() # remove the action from the queue
     q.task_done()
-    
+
+
 def move_car(action=None):
     if queue.empty():
         worker = Thread(target=move, args=(action, queue,))
@@ -59,22 +61,30 @@ def move_car(action=None):
 # desc: starts/stops the camera stream on the Car
 # params: run, specifices if to start (True) or stop (False)
 def stream(run):
-    r = requests.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'])
-    if (r.status_code == 200):
-        response = json.loads(r.json())
-        return response['running']
+    # TODO: Is the port really correct?
+    if SERVER_RUNNING:
+        r = requests.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'])
+        if (r.status_code == 200):
+            response = json.loads(r.json())
+            return response['running']
+        else:
+            return False
     else:
-        return False
+        print('>> Not connected...')
 
 
 def picture():
     """ Returns an image binary captured from the raspberry pi camera.
     Encoding is JPEG."""
-    r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'])
-    if (r.status_code == 200):
-        return r.content
+    if SERVER_RUNNING:
+        r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'])
+        if (r.status_code == 200):
+            return r.content
+        else:
+            return False
     else:
-        return False
+        print('>> Not connected...')
+
 
 # This should probably be threaded, since the server might not be available,
 # Will currently block the main thread when this is executed    
@@ -97,6 +107,7 @@ def start_server():
             return False
         finally:
             ssh.close()
+
 
 def stop_server():
     global SERVER_RUNNING
