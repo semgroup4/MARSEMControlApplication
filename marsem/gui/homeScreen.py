@@ -32,10 +32,10 @@ class OpenCVStream(BoxLayout):
 
     loaded = False
 
-    def server_start(self):
+    def start_server(self):
         car.start_server()
 
-    def server_stop(self):
+    def stop_server(self):
         car.stop_server()
 
     def load(self):

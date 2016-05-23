@@ -98,6 +98,7 @@ def start_server():
                 ssh.connect(cfg.config['host'], username="pi", password="raspberry")
             stdin, stdout, stderr = ssh.exec_command("pgrep python3")
             if len(stdout.readlines()) == 0:
+                print('Server is starting')
                 stdin, stdout, stderr = ssh.exec_command("python3 marsem/server/main.py &")
             SERVER_RUNNING = True
             return True

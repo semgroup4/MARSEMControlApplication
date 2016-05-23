@@ -15,6 +15,8 @@ from functools import partial
 
 import marsem.protocol.car as car
 
+import marsem.protocol.config as cfg
+
 
 class Color():
     def __init__(self):
@@ -48,7 +50,7 @@ def create_color_range(lst):
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
     # TODO: This may well need to be changed, is the port correct?
-    if video_capture.open("tcp://192.168.2.1:2222"):
+    if video_capture.open(cfg.stream_file):
         print("Success in connecting to remote file")
         return True
     else:
