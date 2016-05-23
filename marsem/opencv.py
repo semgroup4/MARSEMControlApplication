@@ -34,10 +34,13 @@ current_frame = None
 def create_color_range(lst):
     return np.array(lst, dtype='uint8')
 
+def update_current_frame(f):
+    global current_frame
+    current_frame = f
+
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
     if video_capture.open("tcp://192.168.2.1:2222"):
-    #if video_capture.open(0):
         print("Success in connecting to remote file")
         return True
     else:
@@ -50,17 +53,9 @@ def connect(callback=None):
 # This needs to be threaded, to prevent main thread block
 def run(color=Color() ,samples=[], callback=None):
     # Get the point in time where this def. was called to count from this point.
-    start_time = timer()
     global current_frame
 
     while video_capture.isOpened():
-        current_time = timer()              # Current execution time to be compared with start_time.
-        diff = current_time - start_time    # Calculate the difference.
-
-        if diff > 10.0:                     # If the difference is more than the set threshold, abort.
-            stop()
-            break
-
         # Capture frame-by-frame
         ret, frame = video_capture.read()
         
@@ -87,19 +82,11 @@ def run(color=Color() ,samples=[], callback=None):
             samples.append(0)
 
         # At this point, the green line has been added to the frame and the frame can be made available.
-        current_frame = frame
+        update_global_frame(frame)
+        move_car(samples)
+        samples = []
 
-        if len(samples) == 2:
-            value = sum(samples) / len(samples)
-
-            if value > 45:
-                if MOVE:
-                    car.move_right()
-
-            if value < 45:
-                if MOVE:
-                    car.move_forward()
-            samples = []
+        cv2.imshow('M.A.R.S.E.M Vision', frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             if callback:
@@ -108,6 +95,15 @@ def run(color=Color() ,samples=[], callback=None):
                 stop()
             break
 
+def move_car(samples):
+    if len(samples) == 2:
+        value = sum(samples) / len(samples)
+
+        if value > 45:
+            car.move_right()
+        if value < 45:
+            car.move_forward()
+        
 
 def get_video(callback=None):
     if video_capture.isOpened():
@@ -121,7 +117,3 @@ def stop(callback=None):
     video_capture.release()
     if callback:
         callback()
-
-if __name__ == '__main__':
-    connect()
-    run()
