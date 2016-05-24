@@ -89,6 +89,9 @@ class OpenCVStream(BoxLayout):
         opencv.stop()
         Clock.unschedule(self.update)
 
+    def set_color(self, color):
+        self.color = color
+
 
 class StartButton(Button):
     def start(self, *args):

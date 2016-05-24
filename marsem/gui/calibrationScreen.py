@@ -1,30 +1,28 @@
 #!/usr/bin/python3.4 -tt
 # -*- coding: utf-8 -*-
 
-import marsem.opencv as opencv
-
-import cv2
-
-from kivy.graphics.texture import Texture
-
+import marsem.protocol.car as car
+from marsem.opencv import Color
 from kivy.uix.screenmanager import Screen
+from kivy.uix.image import Image as KivyImage
 from kivy.lang import Builder
 
+from PIL import Image
+
+import numpy
 
 Builder.load_file("calibrationScreen.kv")
 
 
 class CalibrationScreen(Screen):
-    def takeSnapshot(self):
-        try:
-            frame = opencv.get_video()
 
-            buf1 = cv2.flip(frame, 0)
-            buf = buf1.tostring()
+    def update_picture(self):
 
-            texture1 = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
-            texture1.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
+        if(False): # TODO - Check if camera is available to prevent hanging
+            newPic = car.picture()
+        else:
+            newPic = numpy.fromfile('unavailable.jpg', dtype='int16', sep="")
 
-            self.stream_image.texture = texture1
-        except Exception:
-            print('>> Could not retrieve frame, OpenCV may just be starting up')
+        print("Worked")
+        file = open('calibImage.jpg','wb+')
+        file.write(newPic)
