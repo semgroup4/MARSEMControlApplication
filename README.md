@@ -10,7 +10,7 @@ pip install pyinstaller
 In order to do this, run the following commands:
 
 ```
-pyi-makespec main
+pyi-makespec marsem/gui/main.py
 ```
 This will create a main.spec file in the current directory. In order to get our .kv files bundled into the executeable, go ahead and edit the main.spec file and add the a.datas for the .kv files needed.
 ```
