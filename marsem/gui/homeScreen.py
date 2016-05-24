@@ -20,7 +20,7 @@ import cv2
 
 import marsem.opencv as opencv
 import marsem.protocol.car as car
-
+import marsem.gui.calibrationScreen as calibScreen
 
 Builder.load_file("homeScreen.kv")
 
@@ -77,7 +77,7 @@ class OpenCVStream(BoxLayout):
     def start(self):
         # NEW, added car.stream here instead for automation purposes.
         # TODO: check if this works.
-        opencv.run()
+        opencv.run(calibScreen.get_color())
         Clock.schedule_interval(self.update, 0.1)
 
     def connect(self):
@@ -87,10 +87,6 @@ class OpenCVStream(BoxLayout):
 
     def stop(self):
         opencv.stop()
-        Clock.unschedule(self.update)
-
-    def set_color(self, color):
-        self.color = color
 
 
 class StartButton(Button):
