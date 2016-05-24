@@ -1,11 +1,19 @@
 #!/usr/bin/env python3.4
 
-from distutils.core import setup, find_packages
+from setuptools import setup, find_packages
 
-setup(name='marsem',
-      version='0.1',
-      description='marsem Control Application',
+setup(name='Marsem_control',
+      version='1.0',
+      description='Marsem Control Application',
       author='Group 4',
       url='https://github.com/semgroup4/MARSEMControlApplication',
-      packages=find_packages("marsem", exclude=["test"]),
+      packages=find_packages(exclude=["test"]),
+      package_data = {
+          'marsem': ['*.kv'],
+      },
+      entry_points={
+          'gui_scripts': [
+              'main = marsem.gui',
+          ]
+      },
 )
