@@ -8,14 +8,29 @@
                 source: 'calibImage.jpg'
                 size: 420, 340
                 pos: 50, 50
-        Button:
-            text: 'Take Snapshot'
-            size: '130dp', '25dp'
-            size_hint: None,None
-            height: '48dp'
-            pos: '10dp',root.height - 148
-            on_release: root.update_picture()
+
+
+        BoxLayout:
+            pos: 10, root.height - 200
+            orientation: 'horizontal'
+            size: '400dp', '50dp'
+            Button:
+                text: 'Take Snapshot'
+                size: '130dp', '50dp'
+                on_release: root.update_picture()
+            Button:
+                text: 'Select Min'
+                size: '75dp', '50dp'
+                on_release: root.start_select_min()
+            Button:
+                text: 'Select Max'
+                size: '75dp', '50dp'
+                on_release: root.start_select_max()
         Label:
-            text: root.get_color_string()
+            text: root.color_string
             pos: '600dp', root.height/2-self.width/1.5
+            size: '75dp', '50dp'
+        Label:
+            text: root.current_action_string
+            pos: '600dp', root.height/2-self.width/1.5 - 50
             size: '75dp', '50dp'
