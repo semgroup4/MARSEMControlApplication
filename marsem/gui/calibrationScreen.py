@@ -7,8 +7,8 @@ from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import StringProperty
 
+
 from PIL import Image
-Image.LOAD_TRUNCATED_IMAGES = True
 
 import numpy
 
@@ -36,11 +36,14 @@ class CalibrationScreen(Screen):
     # Grabs an image from the camera and saves to file
     def update_picture(self):
 
+        # Take a snapshot. If camera is not available, use placeholder image.
         if(False): # TODO - Check if camera is available in order to prevent hanging
-            new_pic = car.picture()
+            # TODO - test this. This conversion is untested but necessary as pillow only takes int8 images.
+            new_pic = numpy.int8(car.picture())
         else:
-            new_pic = numpy.fromfile('unavailable.jpg', dtype='int16', sep="")
+            new_pic = numpy.fromfile('unavailable.jpg', dtype='int8', sep="")
 
+        self.snapshot_data = new_pic
         file = open('calibImage.jpg','wb+')
         file.write(new_pic)
         file.close()
@@ -91,15 +94,13 @@ class CalibrationScreen(Screen):
         # remove the zeroed rgb assignments
 
         img = Image.open('calibImage.jpg')
-        #img.load()
 
         img_x = normalized_pos[0] * img.width
         img_y = normalized_pos[1] * img.height
         # Flip y so down is +
         img_y = img.height - img_y
 
-        #r, g, b = img.getpixel((img_x, img_y))
-        r, g, b = 0, 0, 0
+        r, g, b = img.getpixel((img_x, img_y))
 
         if(self.selection == 0):
             self.color.set_min([r, g, b])
