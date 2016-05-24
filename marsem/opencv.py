@@ -5,8 +5,8 @@
 import cv2
 import numpy as np
 
-import marsem.protocol.car as car
-import marsem.protocol.config as cfg
+import protocol.car as car
+import protocol.config as cfg
 
 class Color():
     def __init__(self):
@@ -57,7 +57,7 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
     global current_frame
     t_end = time.time() + timeout
 
-    while video_capture.isOpened() and t_end =< time.time():
+    while video_capture.isOpened() and t_end <= time.time():
         ret, frame = video_capture.read()
         
         mask = cv2.inRange(frame, color.min, color.max)
