@@ -5,8 +5,8 @@
 import cv2
 import numpy as np
 
-import protocol.car as car
-import protocol.config as cfg
+import marsem.protocol.car as car
+import marsem.protocol.config as cfg
 
 class Color():
     def __init__(self):

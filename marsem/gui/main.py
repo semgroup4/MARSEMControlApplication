@@ -3,7 +3,7 @@
 # -*- coding: utf-8 -*-
 
 from PIL import Image
-from io import BytesIO
+import io
 
 from kivy.app import App
 from kivy.clock import Clock
@@ -11,14 +11,15 @@ from kivy.uix.widget import Widget
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
-from marsem.gui.homeScreen import HomeScreen
+import marsem.gui.homeScreen as HomeScreen
 from marsem.gui.photoScreen import PhotoScreen
 from marsem.gui.settingsjson import settings_json
 from marsem.protocol import car
-
 import marsem.protocol.config as cfg
-import io
-#import requests
+
+#import marsem.protocol.config as cfg
+
+
 
 
 class ScreenManagement(ScreenManager):
