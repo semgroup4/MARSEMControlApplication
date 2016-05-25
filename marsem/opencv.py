@@ -84,7 +84,7 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
             samples.append(0)
 
         # At this point, the green line has been added to the frame and the frame can be made available.
-        update_global_frame(frame)
+        update_current_frame(frame)
         move_car(samples)
         samples = []
 
