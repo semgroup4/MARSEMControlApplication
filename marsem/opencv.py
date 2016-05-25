@@ -39,6 +39,9 @@ def update_current_frame(f):
     global current_frame
     current_frame = f
 
+def is_connected():
+    return video_capture.isOpened()
+
 # Connects the video capture to its video source.
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
