@@ -1,9 +1,9 @@
 <CalibrationScreen>:
     name: 'CalibrationScreen'
+    on_enter: whore.source = 'stream_image.png'
     CustomLayout:
         Image:
             id: whore
-            source: 'unavailable.jpg'
             allow_stretch: True
             keep_ratio: False
             pos: root.width/2+self.width/3, root.height/2-self.height/3
@@ -15,8 +15,7 @@
             Button:
                 text: 'Take Snapshot'
                 size: '130dp', '50dp'
-                on_release: root.update_picture()
-                on_release: whore.source = 'stream_image.png'
+                on_release: whore.source = root.update_picture()
             Button:
                 text: 'Select Min'
                 size: '75dp', '50dp'

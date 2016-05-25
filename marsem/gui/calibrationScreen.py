@@ -43,18 +43,10 @@ class CalibrationScreen(Screen):
         # not necessary at all, but it works so I won't change it.
 
         # Take a snapshot. If camera is not available, use placeholder image.
-        if(False): # TODO - Replace False with a function which checks if
-            # camera is available in order to prevent hanging
+        if True: # TODO - Replace False with a function which checks if camera is available in order to prevent hanging
             
             new_pic = car.picture()
-            byte_stream = io.BytesIO(new_pic)
-            print(byte_stream)
-            img = Image.open(byte_stream)
-            print("img", img)
-            return(img)
-           
-            # new_pic = numpy.int8(car.picture()) # TODO - Check if this is necessary.
-            # This conversion is untested but may be necessary as pillow only takes int8 images.
+
         else:
             print ("Could not connect to camera")
             new_pic = numpy.fromfile('unavailable.jpg', dtype='int8', sep="")
@@ -62,6 +54,8 @@ class CalibrationScreen(Screen):
         file = open('calibImage.jpg','wb+')
         file.write(new_pic)
         file.close()
+
+        return 'calibImage.jpg'
 
     # Updates the color label with new values
     def update_color_string(self):
