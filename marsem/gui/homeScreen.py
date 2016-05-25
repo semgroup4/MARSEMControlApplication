@@ -89,8 +89,13 @@ class OpenCVStream(BoxLayout):
 
     def connect(self):
         def _callback(t):
-            if not opencv.is_connected():
+            if t and not opencv.is_connected():
+                # Sleep ?
                 opencv.connect()
+            else:
+                if opencv.is_connected():
+                    # Close the opencv
+                    opencv.stop()
         def _failure(t):
             if opencv.is_connected():
                 opencv.stop()
