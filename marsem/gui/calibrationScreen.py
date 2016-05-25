@@ -15,6 +15,8 @@ import numpy
 Builder.load_file("calibrationScreen.kv")
 
 
+# Currently writes the snapshot to file, but it may be cleaner
+# to simply store the data in a variable.
 class CalibrationScreen(Screen):
 
     color = Color()
@@ -26,29 +28,33 @@ class CalibrationScreen(Screen):
     # The pixel selector is extremely hacky and relies on hardcoded
     # image position values. These values must be adjusted if the UI
     # layout is at all modified.
-
     image_dimensions = 420, 340
     image_offset = 50, 50
 
-    # -1 none, 0 min, 1 max
+    # Selection action for min/max colors: -1 none, 0 min, 1 max
     selection = -1
 
     # Grabs an image from the camera and saves to file
     def update_picture(self):
 
+        # I forgot where I got the numpy.fromfile line -- maybe it's
+        # not necessary at all, but it works so I won't change it.
+
         # Take a snapshot. If camera is not available, use placeholder image.
-        if(False): # TODO - Check if camera is available in order to prevent hanging
-            # TODO - test this. This conversion is untested but necessary as pillow only takes int8 images.
-            new_pic = numpy.int8(car.picture())
+        if(False): # TODO - Replace False with a function which checks if
+            # camera is available in order to prevent hanging
+
+            new_pic = car.picture()
+            # new_pic = numpy.int8(car.picture()) # TODO - Check if this is necessary.
+            # This conversion is untested but may be necessary as pillow only takes int8 images.
         else:
             new_pic = numpy.fromfile('unavailable.jpg', dtype='int8', sep="")
 
-        self.snapshot_data = new_pic
         file = open('calibImage.jpg','wb+')
         file.write(new_pic)
         file.close()
 
-    # Updates the label with the color values
+    # Updates the color label with new values
     def update_color_string(self):
         self.color_string = 'Min: ' + self.color.min.__str__() + \
                '\nMax: ' + self.color.max.__str__()
@@ -67,6 +73,7 @@ class CalibrationScreen(Screen):
         self.current_action_string = 'Selecting Max'
         self.selection = 1
 
+    # On click
     def on_touch_down(self, touch):
         super(CalibrationScreen, self).on_touch_down(touch)
 
@@ -82,17 +89,6 @@ class CalibrationScreen(Screen):
             self.selection = -1
             return
 
-        # TODO
-        # PIL has an issue with loading the file because it's truncated.
-        # Despite the "Image.LOAD_TRUNCATED_IMAGES = True", which should make it load
-        # the image regardless, it flat out refuses. I haven't been able to debug it
-        # and it is possible it is specific only to my system.
-        # I have not been able to test that the correct pixel is being grabbed
-        # since the pixel function doesn't work, but it looks right.
-        #
-        # To enable the intended functionality, uncomment lines 90 and 97, and
-        # remove the zeroed rgb assignments
-
         img = Image.open('calibImage.jpg')
 
         img_x = normalized_pos[0] * img.width
@@ -100,13 +96,16 @@ class CalibrationScreen(Screen):
         # Flip y so down is +
         img_y = img.height - img_y
 
+        # Grab color values
         r, g, b = img.getpixel((img_x, img_y))
 
+        # Depending on action, set min or max.
         if(self.selection == 0):
             self.color.set_min([r, g, b])
         if(self.selection == 1):
             self.color.set_max([r, g, b])
 
+        # Resets select action.
         self.selection = -1
         self.current_action_string = ''
         self.update_color_string()
