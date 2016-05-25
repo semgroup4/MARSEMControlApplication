@@ -7,11 +7,11 @@
             Rectangle:
                 source: 'calibImage.jpg'
                 size: 420, 340
-                pos: 50, 50
+            	pos: self.parent.x+1000, self.parent.y+500
 
 
         BoxLayout:
-            pos: 10, root.height - 200
+            pos: self.parent.x+100, self.parent.y+500
             orientation: 'horizontal'
             size: '400dp', '50dp'
             Button:
@@ -26,6 +26,7 @@
                 text: 'Select Max'
                 size: '75dp', '50dp'
                 on_release: root.start_select_max()
+
         Label:
             text: root.color_string
             pos: '600dp', root.height/2-self.width/1.5

@@ -6,6 +6,7 @@ from marsem.opencv import Color
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import StringProperty
+import io
 
 
 from PIL import Image
@@ -18,7 +19,7 @@ Builder.load_file("calibrationScreen.kv")
 # Currently writes the snapshot to file, but it may be cleaner
 # to simply store the data in a variable.
 class CalibrationScreen(Screen):
-
+   
     color = Color()
 
     color_string = StringProperty()
@@ -41,13 +42,20 @@ class CalibrationScreen(Screen):
         # not necessary at all, but it works so I won't change it.
 
         # Take a snapshot. If camera is not available, use placeholder image.
-        if(False): # TODO - Replace False with a function which checks if
+        if(True): # TODO - Replace False with a function which checks if
             # camera is available in order to prevent hanging
-
+            
             new_pic = car.picture()
+            byte_stream = io.BytesIO(new_pic)
+            print(byte_stream)
+            img = Image.open(byte_stream)
+            print("img", img)
+            return(img)
+           
             # new_pic = numpy.int8(car.picture()) # TODO - Check if this is necessary.
             # This conversion is untested but may be necessary as pillow only takes int8 images.
         else:
+            print ("Could not connect to camera")
             new_pic = numpy.fromfile('unavailable.jpg', dtype='int8', sep="")
 
         file = open('calibImage.jpg','wb+')
