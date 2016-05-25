@@ -61,7 +61,7 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
     global current_frame
     t_end = time.time() + timeout
 
-    while video_capture.isOpened() and t_end <= time.time():
+    while video_capture.isOpened() and t_end > time.time():
         ret, frame = video_capture.read()
         
         mask = cv2.inRange(frame, color.min, color.max)

@@ -1,56 +1,38 @@
 <HomeScreen>:
     name: "HomeScreen"
     CustomLayout:
-        Label:
-            text: 'Camera Stream'
-            pos: root.width/2-self.width/2, root.height/2+self.height*3
-            size: '75dp', '50dp'
-        OpenCVStream:
-            id: stream
-            pos: root.width-self.width-self.width/11, root.height/2-self.height/2
-            size: '420dp', '340dp'
-            on_parent: self.load()
         BoxLayout:
-            pos: root.width/4-self.width*2, root.height/2
+            pos: root.width/2-self.width/2, root.height/2
             orientation: 'vertical'
-            size: '75dp', '200dp'
+            size: '75dp', '100dp'
             Label:
                 text: 'Server'
                 size: '75dp', '50dp'
             Button:
                 text: 'Start'
                 size: '75dp', '50dp'
-                on_release: stream.start_server()
-            Button:
-                text: 'Stop'
-                size: '75dp', '50dp'
-                on_release: stream.stop_server()
-            Label:
-                size: '75dp', '50dp'
+                on_release: root.start_server()
         BoxLayout:
-            pos: root.width/4-self.width/2, root.height/2
+            pos: root.width/3-self.width/2, root.height/2
             orientation: 'vertical'
-            size: '75dp', '200dp'
+            size: '75dp', '150dp'
             Label:
                 text: 'Car'
                 size: '75dp', '50dp'
     	    Button:
-                text: 'Camera'
-                size: '75dp', '50dp'
-                on_release: root.car_picture()	
-            Button:
                 text: 'Connect'
                 size: '75dp', '50dp'
-                on_release: stream.connect()
+                on_release: root.connect()
+            # Nice to have for multiple tests, turns the car stream off again.
+            Button:
+                text: 'Reset'
+                size: '75dp', '50dp'
+                on_release: root.reset()
             Button:
                 text: 'Start'
                 size: '75dp', '50dp'
-                on_release: stream.start()
+                on_release: root.start_sequence()
                 on_release: progress_bar.start()
-            Button:
-                text: 'Stop'
-                size: '75dp', '50dp'
-                on_release: stream.stop()
         Label:
             text: 'Progress overview'
             pos: '60dp', root.height/2-self.width/1.5

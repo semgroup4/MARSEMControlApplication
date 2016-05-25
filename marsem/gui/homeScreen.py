@@ -22,93 +22,57 @@ import marsem.opencv as opencv
 import marsem.protocol.car as car
 
 
-
 Builder.load_file("homeScreen.kv")
 
 
 class HomeScreen(Screen):
+    def start_server(self):
+        car.start_server()
+
+    def reset(self):
+        def _callback(t):
+            if t and not opencv.is_connected():
+                time.sleep(2)
+                opencv.connect()
+            else:
+                if opencv.is_connected():
+                    # Close the opencv
+                    opencv.stop()
+
+        def _failure(t):
+            if opencv.is_connected():
+                opencv.stop()
+
+        car.stream(False, success=_callback, failure=_failure)
+
+    def connect(self):
+        def _callback(t):
+            if t and not opencv.is_connected():
+                print('good boooooy')
+                # Sleep ?
+                time.sleep(2)
+                opencv.connect()
+            else:
+                if opencv.is_connected():
+                    # Close the opencv
+                    opencv.stop()
+
+        def _failure(t):
+            if opencv.is_connected():
+                opencv.stop()
+
+        car.stream(True, success=_callback, failure=_failure)
+
+    def start_sequence(self):
+        opencv.run()
+
+    # TODO! Why is this here?
     def car_picture(self):
         picture = car.picture()
         byte_stream = io.BytesIO(picture)
         print(byte_stream)
         img = Image.open(byte_stream)
         print("img", img)
-
-
-
-class OpenCVStream(BoxLayout):
-    error_count = 0                     # Counting number of times a frame from OpenCV could not be parsed into texture.
-
-    loaded = False
-
-    def start_server(self):
-        car.start_server()
-
-    def stop_server(self):
-        car.stop_server()
-
-    def load(self):
-        if not self.loaded:
-            self.loaded = True
-
-            self.stream_image = Image(source='stream_image.png')
-            self.stream_image.keep_ratio = False
-            self.stream_image.allow_stretch = True
-
-            self.add_widget(self.stream_image)
-
-    def update(self, dt):
-        try:
-            frame = opencv.get_video()
-
-            buf1 = cv2.flip(frame, 0)
-            buf = buf1.tostring()
-
-            texture1 = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
-            texture1.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte')
-
-            self.stream_image.texture = texture1
-
-            self.error_count = 0        # Reset error count if all went well.
-        except Exception:
-            self.error_count += 1       # Add 1 to error count since exception was raised.
-
-            print('>> Could not retrieve frame, OpenCV may just be starting up')
-
-            if self.error_count >= 10:  # 10 or more errors were encountered, abort stream.
-                self.error_count = 0    # Reset error count to 0 in order to be able to start the stream again.
-                Clock.unschedule(self.update)
-
-                print('>> Stream unavailable')
-
-    def start(self):
-        # NEW, added car.stream here instead for automation purposes.
-        # TODO: check if this works.
-        opencv.run()
-        Clock.schedule_interval(self.update, 0.1)
-
-    def connect(self):
-        def _callback(t):
-            if t and not opencv.is_connected():
-                # Sleep ?
-                opencv.connect()
-            else:
-                if opencv.is_connected():
-                    # Close the opencv
-                    opencv.stop()
-        def _failure(t):
-            if opencv.is_connected():
-                opencv.stop()
-        car.stream(True, success=_callback, failure=_failure)
-
-    def stop(self):
-        opencv.stop()
-        Clock.unschedule(self.update)
-
-
-class StartButton(Button):
-    def start(self, *args):
-        print('Start-the-car-code goes here')
 
 
 class PhotoProgress(ProgressBar):
