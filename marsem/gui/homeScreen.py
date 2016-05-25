@@ -89,7 +89,8 @@ class OpenCVStream(BoxLayout):
 
     def connect(self):
         def _callback(r):
-            opencv.connect()
+            if not opencv.is_connected():
+                opencv.connect()
         car.stream(True, _callback)
 
     def stop(self):
