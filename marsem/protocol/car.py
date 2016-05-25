@@ -79,6 +79,15 @@ def picture():
     else:
         return False
 
+def status():
+    """ Return a dictonary of the statuses of the server,
+    {"stream": bool, "server": bool} """
+    r = requests.get(cfg.host_status, params={"status": True}, headers=cfg.config['headers'])
+    if (r.status_code == 200):
+        return json.loads(r.content)
+    else:
+        return False
+
 # This should probably be threaded, since the server might not be available,
 # Will currently block the main thread when this is executed    
 def start_server():
