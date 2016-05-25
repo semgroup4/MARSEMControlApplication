@@ -6,6 +6,7 @@ from marsem.opencv import Color
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
 from kivy.properties import StringProperty
+from kivy.uix.image import Image
 import io
 
 
@@ -42,7 +43,7 @@ class CalibrationScreen(Screen):
         # not necessary at all, but it works so I won't change it.
 
         # Take a snapshot. If camera is not available, use placeholder image.
-        if(True): # TODO - Replace False with a function which checks if
+        if(False): # TODO - Replace False with a function which checks if
             # camera is available in order to prevent hanging
             
             new_pic = car.picture()
@@ -117,40 +118,3 @@ class CalibrationScreen(Screen):
         self.selection = -1
         self.current_action_string = ''
         self.update_color_string()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
