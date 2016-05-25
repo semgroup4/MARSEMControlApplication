@@ -95,6 +95,8 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
                 stop(callback=callback)
             else:
                 stop()
+    
+    stop()
 
 
 def move_car(samples):
