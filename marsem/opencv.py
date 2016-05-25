@@ -4,6 +4,7 @@
 
 import cv2
 import numpy as np
+import time
 
 import marsem.protocol.car as car
 import marsem.protocol.config as cfg
