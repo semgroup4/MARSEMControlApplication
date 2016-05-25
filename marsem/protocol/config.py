@@ -11,3 +11,4 @@ host_index = "http://" + config['host'] + ":" + config['port']
 host_stream = "http://" + config['host'] + ":" + config['port'] + "/stream/"
 stream_file = "tcp://" + config['host'] + ":" + config['stream-port']
 host_picture = "http://" + config['host'] + ":" + config['port'] + "/picture/"
+host_status = "http://" + config['host'] + ":" + config['port'] + "/status/"
