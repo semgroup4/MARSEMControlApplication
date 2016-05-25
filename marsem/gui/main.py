@@ -14,10 +14,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 import marsem.gui.homeScreen as HomeScreen
 from marsem.gui.photoScreen import PhotoScreen
 from marsem.gui.settingsjson import settings_json
-from marsem.protocol import car
 import marsem.protocol.config as cfg
 
-#import marsem.protocol.config as cfg
 
 
 
@@ -35,13 +33,7 @@ class Decorations(Widget):
 
 
 class Menu(FloatLayout):
-    #The picture function is currently bound to the "Settings Button"
-    def car_picture(self):
-        picture = car.picture()
-        byte_stream = io.BytesIO(picture)
-        print(byte_stream)
-        img = Image.open(byte_stream)
-        print("img", img)
+    pass
 
 class Marsem(App):
     def build(self):

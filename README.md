@@ -1,12 +1,44 @@
 # MARSEMControlApplication
 Python app to control MARSEM
 
-## Deploy
-In order to deploy the application, run
+## Deploy/Release an executeable
+This project uses the pyinstaller project to create a main executeable file.
 ```
-python setup.py sdist
+pip install pyinstaller
 ```
-This will create a dist folder \(if there is none\). The resulting tar.gz is the application.
+
+In order to do this, run the following commands:
+
+```
+pyi-makespec marsem/gui/main.py
+```
+This will create a main.spec file in the current directory. In order to get our .kv files bundled into the executeable, go ahead and edit the main.spec file and add the a.datas for the .kv files needed.
+```
+a = Analysis(['marsem/gui/main.py'],
+             pathex=['/your/genereated/path/from/makespec/MARSEMControlApplication'],
+             binaries=None,
+             datas=None,
+             hiddenimports=[],
+             hookspath=[],
+             runtime_hooks=[],
+             excludes=[],
+             win_no_prefer_redirects=False,
+             win_private_assemblies=False,
+             cipher=block_cipher)
+a.datas += [('homeScreen.kv', 'marsem/gui/homeScreen.kv', 'DATA')]
+a.datas += [('marsem.kv', 'marsem/gui/marsem.kv', 'DATA')]
+a.datas += [('photoScreen.kv', 'marsem/gui/photoScreen.kv', 'DATA')]
+```
+After you have edited the main.spec file to look like this. Go ahead and run the build command.
+```
+pyinstaller main.spec -p .
+```
+This will create a folder called "main" in your dist folder. This will also create a executeable main file inside it.
+Go ahead and run our application doing:
+```
+./dist/main/main &
+```
+You should now see the M.A.R.S.E.M GUI controller on your scren. If you have any errors, fix them.
 
 ## Setup OpenCV3.1 For the project
 ### Prequisites

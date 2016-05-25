@@ -22,11 +22,18 @@ import marsem.opencv as opencv
 import marsem.protocol.car as car
 
 
+
 Builder.load_file("homeScreen.kv")
 
 
 class HomeScreen(Screen):
-    pass
+    def car_picture(self):
+        picture = car.picture()
+        byte_stream = io.BytesIO(picture)
+        print(byte_stream)
+        img = Image.open(byte_stream)
+        print("img", img)
+
 
 
 class OpenCVStream(BoxLayout):
