@@ -61,7 +61,6 @@ def move_car(action=None):
 # desc: starts/stops the camera stream on the Car
 # params: run, specifices if to start (True) or stop (False)
 def stream(run, success=None, failure=None):
-    # TODO: Is the port really correct?
     r = requests.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'])
     if (r.status_code == 200):
         response = json.loads(r.json())
