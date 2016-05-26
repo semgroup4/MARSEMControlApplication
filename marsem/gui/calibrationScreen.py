@@ -25,7 +25,6 @@ class CalibrationScreen(Screen):
 
     # Selection action for min/max colors: -1 none, 0 min, 1 max
     selection = -1
-    selected = BooleanProperty(False)
 
     # String propertys that are linked to one label each to display values.
     color_string = StringProperty('Color')
@@ -62,8 +61,6 @@ class CalibrationScreen(Screen):
         file.write(new_pic)
         file.close()
 
-        return 'calibImage.jpg'
-
     # Updates the color label with new values
     def update_color_string(self):
         self.color_string = 'Min: ' + self.color.min.__str__() + \
@@ -87,24 +84,34 @@ class CalibrationScreen(Screen):
     def on_touch_down(self, touch):
         super(CalibrationScreen, self).on_touch_down(touch)
 
-        # Normalized position on the image
+        # Normalized position on the image.
+        # First get the coordinates clicked, 0, 0 starts at the bottom left of the image (determined by image_offset).
         normalized_pos = [touch.x - self.image_offset[0], touch.y - self.image_offset[1]]
+        # Get the location clicked IN PERCENTAGE of the image's size:
         normalized_pos[0] = normalized_pos[0] / self.image_dimensions[0]
         normalized_pos[1] = normalized_pos[1] / self.image_dimensions[1]
 
-        # Check if image was clicked and selection in progress
+        # Check if image was clicked and selection in progress, basically if percentage is above 100 or below 0
+        # we're calculating based on 0-1 where 1 is 100%. If self.selection is -1, no selection was to be made and
+        # nothing happens.
         if(self.selection == -1 or
-                   normalized_pos[0] > 1 or normalized_pos[0] < 0 or
-                   normalized_pos[1] > 1 or normalized_pos[1] < 0):
+                normalized_pos[0] > 1 or normalized_pos[0] < 0 or
+                normalized_pos[1] > 1 or normalized_pos[1] < 0):
+            # Set selection back to -1 and return, do nothing!
             self.selection = -1
             return
 
+        # Open the image that was clicked, we're gonna get them pesky pixels
         img = Image.open('calibImage.jpg')
 
+        # The percentage times the image's width and height, where da pixel at?
         img_x = normalized_pos[0] * img.width
         img_y = normalized_pos[1] * img.height
-        # Flip y so down is +
+        print(img_x)
+        print(img_y)
+        # Invert the y coordinate inside the image:
         img_y = img.height - img_y
+        print('Second img_y: ' + str(img_y))
 
         # Grab color values
         r, g, b = img.getpixel((img_x, img_y))

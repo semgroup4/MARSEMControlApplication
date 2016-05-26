@@ -1,6 +1,5 @@
 <CalibrationScreen>:
     name: 'CalibrationScreen'
-    on_enter: calibration_image.source = 'unavailable.jpg'
     on_enter: self.get_size()
     on_enter: self.selected = False
     CustomLayout:
@@ -8,6 +7,7 @@
             id: calibration_image
             allow_stretch: True
             keep_ratio: False
+            source: 'calibImage.jpg'
             pos: root.width/2-self.width/2, root.height/2-self.height/2
             size: dp(500), dp(420)
         BoxLayout:
@@ -17,7 +17,7 @@
             Button:
                 text: 'Take Snapshot'
                 size: '130dp', '50dp'
-                on_release: calibration_image.source = root.update_picture()
+                on_release: root.update_picture(), calibration_image.reload()
             Button:
                 text: 'Select Min'
                 size: '75dp', '50dp'
