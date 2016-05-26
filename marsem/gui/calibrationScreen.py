@@ -1,34 +1,39 @@
 #!/usr/bin/python3.4 -tt
 # -*- coding: utf-8 -*-
 
-import marsem.protocol.car as car
-from marsem.opencv import Color
-from kivy.uix.screenmanager import Screen
-from kivy.lang import Builder
-from kivy.properties import StringProperty, BooleanProperty
-from kivy.uix.image import Image
+import numpy
 import io
+
+from kivy.uix.screenmanager import Screen
+from kivy.uix.image import Image
+
+from kivy.lang import Builder
+
+from kivy.properties import StringProperty, BooleanProperty
 from kivy.metrics import dp
 
+import marsem.protocol.car as car
+from marsem.opencv import Color
 
 from PIL import Image
 
-import numpy
 
 Builder.load_file("calibrationScreen.kv")
+
+
+# Globally accessible, needs to be this way!
+CURRENT_COLOR = Color()
 
 
 # Currently writes the snapshot to file, but it may be cleaner
 # to simply store the data in a variable.
 class CalibrationScreen(Screen):
-    color = Color()
-
     # Selection action for min/max colors: -1 none, 0 min, 1 max
     selection = -1
 
     # String propertys that are linked to one label each to display values.
-    color_string = StringProperty('Color')
-    current_action_string = StringProperty('Current action')
+    color_string = StringProperty('N/A')
+    current_action_string = StringProperty('No action selected')
 
     def __init__(self, **kwargs):
         super(CalibrationScreen, self).__init__(**kwargs)
@@ -63,12 +68,7 @@ class CalibrationScreen(Screen):
 
     # Updates the color label with new values
     def update_color_string(self):
-        self.color_string = 'Min: ' + self.color.min.__str__() + \
-               '\nMax: ' + self.color.max.__str__()
-
-    # Returns the selected color range
-    def get_color(self):
-        return self.color
+        self.color_string = CURRENT_COLOR.get_color()
 
     # Makes the next click select the min color
     def start_select_min(self):
@@ -97,8 +97,8 @@ class CalibrationScreen(Screen):
         if(self.selection == -1 or
                 normalized_pos[0] > 1 or normalized_pos[0] < 0 or
                 normalized_pos[1] > 1 or normalized_pos[1] < 0):
-            # Set selection back to -1 and return, do nothing!
-            self.selection = -1
+            # Selection is not turned on OR the user clicked outside the image. Do NADA!
+            #self.selection = -1
             return
 
         # Open the image that was clicked, we're gonna get them pesky pixels
@@ -107,22 +107,19 @@ class CalibrationScreen(Screen):
         # The percentage times the image's width and height, where da pixel at?
         img_x = normalized_pos[0] * img.width
         img_y = normalized_pos[1] * img.height
-        print(img_x)
-        print(img_y)
         # Invert the y coordinate inside the image:
         img_y = img.height - img_y
-        print('Second img_y: ' + str(img_y))
 
-        # Grab color values
+        # Grab color values of the clicked pixel.
         r, g, b = img.getpixel((img_x, img_y))
 
         # Depending on action, set min or max.
-        if(self.selection == 0):
-            self.color.set_min([r, g, b])
-        if(self.selection == 1):
-            self.color.set_max([r, g, b])
+        if self.selection == 0:
+            CURRENT_COLOR.set_min([r, g, b])
+        if self.selection == 1:
+            CURRENT_COLOR.set_max([r, g, b])
 
         # Resets select action.
         self.selection = -1
-        self.current_action_string = ''
+        self.current_action_string = 'No action selected'
         self.update_color_string()

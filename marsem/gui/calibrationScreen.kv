@@ -1,7 +1,6 @@
 <CalibrationScreen>:
     name: 'CalibrationScreen'
     on_enter: self.get_size()
-    on_enter: self.selected = False
     CustomLayout:
         Image:
             id: calibration_image
@@ -11,8 +10,8 @@
             pos: root.width/2-self.width/2, root.height/2-self.height/2
             size: dp(500), dp(420)
         BoxLayout:
-            pos: root.width/2-self.width/2, root.height/2-dp(270)
             orientation: 'horizontal'
+            pos: root.width/2-self.width/2, root.height/2-dp(300)
             size: '400dp', '50dp'
             Button:
                 text: 'Take Snapshot'
@@ -26,12 +25,17 @@
                 text: 'Select Max'
                 size: '75dp', '50dp'
                 on_release: root.start_select_max()
-
         Label:
-            text: root.color_string
-            pos: '680dp', root.height/2-self.width/1.5
-            size: '75dp', '50dp'
-        Label:
-            text: root.current_action_string
-            pos: '680dp', root.height/2-self.width/1.5 - dp(25)
-            size: '75dp', '50dp'
+            text: 'Now selecting: ' + root.current_action_string
+            pos: root.width/2-self.width/2, root.height/2-dp(260)
+            size: dp(75), dp(50)
+        BoxLayout:
+            orientation: 'vertical'
+            pos: dp(25), root.height-dp(300)
+            size: dp(75), dp(100)
+            Label:
+                text: 'Target range:'
+                size: self.parent.width, dp(50)
+            Label:
+                text: root.color_string
+                size: self.parent.width, dp(50)

@@ -1,15 +1,6 @@
 <HomeScreen>:
     name: "HomeScreen"
     CustomLayout:
-        Label:
-            text: 'Camera Stream'
-            pos: root.width/2-self.width/2, root.height/2+self.height*3
-            size: '75dp', '50dp'
-        OpenCVStream:
-            id: stream
-            pos: root.width-self.width-self.width/11, root.height/2-self.height/2
-            size: '420dp', '340dp'
-            on_parent: self.load()
         BoxLayout:
             pos: root.width/4-self.width*2, root.height/2
             orientation: 'vertical'
@@ -20,13 +11,7 @@
             Button:
                 text: 'Start'
                 size: '75dp', '50dp'
-                on_release: stream.start_server()
-            Button:
-                text: 'Stop'
-                size: '75dp', '50dp'
-                on_release: stream.get_size()
-            Label:
-                size: '75dp', '50dp'
+                on_release: root.start_server()
         BoxLayout:
             pos: root.width/4-self.width/2, root.height/2
             orientation: 'vertical'
@@ -37,16 +22,12 @@
             Button:
                 text: 'Connect'
                 size: '75dp', '50dp'
-                on_release: stream.connect()
+                on_release: root.connect()
             Button:
                 text: 'Start'
                 size: '75dp', '50dp'
-                on_release: stream.start()
+                on_release: root.start()
                 on_release: progress_bar.start()
-            Button:
-                text: 'Stop'
-                size: '75dp', '50dp'
-                on_release: stream.stop()
         Label:
             text: 'Progress overview'
             pos: '60dp', root.height/2-self.width/1.5
