@@ -88,9 +88,18 @@ class OpenCVStream(BoxLayout):
         Clock.schedule_interval(self.update, 0.1)
 
     def connect(self):
-        if car.stream(True):
-            time.sleep(2)
-            opencv.connect()
+        def _callback(t):
+            if t and not opencv.is_connected():
+                # Sleep ?
+                opencv.connect()
+            else:
+                if opencv.is_connected():
+                    # Close the opencv
+                    opencv.stop()
+        def _failure(t):
+            if opencv.is_connected():
+                opencv.stop()
+        car.stream(True, success=_callback, failure=_failure)
 
     def stop(self):
         opencv.stop()
