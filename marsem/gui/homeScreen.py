@@ -62,7 +62,7 @@ class HomeScreen(Screen):
 class PhotoProgress(ProgressBar):
     def __init__(self, **kwargs):
         super(PhotoProgress, self).__init__(**kwargs)
-        self.max = 100
+        self.max = 600
 
     def start(self):
         self.schedule_update()
@@ -75,6 +75,6 @@ class PhotoProgress(ProgressBar):
     def update(self, dt):
         self.value += 1
 
-        if self.value >= 100:
+        if self.value >= 600:
             self.value = 0
             return False

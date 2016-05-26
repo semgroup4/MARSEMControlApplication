@@ -64,7 +64,7 @@ def connect(callback=None):
 
 # This needs to be threaded, to prevent main thread block
 # TODO change timeout back to 60 seconds
-def run(color=Color() ,samples=[], callback=None, timeout=10):
+def run(color=Color() ,samples=[], callback=None, timeout=60):
     # Get the point in time where this def. was called to count from this point.
     global current_frame
     t_end = time.time() + timeout
