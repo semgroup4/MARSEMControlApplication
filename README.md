@@ -28,6 +28,7 @@ a = Analysis(['marsem/gui/main.py'],
 a.datas += [('homeScreen.kv', 'marsem/gui/homeScreen.kv', 'DATA')]
 a.datas += [('marsem.kv', 'marsem/gui/marsem.kv', 'DATA')]
 a.datas += [('photoScreen.kv', 'marsem/gui/photoScreen.kv', 'DATA')]
+a.datas += [('calibrationScreen.kv', 'marsem/gui/calibrationScreen.kv', 'DATA')]
 ```
 After you have edited the main.spec file to look like this. Go ahead and run the build command.
 ```
