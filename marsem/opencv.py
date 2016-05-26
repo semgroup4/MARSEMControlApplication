@@ -4,6 +4,7 @@
 
 import cv2
 import numpy as np
+import time
 
 import marsem.protocol.car as car
 import marsem.protocol.config as cfg
@@ -37,6 +38,9 @@ def create_color_range(lst):
 def update_current_frame(f):
     global current_frame
     current_frame = f
+
+def is_connected():
+    return video_capture.isOpened()
 
 # Connects the video capture to its video source.
 def connect(callback=None):
@@ -83,7 +87,7 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
             samples.append(0)
 
         # At this point, the green line has been added to the frame and the frame can be made available.
-        update_global_frame(frame)
+        update_current_frame(frame)
         move_car(samples)
         samples = []
 
@@ -94,6 +98,8 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
                 stop(callback=callback)
             else:
                 stop()
+    
+    stop()
 
 
 def move_car(samples):
