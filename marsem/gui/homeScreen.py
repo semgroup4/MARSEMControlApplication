@@ -32,6 +32,10 @@ class HomeScreen(Screen):
 
 
 class OpenCVStream(BoxLayout):
+
+    def get_size(self):
+        print(self.parent.size)
+
     error_count = 0                     # Counting number of times a frame from OpenCV could not be parsed into texture.
 
     loaded = False

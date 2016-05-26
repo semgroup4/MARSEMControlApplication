@@ -5,9 +5,10 @@ import marsem.protocol.car as car
 from marsem.opencv import Color
 from kivy.uix.screenmanager import Screen
 from kivy.lang import Builder
-from kivy.properties import StringProperty
+from kivy.properties import StringProperty, BooleanProperty
 from kivy.uix.image import Image
 import io
+from kivy.metrics import dp
 
 
 from PIL import Image
@@ -20,21 +21,27 @@ Builder.load_file("calibrationScreen.kv")
 # Currently writes the snapshot to file, but it may be cleaner
 # to simply store the data in a variable.
 class CalibrationScreen(Screen):
-   
     color = Color()
-
-    color_string = StringProperty()
-    current_action_string = StringProperty()
-
-    # NOTE:
-    # The pixel selector is extremely hacky and relies on hardcoded
-    # image position values. These values must be adjusted if the UI
-    # layout is at all modified.
-    image_dimensions = 420, 340
-    image_offset = 50, 50
 
     # Selection action for min/max colors: -1 none, 0 min, 1 max
     selection = -1
+    selected = BooleanProperty(False)
+
+    # String propertys that are linked to one label each to display values.
+    color_string = StringProperty('Color')
+    current_action_string = StringProperty('Current action')
+
+    def __init__(self, **kwargs):
+        super(CalibrationScreen, self).__init__(**kwargs)
+
+        # Size of the image widget (see .kv)
+        self.image_dimensions = dp(500), dp(420)
+
+    # Could not get window size in init method since the screen was not loaded yet, it just returned [100, 100]
+    def get_size(self):
+        self.screen_dimensions = self.size
+
+        self.image_offset = self.screen_dimensions[0] / 2 - dp(250), self.screen_dimensions[1] / 2 - dp(210)
 
     # Grabs an image from the camera and saves to file
     def update_picture(self):

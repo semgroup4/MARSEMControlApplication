@@ -1,9 +1,11 @@
 <CalibrationScreen>:
     name: 'CalibrationScreen'
-    on_enter: whore.source = 'stream_image.png'
+    on_enter: calibration_image.source = 'unavailable.jpg'
+    on_enter: self.get_size()
+    on_enter: self.selected = False
     CustomLayout:
         Image:
-            id: whore
+            id: calibration_image
             allow_stretch: True
             keep_ratio: False
             pos: root.width/2-self.width/2, root.height/2-self.height/2
@@ -15,7 +17,7 @@
             Button:
                 text: 'Take Snapshot'
                 size: '130dp', '50dp'
-                on_release: whore.source = root.update_picture()
+                on_release: calibration_image.source = root.update_picture()
             Button:
                 text: 'Select Min'
                 size: '75dp', '50dp'
@@ -27,9 +29,9 @@
 
         Label:
             text: root.color_string
-            pos: '600dp', root.height/2-self.width/1.5
+            pos: '680dp', root.height/2-self.width/1.5
             size: '75dp', '50dp'
         Label:
             text: root.current_action_string
-            pos: '600dp', root.height/2-self.width/1.5 - 50
+            pos: '680dp', root.height/2-self.width/1.5 - dp(25)
             size: '75dp', '50dp'
