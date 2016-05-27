@@ -5,16 +5,21 @@
 import cv2
 import numpy as np
 import time
+from threading import Thread
 
 import marsem.protocol.car as car
 import marsem.protocol.config as cfg
 
+blue_min = [255, 204, 204]
+blue_max = [255, 0, 0]
+red_min = [17, 15, 140]
+red_max = [50, 56, 200]
 
 class Color():
     def __init__(self):
         """ Defaults to red color """
-        self.min = create_color_range([17, 15, 140])
-        self.max = create_color_range([50, 56, 200])
+        self.min = create_color_range(blue_min)
+        self.max = create_color_range(blue_max)
 
     def set_min_max(self, xa, xb):
         self.set_min(xa)
@@ -30,7 +35,9 @@ class Color():
         return 'Min: ' + str(self.min) + '\nMax: ' + str(self.max)
 
 
+#cv2.VideoCapture.set(video_capture, cv2.VideoCapture.CAP_PROP_FPS, 200)
 video_capture = cv2.VideoCapture()
+video_capture.set(cv2.CAP_PROP_FPS, 200)
 kernel = np.ones((5,5), np.uint8)
 
 current_frame = None
@@ -102,7 +109,6 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
                 car.move_right()
             if value < 45:
                 car.move_forward()
-            print(samples)
             samples = []
 
         cv2.imshow('M.A.R.S.E.M Vision', frame)
