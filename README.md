@@ -77,8 +77,9 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 ## How to run Kivy app
 Stand in MARSEMControlApplication
+```
 python -m marsem.gui.main
-
+```
 ## App images you need to get:
 All images can be found here: https://drive.google.com/drive/folders/0B8ZOX8oToxRGYU9CZUVma3pHaXM
 [stream_image.png]
