@@ -14,6 +14,8 @@ from functools import partial
 
 # Global state variables
 SERVER_RUNNING = False
+# Session
+session = requests.Session()
 # This queue is filled with move commands
 queue = Queue(maxsize=1)
 # SSH Client
@@ -71,7 +73,7 @@ def status():
     """ Gets the status of the server, return a dictionary of the various statuses, {server: True, stream: False} as an example. """
     return base_request(partial(status_f), 
                         (Timeout, HTTPError, ConnectionError))
-
+2
 def start_server():
     """ Starts the server using an SSH client to run the commands to start the server if the server is not running. """
     return base_ssh_request(partial(start_server_f), (BadHostKeyException, AuthenticationException, SSHException, socket.error))
@@ -88,7 +90,8 @@ def stop_server():
 
 # desc: sends a move action to the Car
 def move(action, q):
-    r = requests.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'], timeout=5)
+    global session
+    r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
     # We need a way to know if the server is responding at all, if not. Stop!
     q.get() # remove the action from the queue
     q.task_done()
