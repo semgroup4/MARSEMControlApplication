@@ -61,10 +61,9 @@ class CalibrationScreen(Screen):
         # not necessary at all, but it works so I won't change it.
 
         # Take a snapshot. If camera is not available, use placeholder image.
-        if True: # TODO - Replace False with a function which checks if camera is available in order to prevent hanging
-            
-            new_pic = car.picture()
-
+        image = car.picture()
+        if image != False: 
+            new_pic = image
         else:
             print ("Could not connect to camera")
             new_pic = numpy.fromfile('unavailable.jpg', dtype='int8', sep="")
