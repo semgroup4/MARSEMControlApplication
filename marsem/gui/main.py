@@ -13,6 +13,8 @@ from kivy.uix.screenmanager import ScreenManager, Screen, FadeTransition
 
 import marsem.gui.homeScreen as HomeScreen
 from marsem.gui.photoScreen import PhotoScreen
+from marsem.gui.calibrationScreen import CalibrationScreen
+
 from marsem.gui.settingsjson import settings_json
 import marsem.protocol.config as cfg
 

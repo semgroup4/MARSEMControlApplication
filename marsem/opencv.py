@@ -9,6 +9,7 @@ import time
 import marsem.protocol.car as car
 import marsem.protocol.config as cfg
 
+
 class Color():
     def __init__(self):
         """ Defaults to red color """
@@ -25,6 +26,9 @@ class Color():
     def set_max(self, xs):
         self.max = create_color_range(xs)
 
+    def get_color(self):
+        return 'Min: ' + str(self.min) + '\nMax: ' + str(self.max)
+
 
 video_capture = cv2.VideoCapture()
 kernel = np.ones((5,5), np.uint8)
@@ -35,12 +39,15 @@ current_frame = None
 def create_color_range(lst):
     return np.array(lst, dtype='uint8')
 
+
 def update_current_frame(f):
     global current_frame
     current_frame = f
 
+
 def is_connected():
     return video_capture.isOpened()
+
 
 # Connects the video capture to its video source.
 def connect(callback=None):
@@ -56,12 +63,13 @@ def connect(callback=None):
 
 
 # This needs to be threaded, to prevent main thread block
+# TODO change timeout back to 60 seconds
 def run(color=Color() ,samples=[], callback=None, timeout=60):
     # Get the point in time where this def. was called to count from this point.
     global current_frame
     t_end = time.time() + timeout
 
-    while video_capture.isOpened() and t_end <= time.time():
+    while video_capture.isOpened() and t_end > time.time():
         ret, frame = video_capture.read()
         
         mask = cv2.inRange(frame, color.min, color.max)
@@ -100,6 +108,8 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
                 stop()
     
     stop()
+    # Turn the stream OFF after OpenCV has run to completion.
+    car.stream(False)
 
 
 def move_car(samples):
