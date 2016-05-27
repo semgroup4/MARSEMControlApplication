@@ -62,7 +62,8 @@ class CalibrationScreen(Screen):
 
         # Take a snapshot. If camera is not available, use placeholder image.
         image = car.picture()
-        if image != False: 
+
+        if image != False:
             new_pic = image
         else:
             print ("Could not connect to camera")

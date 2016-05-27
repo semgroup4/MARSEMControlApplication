@@ -115,7 +115,7 @@ def stream_f(run, success=None, failure=None):
 
 def picture_f():
     """ Returns a boolean if it fails and a binary picture if it succeds. """
-    r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'], timeout=5)
+    r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'], timeout=20)
     if (r.status_code == 200):
         return r.content
     else:

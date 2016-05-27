@@ -34,9 +34,9 @@ class HomeScreen(Screen):
 
     def start(self):
         # TODO: check if this works.
-        ocv = Thread(target=opencv.run, args=(calibration.CURRENT_COLOR,), daemon=True)
-        ocv.start()
-        #opencv.run(calibration.CURRENT_COLOR)
+        #ocv = Thread(target=opencv.run, args=(calibration.CURRENT_COLOR,), daemon=True)
+        #ocv.start()
+        opencv.run(calibration.CURRENT_COLOR)
 
     def connect(self):
         # Ask about tomorrow:
