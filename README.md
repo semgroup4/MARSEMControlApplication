@@ -37,7 +37,7 @@ pyinstaller main.spec -p .
 This will create a folder called "main" in your dist folder. This will also create a executeable main file inside it.
 Go ahead and run our application doing:
 ```
-./dist/main/main &
+./dist/marsem/marsem &
 ```
 You should now see the M.A.R.S.E.M GUI controller on your scren. If you have any errors, fix them.
 
@@ -77,11 +77,11 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 
 ## How to run Kivy app
 Stand in MARSEMControlApplication
-PYTHONPATH=. python3 marsem/gui/main.py
-
+```
+python -m marsem.gui.main
+```
 ## App images you need to get:
-All images can be found here: https://drive.google.com/drive/folders/0B8ZOX8oToxRGYU9CZUVma3pHaXM
-[stream_image.png]
+All images can be found here: [Images](https://drive.google.com/drive/folders/0B8ZOX8oToxRGYU9CZUVma3pHaXM)
 
 Put them in /yourpersonalpath/MARSEMControlApplication
 
