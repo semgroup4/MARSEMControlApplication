@@ -23,18 +23,36 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # There be dragons her
 
 
 # The exported functions from this module
-__all__ = ['move_car', 'stream', 'picture', 'status', 'start_server', 'stop_server']
+__all__ = ['move_left','move_right','move_forward', 'move_backward', 'stream', 'picture', 'status', 'start_server', 'stop_server']
 
 # **************************************
 # Server commands
 # These are the exported commands!
 # **************************************
 def move_car(action=None):
+    """ Moves the car, puts the command on the queue and then performs one command at a time.
+    This to ensure we don't flood the the server with requests.
+    This function is threaded."""
     if queue.empty():
         worker = Thread(target=move, args=(action, queue,))
         worker.deamon = True
         worker.start()
         queue.put(action)
+
+def move_left():
+    return move_car(action="left")
+
+
+def move_right():
+    return move_car(action="right")
+
+
+def move_forward():
+    return move_car(action="forward")
+
+
+def move_backward():
+    return move_car(action="backward")
 
 def stream(t, success=None, failure=None):
     """ Tells the car server to start or stop streaming. 
@@ -67,33 +85,10 @@ def stop_server():
 # Do not use these outside of this module!
 # **************************************
 
-def move_left():
-    return move_car(action="left")
-
-
-def move_right():
-    return move_car(action="right")
-
-
-def move_forward():
-    return move_car(action="forward")
-
-
-def move_backward():
-    return move_car(action="backward")
-
-
-def start_stream():
-    return stream(True)
-
-
-def stop_stream():
-    return stream(False)
-
 
 # desc: sends a move action to the Car
 def move(action, q):
-    r = requests.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
+    r = requests.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'], timeout=5)
     # We need a way to know if the server is responding at all, if not. Stop!
     q.get() # remove the action from the queue
     q.task_done()
@@ -117,7 +112,7 @@ def stream_f(run, success=None, failure=None):
 
 def picture_f():
     """ Returns a boolean if it fails and a binary picture if it succeds. """
-    r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'])
+    r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'], timeout=5)
     if (r.status_code == 200):
         return r.content
     else:
@@ -127,7 +122,7 @@ def picture_f():
 
 def status_f():
     """ Returns a boolean if it fails and a dictionary {} if it succeds. """
-    r = requests.get(cfg.host_status, params={"status": True}, headers=cfg.config['headers'])
+    r = requests.get(cfg.host_status, params={"status": True}, headers=cfg.config['headers'], timeout=5)
     if (r.status_code == 200):
         return json.loads(r.content)
     else:
