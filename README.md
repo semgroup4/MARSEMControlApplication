@@ -10,9 +10,9 @@ pip install pyinstaller
 In order to do this, run the following commands:
 
 ```
-pyi-makespec marsem/gui/main.py
+pyi-makespec marsem/gui/main.py -n marsem
 ```
-This will create a main.spec file in the current directory. In order to get our .kv files bundled into the executeable, go ahead and edit the main.spec file and add the a.datas for the .kv files needed.
+This will create a marsem.spec file in the current directory. In order to get our .kv files bundled into the executeable, go ahead and edit the marsem.spec file and add the a.datas for the .kv files needed.
 ```
 a = Analysis(['marsem/gui/main.py'],
              pathex=['/your/genereated/path/from/makespec/MARSEMControlApplication'],

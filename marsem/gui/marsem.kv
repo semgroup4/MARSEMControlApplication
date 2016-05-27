@@ -1,6 +1,7 @@
 <ScreenManagement>:
     HomeScreen:
     PhotoScreen:
+    CalibrationScreen:
 
 # This is the layout template used for all screens of the application.
 <CustomLayout>:
@@ -28,7 +29,7 @@
                 width: 1
     Menu:
         pos: root.width-self.width, root.height-root.height/7
-        size: '240dp', '1dp'
+        size: '320dp', '1dp'
 
 <Menu>:
     BoxLayout:
@@ -40,6 +41,12 @@
             size_hint: None,None
             height: '48dp'
             on_release: app.root.current = 'PhotoScreen'
+        Button:
+            text: 'Calibrate'
+            size: '75dp', '25dp'
+            size_hint: None,None
+            height: '48dp'
+            on_release: app.root.current = 'CalibrationScreen'
         Button:
             text: 'Settings'
             size: '75dp', '25dp'
