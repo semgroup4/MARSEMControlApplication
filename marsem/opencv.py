@@ -106,7 +106,8 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
                 stop(callback=callback)
             else:
                 stop()
-    
+
+    print("Stopping run")
     stop()
     # Turn the stream OFF after OpenCV has run to completion.
     car.stream(False)

@@ -45,10 +45,6 @@ class HomeScreen(Screen):
                 # Sleep ?
                 time.sleep(1)
                 opencv.connect()
-            else:
-                if opencv.is_connected():
-                    # Close the opencv if already connected
-                    opencv.stop()
 
         def _failure(t):
             if opencv.is_connected():
