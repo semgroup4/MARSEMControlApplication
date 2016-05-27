@@ -37,7 +37,7 @@ pyinstaller main.spec -p .
 This will create a folder called "main" in your dist folder. This will also create a executeable main file inside it.
 Go ahead and run our application doing:
 ```
-./dist/main/main &
+./dist/marsem/marsem &
 ```
 You should now see the M.A.R.S.E.M GUI controller on your scren. If you have any errors, fix them.
 
