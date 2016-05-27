@@ -81,7 +81,7 @@ Stand in MARSEMControlApplication
 python -m marsem.gui.main
 ```
 ## App images you need to get:
-All images can be found here: [https://drive.google.com/drive/folders/0B8ZOX8oToxRGYU9CZUVma3pHaXM](Images)
+All images can be found here: [Images](https://drive.google.com/drive/folders/0B8ZOX8oToxRGYU9CZUVma3pHaXM)
 
 Put them in /yourpersonalpath/MARSEMControlApplication
 
