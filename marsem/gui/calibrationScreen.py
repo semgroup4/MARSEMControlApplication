@@ -9,7 +9,7 @@ from kivy.uix.image import Image
 
 from kivy.lang import Builder
 
-from kivy.properties import StringProperty, BooleanProperty
+from kivy.properties import StringProperty, BooleanProperty, NumericProperty
 from kivy.metrics import dp
 
 import marsem.protocol.car as car
@@ -34,6 +34,13 @@ class CalibrationScreen(Screen):
     # String propertys that are linked to one label each to display values.
     color_string = StringProperty('N/A')
     current_action_string = StringProperty('No action selected')
+
+    r_min = NumericProperty(0)
+    g_min = NumericProperty(0)
+    b_min = NumericProperty(0)
+    r_max = NumericProperty(0)
+    g_max = NumericProperty(0)
+    b_max = NumericProperty(0)
 
     def __init__(self, **kwargs):
         super(CalibrationScreen, self).__init__(**kwargs)
@@ -92,13 +99,12 @@ class CalibrationScreen(Screen):
         normalized_pos[1] = normalized_pos[1] / self.image_dimensions[1]
 
         # Check if image was clicked and selection in progress, basically if percentage is above 100 or below 0
-        # we're calculating based on 0-1 where 1 is 100%. If self.selection is -1, no selection was to be made and
+        # we're calculating based on 0-1 where 1 is 100%. If self.selection is -1, no selection was made and
         # nothing happens.
         if(self.selection == -1 or
                 normalized_pos[0] > 1 or normalized_pos[0] < 0 or
                 normalized_pos[1] > 1 or normalized_pos[1] < 0):
             # Selection is not turned on OR the user clicked outside the image. Do NADA!
-            #self.selection = -1
             return
 
         # Open the image that was clicked, we're gonna get them pesky pixels
@@ -116,8 +122,15 @@ class CalibrationScreen(Screen):
         # Depending on action, set min or max.
         if self.selection == 0:
             CURRENT_COLOR.set_min([r, g, b])
+            print(str(r) + ' ' + str(g) + ' ' + str(b))
+            self.r_min = r / 255
+            self.g_min = g / 255
+            self.b_min = b / 255
         if self.selection == 1:
             CURRENT_COLOR.set_max([r, g, b])
+            self.r_max = r / 255
+            self.g_max = g / 255
+            self.b_max = b / 255
 
         # Resets select action.
         self.selection = -1

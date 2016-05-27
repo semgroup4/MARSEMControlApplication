@@ -34,8 +34,24 @@
             pos: dp(25), root.height-dp(300)
             size: dp(75), dp(100)
             Label:
-                text: 'Target range:'
+                text: 'Min color:'
                 size: self.parent.width, dp(50)
             Label:
-                text: root.color_string
+                size: dp(50), dp(50)
+                canvas.after:
+                    Color:
+                        rgba: root.r_min, root.g_min, root.b_min, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
+            Label:
+                text: 'Max color:'
                 size: self.parent.width, dp(50)
+            Label:
+                size: dp(50), dp(50)
+                canvas.after:
+                    Color:
+                        rgba: root.r_max, root.g_max, root.b_max, 1
+                    Rectangle:
+                        pos: self.pos
+                        size: self.size
