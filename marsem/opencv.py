@@ -96,8 +96,14 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
 
         # At this point, the green line has been added to the frame and the frame can be made available.
         update_current_frame(frame)
-        move_car(samples)
-        samples = []
+        if len(samples) == 2:
+            value = sum(samples) / len(samples)
+            if value > 45:
+                car.move_right()
+            if value < 45:
+                car.move_forward()
+            print(samples)
+            samples = []
 
         cv2.imshow('M.A.R.S.E.M Vision', frame)
 
@@ -107,20 +113,10 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
             else:
                 stop()
 
-    print("Stopping run")
     stop()
     # Turn the stream OFF after OpenCV has run to completion.
     car.stream(False)
 
-
-def move_car(samples):
-    if len(samples) == 2:
-        value = sum(samples) / len(samples)
-        if value > 45:
-            car.move_right()
-        if value < 45:
-            car.move_forward()
-        
 
 # Returns a 'single' prepared frame from OpenCV
 def get_video(callback=None):
@@ -137,3 +133,9 @@ def stop(callback=None):
     cv2.destroyAllWindows()
     if callback:
         callback()
+
+
+if __name__ == '__main__':
+    cfg.stream_file = 0
+    connect()
+    run()
