@@ -18,8 +18,6 @@ from threading import Thread, current_thread
 
 import time
 
-import cv2
-
 import marsem.opencv as opencv
 import marsem.protocol.car as car
 import marsem.gui.calibrationScreen as calibration
@@ -31,6 +29,9 @@ Builder.load_file("homeScreen.kv")
 class HomeScreen(Screen):
     def start_server(self):
         car.start_server()
+
+    def stop_server(self):
+        car.stop_server()
 
     def stop_stream(self):
         car.stream(False)
@@ -46,6 +47,9 @@ class HomeScreen(Screen):
         def _failure(t):
             if opencv.is_connected():
                 opencv.stop()
+    
+    def stop_cv(self):
+        opencv.stop()
 
         # Activate the car stream (camera), upon returning True -> perform _callback | returning False ->
         # perform _failure.
