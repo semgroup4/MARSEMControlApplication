@@ -121,13 +121,12 @@ class CalibrationScreen(Screen):
 
         # Depending on action, set min or max.
         if self.selection == 0:
-            CURRENT_COLOR.set_min([r, g, b])
-            print(str(r) + ' ' + str(g) + ' ' + str(b))
+            CURRENT_COLOR.set_min([b, g, r])
             self.r_min = r / 255
             self.g_min = g / 255
             self.b_min = b / 255
         if self.selection == 1:
-            CURRENT_COLOR.set_max([r, g, b])
+            CURRENT_COLOR.set_max([b, g, r])
             self.r_max = r / 255
             self.g_max = g / 255
             self.b_max = b / 255
