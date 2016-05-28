@@ -2,7 +2,7 @@
 
 import requests
 import json
-from threading import Thread
+from threading import Thread, current_thread
 from queue import Queue
 
 import marsem.protocol.config as cfg
@@ -18,6 +18,7 @@ SERVER_RUNNING = False
 session = requests.Session()
 # This queue is filled with move commands
 queue = Queue(maxsize=1)
+
 # SSH Client
 ssh = paramiko.client.SSHClient()
 # Warning
@@ -36,9 +37,6 @@ def move_car(action=None):
     This to ensure we don't flood the the server with requests.
     This function is threaded."""
     if queue.empty():
-        worker = Thread(target=move, args=(action, queue,))
-        worker.deamon = True
-        worker.start()
         queue.put(action)
 
 def move_left():
@@ -73,7 +71,7 @@ def status():
     """ Gets the status of the server, return a dictionary of the various statuses, {server: True, stream: False} as an example. """
     return base_request(partial(status_f), 
                         (Timeout, HTTPError, ConnectionError))
-2
+
 def start_server():
     """ Starts the server using an SSH client to run the commands to start the server if the server is not running. """
     return base_ssh_request(partial(start_server_f), (BadHostKeyException, AuthenticationException, SSHException, socket.error))
@@ -89,12 +87,17 @@ def stop_server():
 
 
 # desc: sends a move action to the Car
-def move(action, q):
+def move():
     global session
-    r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
-    # We need a way to know if the server is responding at all, if not. Stop!
-    q.get() # remove the action from the queue
-    q.task_done()
+    global queue
+    while True:
+        action = queue.get()
+        print(action)
+        r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
+
+worker = Thread(target=move, args=())
+worker.deamon = True
+worker.start()
 
 
 def stream_f(run, success=None, failure=None):
@@ -146,7 +149,7 @@ def start_server_f():
         return True
     return False
 
-def stop_server():
+def stop_server_f():
     def format_value(x):
         """ Removes newlines in the value returned by running pgrep on the remote. """
         return x.strip("\n")
