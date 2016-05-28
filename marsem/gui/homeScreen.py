@@ -32,12 +32,6 @@ class HomeScreen(Screen):
     def start_server(self):
         car.start_server()
 
-    def start(self):
-        # TODO: check if this works.
-        #ocv = Thread(target=opencv.run, args=(calibration.CURRENT_COLOR,), daemon=True)
-        #ocv.start()
-        opencv.run(calibration.CURRENT_COLOR)
-
     def connect(self):
         # Ask about tomorrow:
         def _callback(t):
@@ -53,6 +47,53 @@ class HomeScreen(Screen):
         # Activate the car stream (camera), upon returning True -> perform _callback | returning False ->
         # perform _failure.
         car.stream(True, success=_callback, failure=_failure)
+
+
+class OpenCVStream(BoxLayout):
+    error_count = 0                     # Counting number of times a frame from OpenCV could not be parsed into texture.
+
+    loaded = False
+
+    def load(self):
+        if not self.loaded:
+            self.loaded = True
+
+            self.stream_image = Image(source='stream_image.png')
+            self.stream_image.keep_ratio = False
+            self.stream_image.allow_stretch = True
+
+            self.add_widget(self.stream_image)
+
+    def update(self, dt):
+        try:
+            frame = opencv.get_video() # Step 1, get the current frame from OpenCV.
+
+            buf1 = cv2.flip(frame, 0) # Convert it into a string
+            buf = buf1.tostring()
+
+            # Do some stuff to make it into a texture
+            texture1 = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
+            texture1.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte') # Do some more stuff to make it into a texture
+
+            self.stream_image.texture = texture1 # Set the defined image's texture as the new texture
+
+            self.error_count = 0        # Reset error count if all went well.
+        except Exception:
+            self.error_count += 1       # Add 1 to error count since exception was raised.
+
+            print('>> Could not retrieve frame, OpenCV may just be starting up')
+
+            if self.error_count >= 10:  # 10 or more errors were encountered, abort stream.
+                self.error_count = 0    # Reset error count to 0 in order to be able to start the stream again.
+                Clock.unschedule(self.update)
+
+                print('>> Stream unavailable')
+
+        def start(self):
+            ocv = Thread(target=opencv.run, args=(calibration.CURRENT_COLOR,), daemon=True)
+            ocv.start()
+            # TODO! Philip, this controls the update frequency on screen!
+            Clock.schedule_interval(self.update, 0.1)
 
 
 class PhotoProgress(ProgressBar):
