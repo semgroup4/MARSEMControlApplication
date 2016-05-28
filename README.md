@@ -72,6 +72,7 @@ cmake -D CMAKE_BUILD_TYPE=RELEASE \
 	-D BUILD_EXAMPLES=ON \
 	-D BUILD_opencv_python3=ON \
         -D WITH_FFMPEG=ON \
+        -D WITH_TBB=ON \
 	-D OPENCV_EXTRA_MODULES_PATH=~/opencv_contrib/modules ..
 ```
 
