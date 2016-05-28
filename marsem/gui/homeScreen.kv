@@ -1,6 +1,11 @@
 <HomeScreen>:
     name: "HomeScreen"
     CustomLayout:
+        OpenCVStream:
+            id: stream
+            pos: root.width-self.width-self.width/11, root.height/2-self.height/2
+            size: '420dp', '340dp'
+            on_parent: self.load()
         BoxLayout:
             pos: root.width/4-self.width*2, root.height/2
             orientation: 'vertical'
@@ -26,7 +31,7 @@
             Button:
                 text: 'Start'
                 size: '75dp', '50dp'
-                on_release: root.start()
+                on_release: stream.start()
                 on_release: progress_bar.start()
         Label:
             text: 'Progress overview'
