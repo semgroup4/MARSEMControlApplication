@@ -18,8 +18,8 @@ red_max = [50, 56, 200]
 class Color():
     def __init__(self):
         """ Defaults to red color """
-        self.min = create_color_range(blue_min)
-        self.max = create_color_range(blue_max)
+        self.min = create_color_range(red_min)
+        self.max = create_color_range(red_max)
 
     def set_min_max(self, xa, xb):
         self.set_min(xa)
@@ -73,6 +73,7 @@ def connect(callback=None):
 # TODO change timeout back to 60 seconds
 def run(color=Color() ,samples=[], callback=None, timeout=60):
     # Get the point in time where this def. was called to count from this point.
+    print("Min ",color.min, ": Max", color.max)
     global current_frame
     t_end = time.time() + timeout
 
@@ -110,14 +111,8 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
             if value < 45:
                 car.move_forward()
             samples = []
-
-        cv2.imshow('M.A.R.S.E.M Vision', frame)
-
-        if cv2.waitKey(1) & 0xFF == ord('q'):
-            if callback:
-                stop(callback=callback)
-            else:
-                stop()
+        elif len(samples) > 2:
+            samples = []
 
     stop()
     # Turn the stream OFF after OpenCV has run to completion.
@@ -134,11 +129,8 @@ def get_video(callback=None):
 
 
 # Stops video capturing with OpenCV and stops the car stream (closes the camera).
-def stop(callback=None):
+def stop():
     video_capture.release()
-    cv2.destroyAllWindows()
-    if callback:
-        callback()
 
 
 if __name__ == '__main__':
