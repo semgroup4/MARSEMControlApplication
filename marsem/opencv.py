@@ -59,6 +59,9 @@ def is_connected():
 # Connects the video capture to its video source.
 def connect(callback=None):
     """ Connects to the videostream on the raspberry pi """
+    if video_capture.isOpened():
+        print("Already connected")
+        return True
     if video_capture.open(cfg.stream_file):
         print("Success in connecting to remote file")
         return True
@@ -71,7 +74,7 @@ def connect(callback=None):
 
 # This needs to be threaded, to prevent main thread block
 # TODO change timeout back to 60 seconds
-def run(color=Color() ,samples=[], callback=None, timeout=60):
+def run(color=Color() ,samples=[], callback=None, timeout=60, burst=0):
     # Get the point in time where this def. was called to count from this point.
     print("Min ",color.min, ": Max", color.max)
     global current_frame
@@ -79,6 +82,12 @@ def run(color=Color() ,samples=[], callback=None, timeout=60):
 
     while video_capture.isOpened() and t_end > time.time():
         ret, frame = video_capture.read()
+
+        update_current_frame(frame)
+
+        burst += 1
+        if burst < 200:
+            continue
         
         mask = cv2.inRange(frame, color.min, color.max)
         blue = cv2.bitwise_and(frame, frame, mask=mask)
