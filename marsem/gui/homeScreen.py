@@ -14,7 +14,7 @@ from kivy.uix.progressbar import ProgressBar
 
 from timeit import default_timer as timer
 
-from threading import Thread
+from threading import Thread, current_thread
 
 import time
 
@@ -31,6 +31,9 @@ Builder.load_file("homeScreen.kv")
 class HomeScreen(Screen):
     def start_server(self):
         car.start_server()
+
+    def stop_stream(self):
+        car.stream(False)
 
     def connect(self):
         # Ask about tomorrow:
@@ -67,33 +70,23 @@ class OpenCVStream(BoxLayout):
     def update(self, dt):
         try:
             frame = opencv.get_video() # Step 1, get the current frame from OpenCV.
-
+        
             buf1 = cv2.flip(frame, 0) # Convert it into a string
             buf = buf1.tostring()
-
+    
             # Do some stuff to make it into a texture
             texture1 = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
             texture1.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte') # Do some more stuff to make it into a texture
 
             self.stream_image.texture = texture1 # Set the defined image's texture as the new texture
+        except NoneType as error:
+            pass
 
-            self.error_count = 0        # Reset error count if all went well.
-        except Exception:
-            self.error_count += 1       # Add 1 to error count since exception was raised.
+    def start(self):
+        ocv = Thread(target=opencv.run,kwargs={"color": calibration.CURRENT_COLOR}, daemon=True)
+        ocv.start()
+        Clock.schedule_interval(self.update, 0.1)
 
-            print('>> Could not retrieve frame, OpenCV may just be starting up')
-
-            if self.error_count >= 10:  # 10 or more errors were encountered, abort stream.
-                self.error_count = 0    # Reset error count to 0 in order to be able to start the stream again.
-                Clock.unschedule(self.update)
-
-                print('>> Stream unavailable')
-
-        def start(self):
-            ocv = Thread(target=opencv.run, args=(calibration.CURRENT_COLOR,), daemon=True)
-            ocv.start()
-            # TODO! Philip, this controls the update frequency on screen!
-            Clock.schedule_interval(self.update, 0.1)
 
 
 class PhotoProgress(ProgressBar):
