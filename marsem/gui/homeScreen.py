@@ -49,8 +49,7 @@ class HomeScreen(Screen):
         def _failure(t):
             if opencv.is_connected():
                 opencv.stop()
-        #car.stream(True, success=_callback, failure=_failure)
-        opencv.connect()
+        car.stream(True, success=_callback, failure=_failure)
 
 
 

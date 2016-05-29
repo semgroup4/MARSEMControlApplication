@@ -18,7 +18,7 @@ SERVER_RUNNING = False
 session = requests.Session()
 # This queue is filled with move commands
 queue = Queue(maxsize=1)
-
+worker = None
 # SSH Client
 ssh = paramiko.client.SSHClient()
 # Warning
@@ -37,6 +37,9 @@ def move_car(action=None):
     This to ensure we don't flood the the server with requests.
     This function is threaded."""
     if queue.empty():
+        worker = Thread(target=move, args=(action, queue,))
+        worker.deamon = True
+        worker.start()
         queue.put(action)
 
 def move_left():
@@ -87,17 +90,11 @@ def stop_server():
 
 
 # desc: sends a move action to the Car
-def move():
-    global session
-    global queue
-    while True:
-        action = queue.get()
-        print(action)
-        r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
-
-worker = Thread(target=move, args=())
-worker.deamon = True
-worker.start()
+def move(action, q):
+    r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
+    # We need a way to know if the server is responding at all, if not. Stop!
+    q.get() # remove the action from the queue
+    q.task_done()
 
 
 def stream_f(run, success=None, failure=None):
