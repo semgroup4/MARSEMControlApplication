@@ -123,6 +123,7 @@ def run(color=Color() ,samples=[], callback=None, timeout=60, burst=0):
         elif len(samples) > 2:
             samples = []
 
+    update_current_frame(None)
     stop()
     # Turn the stream OFF after OpenCV has run to completion.
     car.stream(False)
@@ -142,7 +143,4 @@ def stop():
     video_capture.release()
 
 
-if __name__ == '__main__':
-    cfg.stream_file = 0
-    connect()
-    run()
+
