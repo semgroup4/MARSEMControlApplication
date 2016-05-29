@@ -82,6 +82,7 @@ class OpenCVStream(BoxLayout):
         except Exception as error:
             # Stop reading the opencv when there is no frame
             print(error)
+            self.stream_image.texture = None
             return False
 
     def start(self):
