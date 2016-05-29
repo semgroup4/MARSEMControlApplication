@@ -6,30 +6,60 @@
             pos: root.width-self.width-self.width/11, root.height/2-self.height/2
             size: '420dp', '340dp'
             on_parent: self.load()
+        # Status area for the car's server, setting server_status.enabled to True will make the Ellipse appear green.
         BoxLayout:
-            pos: root.width/4-self.width*2, root.height/2
-            orientation: 'vertical'
-            size: '75dp', '200dp'
+            pos: root.width/4-self.width*2+dp(10), root.height/2+dp(150)
+            size: dp(75), dp(50)
             Label:
                 text: 'Server'
-                size: '75dp', '50dp'
+                size: dp(75), dp(50)
+            Status:
+                id: server_status
+                canvas:
+                    Color:
+                        rgba: self.r, self.g, self.b, self.o
+                    Ellipse:
+                        pos: self.parent.x+dp(45), self.parent.y+dp(15)
+                        size: dp(20), dp(20)
+        # Status area for the car.stream, setting stream_status.enabled to True will make the Ellipse appear green.
+        BoxLayout:
+            pos: root.width/4-self.width/2, root.height/2+dp(150)
+            size: dp(75), dp(50)
+            Label:
+                text: 'Stream'
+                size: dp(75), dp(50)
+            Status:
+                id: stream_status
+                canvas:
+                    Color:
+                        rgba: self.r, self.g, self.b, self.o
+                    Ellipse:
+                        pos: self.parent.x+dp(45), self.parent.y+dp(15)
+                        size: dp(20), dp(20)
+        BoxLayout:
+            pos: root.width/4-self.width*2, root.height/2-dp(50)
+            orientation: 'vertical'
+            size: '75dp', '200dp'
+            #Label:
+                #text: 'Server'
+                #size: '75dp', '50dp'
             Button:
                 text: 'Start'
                 size: '75dp', '50dp'
                 on_release: root.start_server()
         BoxLayout:
-            pos: root.width/4-self.width/2, root.height/2
+            pos: root.width/4-self.width/2, root.height/2-dp(50)
             orientation: 'vertical'
-            size: '75dp', '200dp'
-            Label:
-                text: 'Car'
-                size: '75dp', '50dp'
+            size: '100dp', '200dp'
+            #Label:
+                #text: 'Car'
+                #size: '75dp', '50dp'
             Button:
                 text: 'Connect'
                 size: '75dp', '50dp'
                 on_release: root.connect()
             Button:
-                text: 'Start'
+                text: 'Start Stream'
                 size: '75dp', '50dp'
                 on_release: stream.start()
                 on_release: progress_bar.start()
@@ -37,11 +67,12 @@
                 text: 'Stop Stream'
                 size: '75dp', '50dp'
                 on_release: root.stop_stream()
+                on_release: progress_bar.stop()
         Label:
             text: 'Progress overview'
-            pos: '60dp', root.height/2-self.width/1.5
+            pos: '60dp', root.height/2-self.width/1.5-dp(50)
             size: '75dp', '50dp'
         PhotoProgress:
             id: progress_bar
-            pos: '35dp', root.height/2-self.width/5
+            pos: '35dp', root.height/2-self.width/5-dp(50)
             size: '220dp', '2dp'
