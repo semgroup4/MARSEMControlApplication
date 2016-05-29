@@ -18,6 +18,8 @@ from threading import Thread, current_thread
 
 import time
 
+import cv2
+
 import marsem.opencv as opencv
 import marsem.protocol.car as car
 import marsem.gui.calibrationScreen as calibration
@@ -37,7 +39,6 @@ class HomeScreen(Screen):
         car.stream(False)
 
     def connect(self):
-        # Ask about tomorrow:
         def _callback(t):
             if t and not opencv.is_connected():
                 # Sleep ?
@@ -47,13 +48,8 @@ class HomeScreen(Screen):
         def _failure(t):
             if opencv.is_connected():
                 opencv.stop()
-    
-    def stop_cv(self):
-        opencv.stop()
-
-        # Activate the car stream (camera), upon returning True -> perform _callback | returning False ->
-        # perform _failure.
         car.stream(True, success=_callback, failure=_failure)
+
 
 
 class OpenCVStream(BoxLayout):
@@ -83,8 +79,10 @@ class OpenCVStream(BoxLayout):
             texture1.blit_buffer(buf, colorfmt='bgr', bufferfmt='ubyte') # Do some more stuff to make it into a texture
 
             self.stream_image.texture = texture1 # Set the defined image's texture as the new texture
-        except NoneType as error:
-            pass
+        except Exception as error:
+            # Stop reading the opencv when there is no frame
+            print(error)
+            return False
 
     def start(self):
         ocv = Thread(target=opencv.run,kwargs={"color": calibration.CURRENT_COLOR}, daemon=True)
@@ -96,7 +94,7 @@ class OpenCVStream(BoxLayout):
 class PhotoProgress(ProgressBar):
     def __init__(self, **kwargs):
         super(PhotoProgress, self).__init__(**kwargs)
-        self.max = 600
+        self.max = 60 # 60 seconds
 
     def start(self):
         self.schedule_update()
@@ -104,11 +102,11 @@ class PhotoProgress(ProgressBar):
     def schedule_update(self):
         # Remove if already existing.
         Clock.unschedule(self.update)
-        Clock.schedule_interval(self.update, 0.1)
+        Clock.schedule_interval(self.update, 1.0)
 
     def update(self, dt):
         self.value += 1
 
-        if self.value >= 600:
+        if self.value >= 60:
             self.value = 0
             return False
