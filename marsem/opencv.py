@@ -15,6 +15,17 @@ blue_max = [255, 0, 0]
 red_min = [17, 15, 140]
 red_max = [50, 56, 200]
 
+video_capture = cv2.VideoCapture()
+video_capture.set(cv2.CAP_PROP_FPS, 200)
+kernel = np.ones((5,5), np.uint8)
+
+current_frame = None
+
+
+# **************************************
+# OpenCV Color class
+# Sets the colors for opencv
+# **************************************
 class Color():
     def __init__(self):
         """ Defaults to red color """
@@ -35,22 +46,19 @@ class Color():
         return 'Min: ' + str(self.min) + '\nMax: ' + str(self.max)
 
 
-#cv2.VideoCapture.set(video_capture, cv2.VideoCapture.CAP_PROP_FPS, 200)
-video_capture = cv2.VideoCapture()
-video_capture.set(cv2.CAP_PROP_FPS, 200)
-kernel = np.ones((5,5), np.uint8)
-
-current_frame = None
-
 
 def create_color_range(lst):
     return np.array(lst, dtype='uint8')
 
 
+# **************************************
+# OpenCV
+# OpenCV module
+# **************************************
+
 def update_current_frame(f):
     global current_frame
     current_frame = f
-
 
 def is_connected():
     return video_capture.isOpened()
@@ -72,21 +80,15 @@ def connect(callback=None):
         return False
 
 
-# This needs to be threaded, to prevent main thread block
-# TODO change timeout back to 60 seconds
 def run(color=Color() ,samples=[], callback=None, timeout=60, burst=0):
-    # Get the point in time where this def. was called to count from this point.
-    print("Min ",color.min, ": Max", color.max)
-    global current_frame
     t_end = time.time() + timeout
 
     while video_capture.isOpened() and t_end > time.time():
         ret, frame = video_capture.read()
 
-        update_current_frame(frame)
-
         burst += 1
         if burst < 200:
+            update_current_frame(frame)
             continue
         
         mask = cv2.inRange(frame, color.min, color.max)
