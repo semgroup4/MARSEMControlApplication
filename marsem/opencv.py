@@ -22,7 +22,7 @@ video_capture.set(cv2.CAP_PROP_FPS, 200)
 kernel = np.ones((5,5), np.uint8)
 
 current_frame = None
-
+DEFAULT_TIMEOUT = 20
 
 # **************************************
 # OpenCV Color class
@@ -82,14 +82,14 @@ def connect(callback=None):
         return False
 
 
-def run(color=Color() ,samples=[], callback=None, timeout=120, burst=0):
+def run(color=Color() ,samples=[], callback=None, timeout=DEFAULT_TIMEOUT, burst=0):
     t_end = time.time() + timeout
 
     while video_capture.isOpened() and t_end > time.time():
         ret, frame = video_capture.read()
 
         burst += 1
-        if burst < 200:
+        if burst < 50:
             update_current_frame(frame)
             continue
         
@@ -119,6 +119,7 @@ def run(color=Color() ,samples=[], callback=None, timeout=120, burst=0):
         update_current_frame(frame)
         if len(samples) == 2:
             value = sum(samples) / len(samples)
+            print(value)
             if value > 45:
                 car.move_right()
             if value < 45:
@@ -127,7 +128,8 @@ def run(color=Color() ,samples=[], callback=None, timeout=120, burst=0):
         elif len(samples) > 2:
             samples = []
 
-    update_current_frame(None)
+    if callback:
+        callback()
     stop()
     # Turn the stream OFF after OpenCV has run to completion.
     car.stream(False)
