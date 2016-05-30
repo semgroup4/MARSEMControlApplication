@@ -92,7 +92,11 @@ class OpenCVStream(BoxLayout):
             return False
 
     def start(self):
-        ocv = Thread(target=opencv.run,kwargs={"color": calibration.CURRENT_COLOR}, daemon=True)
+        #print(calibration.CURRENT_COLOR.get_color())
+        c = opencv.Color()
+        c = calibration.CURRENT_COLOR
+        #c.set_min_max(opencv.green_min, opencv.green_max)
+        ocv = Thread(target=opencv.run,kwargs={"color": c}, daemon=True)
         ocv.start()
         Clock.schedule_interval(self.update, 0.1)
 
@@ -126,7 +130,7 @@ class PhotoProgress(ProgressBar):
     def __init__(self, **kwargs):
         super(PhotoProgress, self).__init__(**kwargs)
         self.value = 0
-        self.max = 600
+        self.max = 1200
 
     def start(self):
         self.value = 0
@@ -142,5 +146,5 @@ class PhotoProgress(ProgressBar):
     def update(self, dt):
         self.value += 1
 
-        if self.value >= 600:
+        if self.value >= self.max:
             return False

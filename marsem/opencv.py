@@ -14,6 +14,8 @@ blue_min = [255, 204, 204]
 blue_max = [255, 0, 0]
 red_min = [17, 15, 140]
 red_max = [50, 56, 200]
+green_min = [25, 94, 10]
+green_max = [55, 144, 45]
 
 video_capture = cv2.VideoCapture()
 video_capture.set(cv2.CAP_PROP_FPS, 200)
@@ -80,7 +82,7 @@ def connect(callback=None):
         return False
 
 
-def run(color=Color() ,samples=[], callback=None, timeout=60, burst=0):
+def run(color=Color() ,samples=[], callback=None, timeout=120, burst=0):
     t_end = time.time() + timeout
 
     while video_capture.isOpened() and t_end > time.time():
