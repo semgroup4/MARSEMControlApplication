@@ -6,7 +6,7 @@ from kivy.clock import Clock
 from kivy.graphics.texture import Texture
 from kivy.lang import Builder
 from kivy.uix.widget import Widget
-from kivy.properties import BooleanProperty, NumericProperty
+from kivy.properties import BooleanProperty, NumericProperty, ObjectProperty
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.image import Image
 from kivy.uix.screenmanager import Screen
@@ -64,6 +64,19 @@ class OpenCVStream(BoxLayout):
 
     loaded = False
 
+    frame = ObjectProperty(None,allownone=True, force_dispatch=True)
+
+    def on_frame(self, instance, pos):
+        texture = Texture.create(size=(self.frame.shape[1],
+                                       self.frame.shape[0]),
+                                 colorfmt='bgr')
+        texture.blit_buffer(self.frame.tostring(),
+                                colorfmt='bgr',
+                                bufferfmt='ubyte')
+        texture.flip_horizontal()
+        self.stream_image.texture = texture
+
+
     def load(self):
         if not self.loaded:
             self.loaded = True
@@ -75,30 +88,18 @@ class OpenCVStream(BoxLayout):
             self.add_widget(self.stream_image)
 
     def update(self, dt):
-        try:
-            frame = opencv.get_video() # Step 1, get the current frame from OpenCV.
-    
-            # Do some stuff to make it into a texture
-            texture1 = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
-            texture1.blit_buffer(frame.tostring(), colorfmt='bgr', bufferfmt='ubyte') # Do some more stuff to make it into a texture
-            #texture1.flip_vertical()
-            texture1.flip_horizontal()
-
-            self.stream_image.texture = texture1 # Set the defined image's texture as the new texture
-        except Exception as error:
-            # Stop reading the opencv when there is no frame
-            print("Stopping opencv update frame", error)
-            self.stream_image.texture = None
-            return False
+        self.frame = opencv.get_video()
 
     def start(self):
-        #print(calibration.CURRENT_COLOR.get_color())
-        c = opencv.Color()
+        def _callback():
+            Clock.unschedule(self.update)
+            self.stream_image.texture = None
         c = calibration.CURRENT_COLOR
         #c.set_min_max(opencv.green_min, opencv.green_max)
-        ocv = Thread(target=opencv.run,kwargs={"color": c}, daemon=True)
+        ocv = Thread(target=opencv.run,kwargs={"color": c, 
+                                               "callback": _callback}, daemon=True)
         ocv.start()
-        Clock.schedule_interval(self.update, 0.1)
+        Clock.schedule_interval(self.update, 0.01)
 
 
 class Status(Widget):
@@ -130,7 +131,7 @@ class PhotoProgress(ProgressBar):
     def __init__(self, **kwargs):
         super(PhotoProgress, self).__init__(**kwargs)
         self.value = 0
-        self.max = 1200
+        self.max = opencv.DEFAULT_TIMEOUT * 10 # Milliseconds
 
     def start(self):
         self.value = 0
