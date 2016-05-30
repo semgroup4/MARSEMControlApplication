@@ -43,7 +43,7 @@ class HomeScreen(Screen):
             return True
 
     def stop_stream(self):
-        car.stream(False)
+        return car.stream(False)
 
     def connect(self):
         def _callback(t):
