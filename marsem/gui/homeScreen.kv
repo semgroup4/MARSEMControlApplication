@@ -46,11 +46,11 @@
             Button:
                 text: 'Start Server'
                 size: '75dp', '50dp'
-                on_release: root.start_server()
+                on_release: server_status.enabled = root.start_server()
             Button:
                 text: 'Stop Server'
                 size: '75dp', '50dp'
-                on_release: root.stop_server()
+                on_release: server_status.enabled = root.stop_server()
         BoxLayout:
             pos: root.width/4-self.width/2, root.height/2-dp(50)
             orientation: 'vertical'
@@ -61,7 +61,7 @@
             Button:
                 text: 'Connect OpenCV'
                 size: '75dp', '50dp'
-                on_release: root.connect()
+                on_release: stream_status.enabled = root.connect()
             Button:
                 text: 'Start Stream'
                 size: '75dp', '50dp'

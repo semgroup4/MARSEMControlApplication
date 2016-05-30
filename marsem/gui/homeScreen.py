@@ -31,10 +31,16 @@ Builder.load_file("homeScreen.kv")
 
 class HomeScreen(Screen):
     def start_server(self):
-        car.start_server()
+        if car.start_server():
+            return True
+        else:
+            return False
 
     def stop_server(self):
-        car.stop_server()
+        if car.stop_server():
+            return False
+        else:
+            return True
 
     def stop_stream(self):
         car.stream(False)
@@ -44,13 +50,13 @@ class HomeScreen(Screen):
             if t and not opencv.is_connected():
                 # Sleep ?
                 time.sleep(1)
-                opencv.connect()
+                return opencv.connect()
 
         def _failure(t):
             if opencv.is_connected():
                 opencv.stop()
-        car.stream(True, success=_callback, failure=_failure)
-
+                return False
+        return car.stream(True, success=_callback, failure=_failure)
 
 
 class OpenCVStream(BoxLayout):

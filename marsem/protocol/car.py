@@ -99,6 +99,7 @@ def stream_f(run, success=None, failure=None):
         response = json.loads(r.json())
         if success != None:
             success(response['running'])
+            return response['running']
         else:
             return response['running']
     else:
