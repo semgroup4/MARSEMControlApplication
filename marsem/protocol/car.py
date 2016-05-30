@@ -15,6 +15,8 @@ from functools import partial
 # This queue is filled with move commands
 queue = Queue(maxsize=1)
 worker = None
+# session
+session = requests.Session()
 # SSH Client
 ssh = paramiko.client.SSHClient()
 # Warning
@@ -87,7 +89,7 @@ def stop_server():
 
 # desc: sends a move action to the Car
 def move(action, q):
-    r = requests.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
+    r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
     # We need a way to know if the server is responding at all, if not. Stop!
     q.get() # remove the action from the queue
     q.task_done()
