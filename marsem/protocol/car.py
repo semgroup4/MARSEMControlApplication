@@ -89,7 +89,8 @@ def stop_server():
 
 # desc: sends a move action to the Car
 def move(action, q):
-    r = requests.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
+    global session
+    r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
     # We need a way to know if the server is responding at all, if not. Stop!
     q.get() # remove the action from the queue
     q.task_done()
