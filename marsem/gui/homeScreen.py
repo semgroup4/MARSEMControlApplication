@@ -75,13 +75,13 @@ class OpenCVStream(BoxLayout):
             # Do some stuff to make it into a texture
             texture1 = Texture.create(size=(frame.shape[1], frame.shape[0]), colorfmt='bgr')
             texture1.blit_buffer(frame.tostring(), colorfmt='bgr', bufferfmt='ubyte') # Do some more stuff to make it into a texture
-            texture1.flip_vertical()
+            #texture1.flip_vertical()
             texture1.flip_horizontal()
 
             self.stream_image.texture = texture1 # Set the defined image's texture as the new texture
         except Exception as error:
             # Stop reading the opencv when there is no frame
-            print(error)
+            print("Stopping opencv update frame", error)
             self.stream_image.texture = None
             return False
 
