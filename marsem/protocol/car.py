@@ -12,10 +12,6 @@ from requests.exceptions import Timeout, HTTPError, ConnectionError
 import socket
 from functools import partial
 
-# Global state variables
-SERVER_RUNNING = False
-# Session
-session = requests.Session()
 # This queue is filled with move commands
 queue = Queue(maxsize=1)
 worker = None
@@ -91,7 +87,7 @@ def stop_server():
 
 # desc: sends a move action to the Car
 def move(action, q):
-    r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
+    r = requests.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
     # We need a way to know if the server is responding at all, if not. Stop!
     q.get() # remove the action from the queue
     q.task_done()
@@ -154,6 +150,7 @@ def stop_server_f():
     ssh.connect(cfg.config['host'], username="pi", password="raspberry")
     stdin, stdout, stderr = ssh.exec_command("pgrep python")
     res = stdout.readlines()
+    print(res)
     if len(res) >= 1:
         res = format_value(res[0])
         stdin, stdout, stderr = ssh.exec_command("kill -s SIGTERM " + res)
@@ -176,13 +173,9 @@ def base_request(f, exceptions):
         return False
 
 def base_ssh_request(f,exceptions):
-    global SERVER_RUNNING
-    if SERVER_RUNNING:
-        return SERVER_RUNNING
     try:
-        SERVER_RUNNING = f()
-        return SERVER_RUNNING
+        return f()
     except exceptions as error:
-        SERVER_RUNNING = False
-        return SERVER_RUNNING
+        return False
+
 
