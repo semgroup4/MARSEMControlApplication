@@ -12,18 +12,18 @@
         BoxLayout:
             orientation: 'horizontal'
             pos: root.width/2-self.width/2, root.height/2-dp(300)
-            size: '400dp', '50dp'
+            size: '600dp', '50dp'
             Button:
                 text: 'Take Snapshot'
                 size: '130dp', '50dp'
                 on_release: root.update_picture(), calibration_image.reload()
             Button:
-                text: 'Select Min'
-                size: '75dp', '50dp'
+                text: 'Select Darkest Color'
+                size: '125dp', '50dp'
                 on_release: root.start_select_min()
             Button:
-                text: 'Select Max'
-                size: '75dp', '50dp'
+                text: 'Select Brightest Color'
+                size: '125dp', '50dp'
                 on_release: root.start_select_max()
         Label:
             text: 'Now selecting: ' + root.current_action_string
@@ -34,7 +34,7 @@
             pos: dp(25), root.height-dp(300)
             size: dp(75), dp(100)
             Label:
-                text: 'Min color:'
+                text: 'Dark color:'
                 size: self.parent.width, dp(50)
             Label:
                 size: dp(50), dp(50)
@@ -45,7 +45,7 @@
                         pos: self.pos
                         size: self.size
             Label:
-                text: 'Max color:'
+                text: 'Bright color:'
                 size: self.parent.width, dp(50)
             Label:
                 size: dp(50), dp(50)
