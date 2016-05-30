@@ -91,8 +91,7 @@ def stop_server():
 def move(action, q):
     global session
     try:
-        r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'], timeout=0.5)
-        # We need a way to know if the server is responding at all, if not. Stop!
+        r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
         q.get() # remove the action from the queue
         q.task_done()
     except (Timeout, HTTPError, ConnectionError) as error:
@@ -104,7 +103,7 @@ def move(action, q):
 def stream_f(run, success=None, failure=None):
     r = requests.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'], timeout=5)
     if (r.status_code == 200):
-        response = json.loads(r.json())
+        response = r.json()
         if success != None:
             success(response['running'])
             return response['running']
@@ -132,7 +131,7 @@ def status_f():
     """ Returns a boolean if it fails and a dictionary {} if it succeds. """
     r = requests.get(cfg.host_status, params={"status": True}, headers=cfg.config['headers'], timeout=5)
     if (r.status_code == 200):
-        return json.loads(r.content)
+        return r.json()
     else:
         return False
 
