@@ -90,10 +90,15 @@ def stop_server():
 # desc: sends a move action to the Car
 def move(action, q):
     global session
-    r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
-    # We need a way to know if the server is responding at all, if not. Stop!
-    q.get() # remove the action from the queue
-    q.task_done()
+    try:
+        r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'], timeout=0.5)
+        # We need a way to know if the server is responding at all, if not. Stop!
+        q.get() # remove the action from the queue
+        q.task_done()
+    except (Timeout, HTTPError, ConnectionError) as error:
+        q.get()
+        q.task_done()
+        
 
 
 def stream_f(run, success=None, failure=None):
