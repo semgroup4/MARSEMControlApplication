@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import time
 from threading import Thread
+import functools
 
 import marsem.protocol.car as car
 import marsem.protocol.config as cfg
@@ -18,11 +19,9 @@ green_min = [25, 94, 10]
 green_max = [55, 144, 45]
 
 video_capture = cv2.VideoCapture()
-video_capture.set(cv2.CAP_PROP_FPS, 200)
-kernel = np.ones((5,5), np.uint8)
 
 current_frame = None
-DEFAULT_TIMEOUT = 20
+DEFAULT_TIMEOUT = 60
 
 # **************************************
 # OpenCV Color class
@@ -82,54 +81,84 @@ def connect(callback=None):
         return False
 
 
-def run(color=Color() ,samples=[], callback=None, timeout=DEFAULT_TIMEOUT, burst=0):
+def run(color=Color() ,samples=[], callback=None, timeout=DEFAULT_TIMEOUT):
     t_end = time.time() + timeout
+    time_t = time.time
+    burst = 0
+    kernel = np.ones((5,5), np.uint8)
 
-    while video_capture.isOpened() and t_end > time.time():
-        ret, frame = video_capture.read()
+    # Avoid re-evauluating the module calls inside the loop
+    # Code optimization, do not remove!
+    append = samples.append
+    capt_read = video_capture.read
+    inRange = cv2.inRange
+    bitwise_and = cv2.bitwise_and
+    cvtColor = cv2.cvtColor
+    color_min = color.min
+    color_max = color.max
+    BGR2GRAY = cv2.COLOR_BGR2GRAY
+    treshold = cv2.threshold
+    THRESH_BINARY = cv2.THRESH_BINARY
+    THRESH_OTSU = cv2.THRESH_OTSU
+    morphologyEx = cv2.morphologyEx
+    MORPH_CLOSE = cv2.MORPH_CLOSE
+    findContours = cv2.findContours
+    RETR_LIST = cv2.RETR_LIST
+    CHAIN_APPROX_SIMPLE = cv2.CHAIN_APPROX_SIMPLE
+    boundingRect = cv2.boundingRect
+    rectangle = cv2.rectangle
+    car_move_forward = car.move_forward
+    car_move_right = car.move_right
 
-        burst += 1
-        if burst < 50:
+    while (1):
+        ret, frame = capt_read()
+        
+        if burst < 200:
+            # Read 200 frames or so before starting
+            burst += 1
             update_current_frame(frame)
             continue
+
+        if time_t() > t_end:
+            break
         
-        mask = cv2.inRange(frame, color.min, color.max)
-        blue = cv2.bitwise_and(frame, frame, mask=mask)
-        gray = cv2.cvtColor(blue, cv2.COLOR_BGR2GRAY)
+        mask = inRange(frame, color_min, color_max)
+        mask_color = bitwise_and(frame, frame, mask=mask)
+        gray = cvtColor(mask_color, BGR2GRAY)
 
-        (thresh, im_bw) = cv2.threshold(gray, 128, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-        im_bw = cv2.threshold(gray, thresh, 255, cv2.THRESH_BINARY)[1]
+        (thresh, im_bw) = treshold(gray, 128, 255, THRESH_BINARY + THRESH_OTSU)
+        im_bw = treshold(gray, thresh, 255, THRESH_BINARY)[1]
 
-        dilation = cv2.dilate(im_bw, kernel, iterations=10)
-        erosion = cv2.erode(dilation, kernel, iterations=14)
-
-        (_, contours, heir) = cv2.findContours(erosion.copy(), cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+        # Erode and dilate using MORPH_CLOSE in morphologyEx
+        erosion = morphologyEx(im_bw, MORPH_CLOSE, kernel)
+        (_, contours, heirarchy) = findContours(erosion.copy(), RETR_LIST, CHAIN_APPROX_SIMPLE)
         if contours:
             contour = contours[0]
-            x, y, w, h = cv2.boundingRect(contour)
-
-            samples.append(x)
+            x, y, w, h = boundingRect(contour)
+            append(x)
 
             center = x + int(w / 2)
-            cv2.rectangle(frame, (center, 0), (center, 480), (0, 255, 0), 2)
+            rectangle(frame, (center, 0), (center, 480), (0, 255, 0), 2)
         else:
-            samples.append(0)
-
-        # At this point, the green line has been added to the frame and the frame can be made available.
+            append(0)
         update_current_frame(frame)
-        if len(samples) == 2:
-            value = sum(samples) / len(samples)
-            print(value)
-            if value > 45:
-                car.move_right()
-            if value < 45:
-                car.move_forward()
-            samples = []
-        elif len(samples) > 2:
-            samples = []
 
+        length = len(samples)
+        if length >= 2:
+            value = sum(samples) / length
+            if value > 45:
+                # Move a "lot" to the right
+                car_move_right()
+                car_move_right()
+                car_move_right()
+            del samples[:]
+        # Always move forward, to avoid stutter
+        car_move_forward()
+            
     if callback:
         callback()
+        
+    time.sleep(2)
     stop()
     # Turn the stream OFF after OpenCV has run to completion.
     car.stream(False)
@@ -147,6 +176,3 @@ def get_video(callback=None):
 # Stops video capturing with OpenCV and stops the car stream (closes the camera).
 def stop():
     video_capture.release()
-
-
-
