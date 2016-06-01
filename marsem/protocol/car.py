@@ -91,7 +91,10 @@ def stop_server():
 def move(action, q):
     global session
     try:
-        r = session.get(cfg.host_index, params={"action": action}, headers=cfg.config['headers'])
+        r = session.get(cfg.host_index, 
+                        params={"action": action}, 
+                        headers=cfg.config['headers'], 
+                        timeout=1)
         q.get() # remove the action from the queue
         q.task_done()
     except (Timeout, HTTPError, ConnectionError) as error:
@@ -101,7 +104,8 @@ def move(action, q):
 
 
 def stream_f(run, success=None, failure=None):
-    r = requests.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'], timeout=5)
+    global session
+    r = session.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'], timeout=5)
     if (r.status_code == 200):
         response = r.json()
         if success != None:
@@ -118,8 +122,9 @@ def stream_f(run, success=None, failure=None):
 
 
 def picture_f():
+    global session
     """ Returns a boolean if it fails and a binary picture if it succeds. """
-    r = requests.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'], timeout=20)
+    r = session.get(cfg.host_picture, params={"picture": True}, headers=cfg.config['headers'], timeout=20)
     if (r.status_code == 200):
         return r.content
     else:
@@ -128,8 +133,9 @@ def picture_f():
 
 
 def status_f():
+    global session
     """ Returns a boolean if it fails and a dictionary {} if it succeds. """
-    r = requests.get(cfg.host_status, params={"status": True}, headers=cfg.config['headers'], timeout=5)
+    r = session.get(cfg.host_status, params={"status": True}, headers=cfg.config['headers'], timeout=5)
     if (r.status_code == 200):
         return r.json()
     else:
