@@ -43,6 +43,7 @@ class HomeScreen(Screen):
             return True
 
     def stop_stream(self):
+        opencv.stop()
         return car.stream(False)
 
     def connect(self):
@@ -67,14 +68,17 @@ class OpenCVStream(BoxLayout):
     frame = ObjectProperty(None,allownone=True, force_dispatch=True)
 
     def on_frame(self, instance, pos):
-        texture = Texture.create(size=(self.frame.shape[1],
-                                       self.frame.shape[0]),
-                                 colorfmt='bgr')
-        texture.blit_buffer(self.frame.tostring(),
+        if self.frame != None:
+            texture = Texture.create(size=(self.frame.shape[1],
+                                           self.frame.shape[0]),
+                                     colorfmt='bgr')
+            texture.blit_buffer(self.frame.tostring(),
                                 colorfmt='bgr',
                                 bufferfmt='ubyte')
-        texture.flip_horizontal()
-        self.stream_image.texture = texture
+            texture.flip_horizontal()
+            self.stream_image.texture = texture
+        else:
+            self.stream_image.texture = None
 
 
     def load(self):
