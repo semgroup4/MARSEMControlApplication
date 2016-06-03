@@ -18,7 +18,9 @@ red_max = [50, 56, 200]
 green_min = [25, 94, 10]
 green_max = [55, 144, 45]
 
+#cv2.VideoCapture.set(cv2.CV_CAP_PROP_FPS, 200)
 video_capture = cv2.VideoCapture()
+video_capture.set(cv2.CAP_PROP_FPS, 200)
 
 current_frame = None
 DEFAULT_TIMEOUT = 60
@@ -71,6 +73,7 @@ def connect(callback=None):
     if video_capture.isOpened():
         print("Already connected")
         return True
+    #if video_capture.open(0):
     if video_capture.open(cfg.stream_file):
         print("Success in connecting to remote file")
         return True
@@ -149,11 +152,13 @@ def run(color=Color() ,samples=[], callback=None, timeout=DEFAULT_TIMEOUT):
             if value > 45:
                 # Move a "lot" to the right
                 car_move_right()
-                car_move_right()
-                car_move_right()
+#                car_move_right()
+#                car_move_right()
+            else:
+                car_move_forward()
+#                car_move_forward()
+#                car_move_forward()
             del samples[:]
-        # Always move forward, to avoid stutter
-        car_move_forward()
             
     if callback:
         callback()

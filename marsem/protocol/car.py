@@ -2,8 +2,9 @@
 
 import requests
 import json
+import time
 from threading import Thread, current_thread
-from queue import Queue
+import queue
 
 import marsem.protocol.config as cfg
 import paramiko
@@ -13,8 +14,14 @@ import socket
 from functools import partial
 
 # This queue is filled with move commands
-queue = Queue(maxsize=1)
-worker = None
+pq = queue.PriorityQueue(maxsize=6)
+# Priority of the commands.
+prios = {
+    "forward": 2,
+    "backward": 2,
+    "right": 1,
+    "left": 1
+}
 # session
 session = requests.Session()
 # SSH Client
@@ -24,22 +31,13 @@ ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy()) # There be dragons her
 
 
 # The exported functions from this module
-__all__ = ['move_left','move_right','move_forward', 'move_backward', 'stream', 'picture', 'status', 'start_server', 'stop_server']
+__all__ = ['move_left','move_right','move_forward', 'move_backward', 'stream', 'picture', 'status', 'start_server', 'stop_server', 'stop_move_thread']
 
 # **************************************
 # Server commands
 # These are the exported commands!
+# Only use these outside of this module.
 # **************************************
-def move_car(action=None):
-    """ Moves the car, puts the command on the queue and then performs one command at a time.
-    This to ensure we don't flood the the server with requests.
-    This function is threaded."""
-    if queue.empty():
-        worker = Thread(target=move, args=(action, queue,))
-        worker.deamon = True
-        worker.start()
-        queue.put(action)
-
 def move_left():
     return move_car(action="left")
 
@@ -54,6 +52,7 @@ def move_forward():
 
 def move_backward():
     return move_car(action="backward")
+
 
 def stream(t, success=None, failure=None):
     """ Tells the car server to start or stop streaming. 
@@ -81,28 +80,43 @@ def stop_server():
     """ Runs the command to kill the server if the server is running. """
     return base_ssh_request(partial(stop_server_f), (BadHostKeyException, AuthenticationException, SSHException, socket.error))
 
+def stop_move_thread():
+    global command_thread
+    if command_thread:
+        queue.join()
+        command_thread.join()
+
 # **************************************
 # Base commands
 # Do not use these outside of this module!
 # **************************************
-
+def move_car(action=None):
+    """ Moves the car, puts the command on the queue and then performs one command at a time.
+    This to ensure we don't flood the the server with requests.
+    This function is threaded."""
+    try:
+        pq.put((prios[action], action, 3), timeout=0.5)
+        worker = Thread(target=move, daemon=True)
+        worker.start()
+    except queue.Full as e:
+        pass
 
 # desc: sends a move action to the Car
-def move(action, q):
+def move():
     global session
+    global pq
+    # Always gets the most important thing in the queue first
+    action = pq.get() # action is a tuple, 0 is prio, 1 is data
     try:
-        r = session.get(cfg.host_index, 
-                        params={"action": action}, 
-                        headers=cfg.config['headers'], 
-                        timeout=1)
-        q.get() # remove the action from the queue
-        q.task_done()
+        for x in range(0, action[2]):
+            r = session.get(cfg.host_index, 
+                            params={"action": action[1]}, 
+                            headers=cfg.config['headers'], 
+                            timeout=0.5)
+        pq.task_done()
     except (Timeout, HTTPError, ConnectionError) as error:
-        q.get()
-        q.task_done()
-        
-
-
+        pq.task_done()
+   
 def stream_f(run, success=None, failure=None):
     global session
     r = session.get(cfg.host_stream, params={"stream": run}, headers=cfg.config['headers'], timeout=5)
