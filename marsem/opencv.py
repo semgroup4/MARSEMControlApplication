@@ -23,7 +23,7 @@ video_capture = cv2.VideoCapture()
 video_capture.set(cv2.CAP_PROP_FPS, 200)
 
 current_frame = None
-DEFAULT_TIMEOUT = 60
+DEFAULT_TIMEOUT = 50
 
 # **************************************
 # OpenCV Color class
@@ -152,12 +152,8 @@ def run(color=Color() ,samples=[], callback=None, timeout=DEFAULT_TIMEOUT):
             if value > 45:
                 # Move a "lot" to the right
                 car_move_right()
-#                car_move_right()
-#                car_move_right()
             else:
                 car_move_forward()
-#                car_move_forward()
-#                car_move_forward()
             del samples[:]
             
     if callback:

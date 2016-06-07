@@ -35,25 +35,24 @@
     BoxLayout:
         pos: self.parent.x, self.parent.y
         #pos: root.width*11, root.height-self.height*2+self.height*11.3
-        Button:
-            text: 'Pictures'
-            size: '75dp', '25dp'
-            size_hint: None,None
-            height: '48dp'
-            on_release: app.root.current = 'PhotoScreen'
+        #Button:
+        #    text: 'Pictures'
+        #    size: '75dp', '25dp'
+        #    size_hint: None,None
+        #    height: '48dp'
+        #    on_release: app.root.current = 'PhotoScreen'
         Button:
             text: 'Calibrate'
             size: '75dp', '25dp'
             size_hint: None,None
             height: '48dp'
             on_release: app.root.current = 'CalibrationScreen'
-        Button:
-            text: 'Settings'
-            size: '75dp', '25dp'
-            size_hint: None,None
-            height: '48dp'
-            on_release: app.open_settings()
-	    
+        #Button:
+        #    text: 'Settings'
+        #    size: '75dp', '25dp'
+        #    size_hint: None,None
+        #    height: '48dp'
+        #    on_release: app.open_settings()	    
         Button:
             text: 'Quit'
             size: '75dp', '25dp'

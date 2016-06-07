@@ -1,19 +1,14 @@
-import requests
+import marsem.protocol.car as car
 import time
 
-s = requests.Session()
-totaltime = 0
-runtime = 0
+counter = 0
+t = time.time() + 60
+while True:
+    time.sleep(0.05)
+    counter += 1
+    if counter % 2 == 0:
+        car.move_right()
 
-x = range(0,100)
-
-
-for i in x:
-    t = time.time()
-    r = s.get("http://192.168.2.1:8000/", params={"action": "forward"}, headers={"Content-Type": "application/json"})
-    runtime = time.time() - t
-    totaltime += runtime
-
-
-print("Time to perform 100 requests: ", totaltime)
-print("AVG requests per counter: ", totaltime/100)
+    car.move_forward()
+    if time.time() > t:
+        break

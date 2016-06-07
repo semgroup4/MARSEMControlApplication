@@ -14,7 +14,7 @@ import socket
 from functools import partial
 
 # This queue is filled with move commands
-pq = queue.PriorityQueue(maxsize=6)
+pq = queue.PriorityQueue(maxsize=3)
 # Priority of the commands.
 prios = {
     "forward": 2,
@@ -111,8 +111,8 @@ def move():
         for x in range(0, action[2]):
             r = session.get(cfg.host_index, 
                             params={"action": action[1]}, 
-                            headers=cfg.config['headers'], 
-                            timeout=0.5)
+                            headers=cfg.config['headers'], timeout=0.5)
+            time.sleep(0.1)
         pq.task_done()
     except (Timeout, HTTPError, ConnectionError) as error:
         pq.task_done()
@@ -204,6 +204,7 @@ def base_ssh_request(f,exceptions):
     try:
         return f()
     except exceptions as error:
+        print(error)
         return False
 
 
